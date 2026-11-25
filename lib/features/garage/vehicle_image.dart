@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import '../assistance/domain.dart';
+import 'vehicle_catalog.dart';
 
 class VehicleImage extends StatelessWidget {
   const VehicleImage(this.vehicle, {super.key, this.height = 120});
@@ -7,28 +8,10 @@ class VehicleImage extends StatelessWidget {
   final Vehicle vehicle;
   final double height;
 
-  static const _renders = [
-    ('toyota', 'corolla', 2018, 'silver'),
-    ('honda', 'fit', 2017, 'white'),
-    ('ford', 'ranger', 2021, 'graphite'),
-  ];
-
   static String? assetFor(Vehicle vehicle) {
-    String normalize(String value) => value.trim().toLowerCase();
-    final make = normalize(vehicle.make);
-    final model = normalize(vehicle.model);
-    final colour = normalize(vehicle.colour ?? '');
-    final matches = _renders.where(
-      (r) => r.$1 == make && r.$2 == model && r.$3 == vehicle.year,
-    );
-    for (final render in matches) {
-      if (render.$4 == colour) return _path(render);
-    }
-    return matches.isEmpty ? null : _path(matches.first);
+    final render = VehicleCatalog.resolve(vehicle);
+    return render == null ? null : VehicleCatalog.assetPath(render);
   }
-
-  static String _path((String, String, int, String) render) =>
-      'assets/vehicles/${render.$1}-${render.$2}-${render.$3}-${render.$4}.png';
 
   @override
   Widget build(BuildContext context) {

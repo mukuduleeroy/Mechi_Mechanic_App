@@ -97,6 +97,45 @@ void main() {
     },
   );
 
+  testWidgets('a saved paint change is visible in Vehicles and on Home', (
+    tester,
+  ) async {
+    await launch(tester);
+    await tester.tap(find.byTooltip('Vehicles'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Edit Toyota Corolla'));
+    await tester.pumpAndSettle();
+    await tapLabel(tester, 'Choose a vehicle model');
+    final generation = find.text('GD · Example year 2005');
+    await tester.scrollUntilVisible(
+      generation,
+      180,
+      scrollable: find.descendant(
+        of: find.byType(ListView).last,
+        matching: find.byType(Scrollable),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tapLabel(tester, 'GD · Example year 2005');
+    await tester.ensureVisible(find.widgetWithText(ChoiceChip, 'Red'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Red'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Save vehicle'));
+    await tester.pumpAndSettle();
+    await tapLabel(tester, 'Save vehicle');
+    expect(find.text('Red'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('Red'), findsOneWidget);
+    final prefs = await SharedPreferences.getInstance();
+    final vehicle = LocalVehicles(prefs).load().active;
+    expect(vehicle.name, 'Honda Fit GD');
+    expect(vehicle.year, 2005);
+    expect(vehicle.colour, 'Red');
+    await captureGolden(tester, 'vehicle-paint');
+  });
+
   testWidgets('design tokens and component states', (tester) async {
     expect(Mechi.theme.colorScheme.primary, Mechi.blue);
     expect(Mechi.theme.scaffoldBackgroundColor, Mechi.canvas);

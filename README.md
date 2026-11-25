@@ -15,6 +15,20 @@ flutter run -d <device-id>
 
 Select a simulator or emulator ID from `flutter devices`. To launch an Android emulator first, use `flutter emulators` and `flutter emulators --launch <id>`. On macOS, start an iOS device in Simulator through Xcode. This project uses Flutter’s Swift Package Manager integration on iOS.
 
+## Install on a physical iPhone
+
+Pair the iPhone with this Mac and enable Developer Mode on the phone. Open `ios/Runner.xcworkspace` in Xcode, select **Runner → Signing & Capabilities**, and use automatic signing with your Apple development team. Select the iPhone as the run destination so Xcode can register it and create a provisioning profile. [Apple device setup](https://developer.apple.com/documentation/xcode/running-your-app-on-simulated-or-physical-devices) · [Developer Mode](https://developer.apple.com/documentation/xcode/enabling-developer-mode-on-a-device/)
+
+Once the device is provisioned, build and install Mechi from the repository root. Use the physical device ID shown by `flutter devices`.
+
+```sh
+flutter pub get
+flutter devices
+flutter run --release -d <iphone-device-id>
+```
+
+Release mode lets you launch the installed app from its Home Screen on later runs.
+
 ## Verify
 
 ```sh

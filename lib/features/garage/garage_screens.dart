@@ -13,6 +13,8 @@ import '../assistance/job_state.dart';
 import '../assistance/repositories.dart';
 import 'garage_state.dart';
 import 'vehicle_image.dart';
+import 'vehicle_catalog.dart';
+import 'vehicle_colour.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -174,6 +176,7 @@ class HomeScreen extends ConsumerWidget {
                                       style: typography.titleLarge,
                                     ),
                                     const SizedBox(height: 8),
+                                    VehicleColourLabel(vehicle.colour),
                                     TextButton(
                                       onPressed: () => context.push('/garage'),
                                       child: const Text('Manage vehicle'),
@@ -458,22 +461,71 @@ class _ServiceTile extends StatelessWidget {
   );
 }
 
+Future<VehicleRender?> _openVehicleCatalog(
+  BuildContext context,
+) => showModalBottomSheet<VehicleRender>(
+  context: context,
+  isScrollControlled: true,
+  useSafeArea: true,
+  builder: (sheet) => FractionallySizedBox(
+    heightFactor: .75,
+    child: Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('Choose a vehicle model'),
+        ),
+        Expanded(
+          child: ListView(
+            children: [
+              for (final render in VehicleCatalog.renders)
+                ListTile(
+                  leading: SizedBox(
+                    width: 68,
+                    child: VehicleImage(
+                      Vehicle(
+                        '',
+                        render.make,
+                        render.model,
+                        render.sampleYear,
+                        '',
+                      ),
+                      height: 35,
+                    ),
+                  ),
+                  title: Text('${render.make} ${render.model}'),
+                  subtitle: Text(
+                    render.generation.isEmpty
+                        ? '${render.sampleYear}'
+                        : '${render.generation} · Example year ${render.sampleYear}',
+                  ),
+                  onTap: () => Navigator.pop(sheet, render),
+                ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+);
+
 class GarageScreen extends ConsumerWidget {
   const GarageScreen({super.key});
 
   Future<void> edit(
     BuildContext context,
-    WidgetRef ref, [
+    WidgetRef ref, {
     Vehicle? initial,
-  ]) async {
+    VehicleRender? preset,
+  }) async {
     final vehicle = await showModalBottomSheet<Vehicle>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
       barrierColor: Mechi.scrim,
-      builder: (_) => _VehicleForm(initial),
+      builder: (_) => _VehicleForm(initial, preset),
     );
-    if (vehicle != null) {
+    if (vehicle != null && context.mounted) {
       await ref
           .read(garageProvider.notifier)
           .save(vehicle: vehicle, selected: vehicle.id);
@@ -488,6 +540,16 @@ class GarageScreen extends ConsumerWidget {
       onBack: context.pop,
       footer: ActionButton('Add vehicle', () => edit(context, ref)),
       children: [
+        OutlinedButton.icon(
+          icon: const Icon(LucideIcons.car, size: 18),
+          label: const Text('Browse catalog'),
+          onPressed: () async {
+            final preset = await _openVehicleCatalog(context);
+            if (preset != null && context.mounted) {
+              await edit(context, ref, preset: preset);
+            }
+          },
+        ),
         for (final vehicle in garage.vehicles)
           Panel(
             child: Row(
@@ -507,6 +569,8 @@ class GarageScreen extends ConsumerWidget {
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         Text('${vehicle.year} · ${vehicle.plate}'),
+                        const SizedBox(height: 6),
+                        VehicleColourLabel(vehicle.colour),
                         if (garage.selected == vehicle.id)
                           const ChipLabel('Current vehicle'),
                       ],
@@ -515,7 +579,7 @@ class GarageScreen extends ConsumerWidget {
                 ),
                 IconButton(
                   tooltip: 'Edit ${vehicle.name}',
-                  onPressed: () => edit(context, ref, vehicle),
+                  onPressed: () => edit(context, ref, initial: vehicle),
                   icon: const Icon(LucideIcons.pencil, size: 18),
                 ),
               ],
@@ -526,9 +590,14 @@ class GarageScreen extends ConsumerWidget {
   }
 }
 
+String _modelName(VehicleRender render) => render.generation.isEmpty
+    ? render.model
+    : '${render.model} ${render.generation.split(' / ').first}';
+
 class _VehicleForm extends StatefulWidget {
-  const _VehicleForm(this.vehicle);
+  const _VehicleForm(this.vehicle, this.preset);
   final Vehicle? vehicle;
+  final VehicleRender? preset;
   @override
   State<_VehicleForm> createState() => _VehicleFormState();
 }
@@ -536,9 +605,17 @@ class _VehicleForm extends StatefulWidget {
 class _VehicleFormState extends State<_VehicleForm> {
   final key = GlobalKey<FormState>();
   late final fields = [
-    TextEditingController(text: widget.vehicle?.make),
-    TextEditingController(text: widget.vehicle?.model),
-    TextEditingController(text: widget.vehicle?.year.toString()),
+    TextEditingController(text: widget.vehicle?.make ?? widget.preset?.make),
+    TextEditingController(
+      text:
+          widget.vehicle?.model ??
+          (widget.preset == null ? null : _modelName(widget.preset!)),
+    ),
+    TextEditingController(
+      text:
+          widget.vehicle?.year.toString() ??
+          widget.preset?.sampleYear.toString(),
+    ),
     TextEditingController(text: widget.vehicle?.plate),
     TextEditingController(text: widget.vehicle?.colour),
   ];
@@ -548,6 +625,20 @@ class _VehicleFormState extends State<_VehicleForm> {
       field.dispose();
     }
     super.dispose();
+  }
+
+  Future<void> _chooseModel() async {
+    FocusScope.of(context).unfocus();
+    final selected = await _openVehicleCatalog(context);
+    if (!mounted || selected == null) return;
+    final editYear = int.tryParse(fields[2].text.trim());
+    fields[0].text = selected.make;
+    fields[1].text = _modelName(selected);
+    if (editYear == null ||
+        editYear < selected.firstYear ||
+        editYear > selected.lastYear) {
+      fields[2].text = selected.sampleYear.toString();
+    }
   }
 
   @override
@@ -565,6 +656,11 @@ class _VehicleFormState extends State<_VehicleForm> {
                 widget.vehicle == null ? 'Add vehicle' : 'Edit vehicle',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
+              TextButton.icon(
+                onPressed: _chooseModel,
+                icon: const Icon(LucideIcons.car, size: 17),
+                label: const Text('Choose a vehicle model'),
+              ),
               for (final (index, label) in [
                 'Make',
                 'Model',
@@ -576,7 +672,12 @@ class _VehicleFormState extends State<_VehicleForm> {
                   padding: const EdgeInsets.only(top: 8),
                   child: TextFormField(
                     controller: fields[index],
-                    decoration: InputDecoration(labelText: label),
+                    decoration: InputDecoration(
+                      labelText: label,
+                      hintText: index == 4
+                          ? 'e.g. Pearl white or #a62032'
+                          : null,
+                    ),
                     maxLength: 32,
                     keyboardType: index == 2
                         ? TextInputType.number
@@ -587,7 +688,7 @@ class _VehicleFormState extends State<_VehicleForm> {
                         return 'Enter ${label.toLowerCase()}';
                       }
                       if (index == 2) {
-                        final year = int.tryParse(value);
+                        final year = int.tryParse(value.trim());
                         if (year == null || year < 1900 || year > 2030) {
                           return 'Enter a valid year';
                         }
@@ -596,6 +697,29 @@ class _VehicleFormState extends State<_VehicleForm> {
                     },
                   ),
                 ),
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: fields[4],
+                builder: (context, value, _) => Align(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(
+                    spacing: 7,
+                    runSpacing: 4,
+                    children: [
+                      for (final entry in VehicleColours.presets.entries)
+                        ChoiceChip(
+                          label: Text(entry.key),
+                          avatar: PaintSwatch(entry.value),
+                          showCheckmark: false,
+                          selected:
+                              value.text.trim().toLowerCase() ==
+                              entry.key.toLowerCase(),
+                          onSelected: (_) => fields[4].text = entry.key,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
               ActionButton('Save vehicle', () {
                 if (!key.currentState!.validate()) return;
                 final id =
@@ -607,7 +731,7 @@ class _VehicleFormState extends State<_VehicleForm> {
                     id,
                     fields[0].text.trim(),
                     fields[1].text.trim(),
-                    int.parse(fields[2].text),
+                    int.parse(fields[2].text.trim()),
                     fields[3].text.trim().toUpperCase(),
                     colour: fields[4].text.trim().isEmpty
                         ? null
