@@ -194,13 +194,16 @@ class Screen extends StatelessWidget {
     required this.children,
     this.footer,
     this.onBack,
+    this.backgroundColor,
   });
   final String title;
   final List<Widget> children;
   final Widget? footer;
   final VoidCallback? onBack;
+  final Color? backgroundColor;
   @override
   Widget build(BuildContext context) => Scaffold(
+    backgroundColor: backgroundColor,
     body: SafeArea(
       child: Column(
         children: [

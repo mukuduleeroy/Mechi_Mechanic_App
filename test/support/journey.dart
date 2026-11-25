@@ -10,6 +10,7 @@ Future<void> tapLabel(WidgetTester tester, String label) async {
 Future<void> bookRepair(
   WidgetTester tester, {
   Future<void> Function(String)? capture,
+  bool captureProfiles = false,
 }) async {
   await tapLabel(tester, 'Request assistance');
   await tapLabel(tester, 'Find mechanics');
@@ -22,6 +23,13 @@ Future<void> bookRepair(
   await tapLabel(tester, 'Find mechanics');
   await capture?.call('discovery');
   await tapLabel(tester, 'View profile');
+  if (captureProfiles && capture != null) {
+    await capture('overview');
+    await tester.ensureVisible(find.text('See all'));
+    await tester.pumpAndSettle();
+    await tapLabel(tester, 'See all');
+    await capture('mechanic-reviews');
+  }
   await tapLabel(tester, 'Get quote');
   expect(find.text('Review quote'), findsOneWidget);
   expect(find.text('\$36.00'), findsWidgets);
@@ -38,10 +46,15 @@ Future<void> bookRepair(
   expect(find.text('Tyre puncture kit'), findsWidgets);
   await tapLabel(tester, 'Back to confirmation');
   await tapLabel(tester, 'Confirm completion');
+  if (captureProfiles) await capture?.call('completion');
   await tapLabel(tester, 'Continue to payment');
+  if (captureProfiles) await capture?.call('payment');
 }
 
-Future<void> payAndReview(WidgetTester tester) async {
+Future<void> payAndReview(
+  WidgetTester tester, {
+  Future<void> Function(String)? capture,
+}) async {
   await tapLabel(tester, 'Pay now');
   final confirm = find.text('Yes, pay');
   await tester.tap(confirm);
@@ -53,8 +66,11 @@ Future<void> payAndReview(WidgetTester tester) async {
   await tapLabel(tester, 'Print receipt');
   expect(find.text('R-MC-0003'), findsOneWidget);
   expect(find.text('\$36.00'), findsOneWidget);
+  await capture?.call('receipt');
   await tapLabel(tester, 'Rate mechanic');
   await tester.tap(find.byTooltip('5 stars'));
+  await tester.pumpAndSettle();
+  await capture?.call('write-review');
   await tester.enterText(find.byType(TextField), 'Fast tyre repair.');
   await tester.pumpAndSettle();
   await tapLabel(tester, 'Submit review');

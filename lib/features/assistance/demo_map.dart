@@ -13,6 +13,8 @@ class DemoMap extends StatelessWidget {
     this.movement,
     this.trackingFix,
     this.zoom = 1,
+    this.preview = false,
+    this.details = false,
     this.location = 'Harare',
   });
   final List<Mechanic> mechanics;
@@ -24,6 +26,8 @@ class DemoMap extends StatelessWidget {
   /// heading in degrees from map north.
   final ({Offset position, double heading})? trackingFix;
   final double zoom;
+  final bool preview;
+  final bool details;
   final String location;
   static const origin = Offset(.30, .56);
   static const points = [
@@ -72,7 +76,20 @@ class DemoMap extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, box) {
             final size = box.biggest;
-            final routePoints = route(selected);
+            final standardRoute = route(selected);
+            final detailTarget = Offset(
+              standardRoute.last.dx,
+              math.max(.46, standardRoute.last.dy),
+            );
+            final routePoints = preview
+                ? const [Offset(.64, .77), Offset(.87, .68), Offset(.87, .38)]
+                : details
+                ? [origin, Offset(detailTarget.dx, origin.dy), detailTarget]
+                : standardRoute;
+            final destination = routePoints.last;
+            final selectedMechanic = mechanics
+                .where((m) => m.id == selected)
+                .firstOrNull;
             final List<Offset> projected = routePoints
                 .map((p) => Offset(p.dx * size.width, p.dy * size.height))
                 .toList();
@@ -96,7 +113,7 @@ class DemoMap extends StatelessWidget {
                         CustomPaint(painter: _StreetPainter(projected, value)),
                   ),
                   marker(
-                    origin,
+                    routePoints.first,
                     const _CarMarker(label: 'Your vehicle', heading: 90),
                   ),
                   if (trackingFix case final fix?)
@@ -108,6 +125,7 @@ class DemoMap extends StatelessWidget {
                       child: _CarMarker(
                         label: 'Mechanic vehicle',
                         heading: fix.heading,
+                        tracking: true,
                       ),
                     )
                   else if (movement case final progress?)
@@ -122,6 +140,7 @@ class DemoMap extends StatelessWidget {
                           _CarMarker(
                             label: 'Mechanic vehicle',
                             heading: fix.heading,
+                            tracking: true,
                           ),
                         );
                       },
@@ -129,18 +148,37 @@ class DemoMap extends StatelessWidget {
                   else
                     for (final mechanic in mechanics)
                       marker(
-                        points[mechanic.id],
-                        IconButton(
-                          tooltip: mechanic.name,
-                          onPressed: () => onSelect?.call(mechanic.id),
-                          icon: _MapPin(
-                            icon: LucideIcons.wrench,
-                            color: mechanic.id == selected
-                                ? Mechi.blue
-                                : Mechi.muted,
+                        preview || details ? destination : points[mechanic.id],
+                        onSelect == null
+                            ? _MapPin(selected: mechanic.id == selected)
+                            : IconButton(
+                                tooltip: mechanic.name,
+                                onPressed: () => onSelect!(mechanic.id),
+                                icon: _MapPin(
+                                  selected: mechanic.id == selected,
+                                ),
+                              ),
+                      ),
+                  if (selectedMechanic != null &&
+                      movement == null &&
+                      trackingFix == null)
+                    Positioned(
+                      top: math.max(4, destination.dy * size.height - 48),
+                      left: (destination.dx * size.width - 60).clamp(
+                        0.0,
+                        math.max(0, size.width - 120),
+                      ),
+                      width: 120,
+                      child: IgnorePointer(
+                        child: Center(
+                          child: ChipLabel(
+                            '${selectedMechanic.eta} min · ${selectedMechanic.distance} km',
+                            background: Mechi.ink,
+                            ink: Mechi.white,
                           ),
                         ),
                       ),
+                    ),
                 ],
               ),
             );
@@ -152,10 +190,15 @@ class DemoMap extends StatelessWidget {
 }
 
 class _CarMarker extends StatelessWidget {
-  const _CarMarker({required this.label, required this.heading});
+  const _CarMarker({
+    required this.label,
+    required this.heading,
+    this.tracking = false,
+  });
 
   final String label;
   final double heading;
+  final bool tracking;
 
   @override
   Widget build(BuildContext context) => Center(
@@ -165,14 +208,20 @@ class _CarMarker extends StatelessWidget {
       curve: Mechi.curve,
       builder: (_, angle, child) =>
           Transform.rotate(angle: angle * math.pi / 180, child: child),
-      child: Image.asset(
-        'assets/vehicles/map-car.png',
-        height: 33,
-        width: 21,
-        fit: BoxFit.contain,
-        semanticLabel: label,
-        errorBuilder: (_, error, stack) =>
-            const Icon(LucideIcons.car, color: Mechi.ink, size: 21),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: tracking ? Mechi.blue : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Image.asset(
+          'assets/vehicles/map-car.png',
+          height: 33,
+          width: 21,
+          fit: BoxFit.contain,
+          semanticLabel: label,
+          errorBuilder: (_, error, stack) =>
+              const Icon(LucideIcons.car, color: Mechi.ink, size: 21),
+        ),
       ),
     ),
   );
@@ -189,20 +238,27 @@ class _HeadingTween extends Tween<double> {
 }
 
 class _MapPin extends StatelessWidget {
-  const _MapPin({required this.icon, required this.color});
-  final IconData icon;
-  final Color color;
+  const _MapPin({required this.selected});
+  final bool selected;
+
   @override
   Widget build(BuildContext context) => Center(
     child: Container(
-      width: 33,
-      height: 33,
+      width: 28,
+      height: 28,
       decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-        border: Border.all(color: Mechi.white, width: 2),
+        color: Mechi.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: selected ? Mechi.blue : Mechi.line,
+          width: 1.5,
+        ),
       ),
-      child: Icon(icon, color: Mechi.white, size: 15),
+      child: Icon(
+        LucideIcons.wrench,
+        color: selected ? Mechi.ink : Mechi.muted,
+        size: 15,
+      ),
     ),
   );
 }
@@ -216,19 +272,6 @@ class _StreetPainter extends CustomPainter {
     final rect = Offset.zero & size;
     canvas.save();
     canvas.clipRect(rect);
-    canvas.drawRect(
-      Rect.fromLTWH(0, size.height * .23, size.width * .21, size.height * .25),
-      Paint()..color = Mechi.park,
-    );
-    canvas.drawRect(
-      Rect.fromLTWH(
-        size.width * .75,
-        size.height * .55,
-        size.width * .25,
-        size.height * .3,
-      ),
-      Paint()..color = Mechi.park,
-    );
     final road = Paint()
       ..color = Mechi.white
       ..strokeWidth = 4;
@@ -243,8 +286,8 @@ class _StreetPainter extends CustomPainter {
     for (var i = 0; i < 14; i++) {
       final y = i * size.height / 12;
       canvas.drawLine(
-        Offset(0, y + 25),
-        Offset(size.width, y - 25),
+        Offset(0, y + size.width * .08),
+        Offset(size.width, y - size.width * .08),
         road..strokeWidth = i % 3 == 0 ? 7 : 3,
       );
     }

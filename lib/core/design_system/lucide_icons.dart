@@ -1,6 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 abstract final class LucideIcons {
+  static const bell = IconData(0xf19c, fontFamily: 'Lucide');
+  static const clock = IconData(0xf221, fontFamily: 'Lucide');
+  static const heart = IconData(0xf354, fontFamily: 'Lucide');
+  static const map = IconData(0xf3bf, fontFamily: 'Lucide');
+  static const printer = IconData(0xf46b, fontFamily: 'Lucide');
+  static const shieldCheck = IconData(0xf4c1, fontFamily: 'Lucide');
+  static const slidersHorizontal = IconData(0xf4dc, fontFamily: 'Lucide');
   static const activity = IconData(0xf101, fontFamily: 'Lucide');
   static const alertCircle = IconData(0xf10b, fontFamily: 'Lucide');
   static const alertTriangle = IconData(0xf10d, fontFamily: 'Lucide');

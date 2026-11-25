@@ -1,5 +1,4 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../assistance/domain.dart';
 
 class VehicleImage extends StatelessWidget {
@@ -34,10 +33,17 @@ class VehicleImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final asset = assetFor(vehicle);
-    Widget fallback() => SvgPicture.asset(
-      'assets/vehicles/silver.svg',
+    Widget fallback() => SizedBox(
       height: height,
-      semanticsLabel: 'Generic vehicle illustration',
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Text(
+          'Vehicle image unavailable',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ),
     );
     if (asset == null) return fallback();
 

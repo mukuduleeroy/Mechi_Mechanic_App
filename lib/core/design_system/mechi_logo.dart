@@ -7,9 +7,11 @@ class MechiLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = symbolOnly ? 'mark' : 'lockup';
+    final name = symbolOnly
+        ? 'mechi-app-symbol-transparent'
+        : 'mechi-logo-original';
     return Image.asset(
-      'assets/branding/mechi-$name.png',
+      'assets/branding/$name.png',
       height: height,
       fit: BoxFit.contain,
       cacheHeight: (height * MediaQuery.devicePixelRatioOf(context)).ceil(),

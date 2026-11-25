@@ -920,23 +920,37 @@ class _ReceiptScreenState extends ConsumerState<ReceiptScreen> {
                     ActionButton(
                       'Rate mechanic',
                       () => context.push('/review/${job.id}'),
+                    )
+                  else if (job.status == JobStatus.reviewed)
+                    const ChipLabel(
+                      'Review submitted',
+                      icon: LucideIcons.check,
                     ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
-                        child: ActionButton(
-                          'Print again',
-                          () => setState(() => printCount++),
-                          secondary: true,
+                        child: FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Mechi.ink,
+                            foregroundColor: Mechi.white,
+                            shape: const StadiumBorder(),
+                          ),
+                          onPressed: () => setState(() => printCount++),
+                          icon: const Icon(LucideIcons.printer, size: 16),
+                          label: const Text('Print again'),
                         ),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: ActionButton(
-                          'Done',
-                          () => backOrHome(context),
-                          secondary: true,
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Mechi.white,
+                            foregroundColor: Mechi.ink,
+                            shape: const StadiumBorder(),
+                          ),
+                          onPressed: () => backOrHome(context),
+                          child: const Text('Done'),
                         ),
                       ),
                     ],
@@ -960,8 +974,10 @@ class ReviewScreen extends ConsumerStatefulWidget {
 
 class _ReviewScreenState extends ConsumerState<ReviewScreen> {
   final review = TextEditingController();
+  final feedback = <String>{};
   int rating = 0;
   bool submitting = false;
+
   @override
   void dispose() {
     review.dispose();
@@ -973,20 +989,48 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
     ref.watch(jobsProvider);
     final controller = ref.read(jobsProvider.notifier);
     final job = controller.find(widget.id);
-    final available = job?.status == JobStatus.paid;
+    final available =
+        job?.status == JobStatus.paid ||
+        (submitting && job?.status == JobStatus.reviewed);
+    final type = Theme.of(context).textTheme;
     return Screen(
       title: 'Rate mechanic',
+      backgroundColor: Mechi.white,
       onBack: () => backOrHome(context),
       footer: available
-          ? ActionButton(
-              'Submit review',
-              rating == 0 || submitting
+          ? FilledButton(
+              style: FilledButton.styleFrom(
+                shape: const StadiumBorder(),
+                minimumSize: const Size.fromHeight(48),
+              ),
+              onPressed: rating == 0 || submitting
                   ? null
                   : () async {
                       setState(() => submitting = true);
-                      await controller.review(job!, rating, review.text);
-                      if (context.mounted) backOrHome(context);
+                      final message = [
+                        if (review.text.trim().isNotEmpty) review.text.trim(),
+                        if (feedback.isNotEmpty) feedback.join(' · '),
+                      ].join('\n\n');
+                      try {
+                        await controller.review(job!, rating, message);
+                        if (context.mounted) backOrHome(context);
+                      } catch (_) {
+                        if (context.mounted) {
+                          setState(() => submitting = false);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Couldn’t save the review.'),
+                            ),
+                          );
+                        }
+                      }
                     },
+              child: submitting
+                  ? const SizedBox.square(
+                      dimension: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('Submit review'),
             )
           : null,
       children: [
@@ -994,37 +1038,86 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
           const Panel(child: Text('Review unavailable or already submitted.'))
         else ...[
           Panel(
+            color: Mechi.canvas,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MechanicIdentity(
                   ref.watch(mechanicsProvider).byId(job!.mechanicId!),
                 ),
-                const SizedBox(height: 14),
-                const Text('How was your service?'),
-                Wrap(
-                  children: [
-                    for (var i = 1; i <= 5; i++)
-                      IconButton(
-                        tooltip: '$i star${i == 1 ? '' : 's'}',
-                        onPressed: () => setState(() => rating = i),
-                        icon: Icon(
-                          LucideIcons.star,
-                          color: i <= rating ? Mechi.star : Mechi.muted,
-                        ),
-                      ),
-                  ],
+                const SizedBox(height: 8),
+                Text(
+                  '${job.request.service.label} · Completed',
+                  style: type.bodySmall,
                 ),
-                if (rating > 0) ChipLabel('$rating / 5'),
               ],
             ),
           ),
+          Text('How was your service?', style: type.headlineMedium),
+          Text(
+            'Choose a star rating and share your experience.',
+            style: type.bodySmall,
+          ),
+          Row(
+            children: [
+              for (var i = 1; i <= 5; i++)
+                Expanded(
+                  child: IconButton(
+                    tooltip: '$i star${i == 1 ? '' : 's'}',
+                    isSelected: i <= rating,
+                    onPressed: submitting
+                        ? null
+                        : () => setState(() => rating = i),
+                    icon: Icon(
+                      i <= rating ? Icons.star_rounded : LucideIcons.star,
+                      color: Mechi.star,
+                      size: 29,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          Text('What went well?', style: type.titleMedium),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              for (final tag in [
+                'Arrived on time',
+                'Professional',
+                'Fair pricing',
+                'Quality repair',
+              ])
+                FilterChip(
+                  label: Text(tag),
+                  backgroundColor: Mechi.canvas,
+                  selectedColor: Mechi.pale,
+                  side: BorderSide.none,
+                  shape: const StadiumBorder(),
+                  selected: feedback.contains(tag),
+                  onSelected: submitting
+                      ? null
+                      : (selected) => setState(() {
+                          if (selected) {
+                            feedback.add(tag);
+                          } else {
+                            feedback.remove(tag);
+                          }
+                        }),
+                ),
+            ],
+          ),
+          Text('Your review', style: type.titleMedium),
           TextField(
             controller: review,
+            enabled: !submitting,
             maxLength: 240,
-            minLines: 3,
+            minLines: 4,
             maxLines: 5,
-            decoration: const InputDecoration(labelText: 'Review (optional)'),
+            decoration: const InputDecoration(
+              hintText: 'Review (optional)',
+              fillColor: Mechi.canvas,
+            ),
           ),
         ],
       ],

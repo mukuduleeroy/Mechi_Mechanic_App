@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../core/design_system/lucide_icons.dart';
 import '../../core/design_system/mechi_ui.dart';
 import '../garage/garage_state.dart';
+import '../garage/vehicle_image.dart';
+import 'mechanic_reviews.dart';
 import 'demo_map.dart';
 import 'domain.dart';
 import 'job_state.dart';
@@ -171,6 +173,7 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
   final pages = PageController(viewportFraction: .88);
   int selected = 0;
   double zoom = 1;
+  bool selectedOnly = false;
   @override
   void dispose() {
     pages.dispose();
@@ -179,7 +182,7 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(jobsProvider);
+    final jobs = ref.watch(jobsProvider);
     final job = ref.read(jobsProvider.notifier).find(widget.id);
     final mechanics = ref.watch(mechanicsProvider).all;
     if (job == null) {
@@ -207,7 +210,7 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
         fit: StackFit.expand,
         children: [
           DemoMap(
-            mechanics: mechanics,
+            mechanics: selectedOnly ? [mechanics[selected]] : mechanics,
             selected: selected,
             zoom: zoom,
             location: job.request.location,
@@ -234,30 +237,59 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                   ),
                   child: Row(
                     children: [
-                      IconButton.filled(
-                        tooltip: 'Back',
-                        onPressed: () => backOrHome(context),
-                        style: IconButton.styleFrom(
+                      FilledButton.icon(
+                        style: FilledButton.styleFrom(
                           backgroundColor: Mechi.white,
                           foregroundColor: Mechi.ink,
+                          shape: const StadiumBorder(),
                         ),
-                        icon: const Icon(LucideIcons.arrowLeft, size: 19),
-                      ),
-                      const SizedBox(width: 8),
-                      const ChipLabel(
-                        'Nearby mechanics',
-                        background: Mechi.white,
-                        ink: Mechi.ink,
+                        onPressed: () => backOrHome(context),
+                        icon: const Icon(LucideIcons.arrowLeft, size: 16),
+                        label: const Text('Nearby mechanics'),
                       ),
                       const Spacer(),
                       IconButton.filled(
-                        tooltip: 'Manage request',
+                        tooltip: 'Map filters',
                         style: IconButton.styleFrom(
                           backgroundColor: Mechi.white,
                           foregroundColor: Mechi.ink,
                         ),
-                        onPressed: () => context.push('/job/${job.id}'),
-                        icon: const Icon(LucideIcons.moreHorizontal, size: 19),
+                        icon: const Icon(
+                          LucideIcons.slidersHorizontal,
+                          size: 19,
+                        ),
+                        onPressed: () async {
+                          final value = await showModalBottomSheet<bool>(
+                            context: context,
+                            builder: (sheet) => SafeArea(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    title: const Text('Show all mechanics'),
+                                    onTap: () => Navigator.pop(sheet, false),
+                                  ),
+                                  ListTile(
+                                    title: const Text(
+                                      'Show selected mechanic only',
+                                    ),
+                                    onTap: () => Navigator.pop(sheet, true),
+                                  ),
+                                  ListTile(
+                                    title: const Text('Manage request'),
+                                    onTap: () {
+                                      Navigator.pop(sheet);
+                                      context.push('/job/${job.id}');
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                          if (mounted && value != null) {
+                            setState(() => selectedOnly = value);
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -306,13 +338,16 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                 ),
                 const SizedBox(height: 10),
                 SizedBox(
-                  height: 218,
+                  height: 200,
                   child: PageView.builder(
                     controller: pages,
                     itemCount: mechanics.length,
                     onPageChanged: (index) => setState(() => selected = index),
                     itemBuilder: (context, index) {
                       final mechanic = mechanics[index];
+                      final average = reviewAverage(
+                        reviewsFor(jobs, mechanic.id),
+                      );
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Panel(
@@ -321,35 +356,41 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               MechanicIdentity(mechanic),
-                              Wrap(
-                                spacing: 7,
-                                runSpacing: 4,
+                              const SizedBox(height: 5),
+                              Text(
+                                'Verified mechanic · Available',
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: Mechi.blue),
+                              ),
+                              Text(
+                                '${average == null ? '' : '★ ${average.toStringAsFixed(1)} · '}${mechanic.eta} min · ${mechanic.distance} km',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              const Divider(color: Mechi.line),
+                              Row(
                                 children: [
-                                  ChipLabel(
-                                    '${mechanic.rating}',
-                                    icon: LucideIcons.star,
-                                    ink: Mechi.star,
-                                    background: Mechi.paper,
+                                  const Icon(LucideIcons.mapPin, size: 17),
+                                  const SizedBox(width: 5),
+                                  Expanded(
+                                    child: Text(
+                                      mechanic.area,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                  ChipLabel(
-                                    '${mechanic.distance} km · ${mechanic.eta} min',
-                                  ),
-                                  const ChipLabel(
-                                    'Verified · Demo',
-                                    icon: LucideIcons.badgeCheck,
-                                  ),
-                                  const ChipLabel(
-                                    'Available',
-                                    ink: Mechi.muted,
-                                    background: Mechi.canvas,
+                                  FilledButton(
+                                    style: FilledButton.styleFrom(
+                                      shape: const StadiumBorder(),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                      ),
+                                    ),
+                                    onPressed: () => context.push(
+                                      '/mechanic/${job.id}/${mechanic.id}',
+                                    ),
+                                    child: const Text('View profile'),
                                   ),
                                 ],
-                              ),
-                              ActionButton(
-                                'View profile',
-                                () => context.push(
-                                  '/mechanic/${job.id}/${mechanic.id}',
-                                ),
                               ),
                             ],
                           ),
@@ -406,121 +447,358 @@ class MechanicScreen extends ConsumerStatefulWidget {
 
 class _MechanicScreenState extends ConsumerState<MechanicScreen> {
   bool reviews = false;
+
   @override
   Widget build(BuildContext context) {
-    ref.watch(jobsProvider);
+    final jobs = ref.watch(jobsProvider);
     final mechanics = ref.watch(mechanicsProvider);
-    if (!mechanics.all.any((item) => item.id == widget.mechanicId)) {
+    final preferences = ref.watch(preferencesProvider);
+    final mechanic = mechanics.all
+        .where((item) => item.id == widget.mechanicId)
+        .firstOrNull;
+    final job = ref.read(jobsProvider.notifier).find(widget.id);
+    if (mechanic == null || job == null) {
       return Screen(
         title: 'Mechanic details',
         onBack: () => backOrHome(context),
         children: const [Text('Mechanic unavailable.')],
       );
     }
-    final mechanic = mechanics.byId(widget.mechanicId);
-    final job = ref.read(jobsProvider.notifier).find(widget.id);
-    return Screen(
-      title: 'Mechanic details',
-      onBack: () => backOrHome(context),
-      footer: Panel(
-        child: Row(
+    final records = reviewsFor(jobs, mechanic.id);
+    final average = reviewAverage(records);
+    final favouriteKey = 'favourite-mechanic-${mechanic.id}';
+    final favourite = preferences.getBool(favouriteKey) ?? false;
+    final type = Theme.of(context).textTheme;
+    return Scaffold(
+      backgroundColor: Mechi.white,
+      body: SafeArea(
+        child: Column(
           children: [
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
                 children: [
-                  Text(
-                    usd(mechanic.callout),
-                    style: Theme.of(context).textTheme.titleLarge,
+                  Stack(
+                    children: [
+                      if (!reviews)
+                        SizedBox(
+                          height: 258,
+                          child: DemoMap(
+                            mechanics: [mechanic],
+                            selected: mechanic.id,
+                            details: true,
+                            location: mechanic.area,
+                          ),
+                        )
+                      else
+                        const SizedBox(height: 82),
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            FilledButton.icon(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Mechi.white,
+                                foregroundColor: Mechi.ink,
+                                shape: const StadiumBorder(),
+                              ),
+                              onPressed: () {
+                                if (reviews) {
+                                  setState(() => reviews = false);
+                                } else {
+                                  backOrHome(context);
+                                }
+                              },
+                              icon: const Icon(LucideIcons.arrowLeft, size: 16),
+                              label: const Text('Details'),
+                            ),
+                            const Spacer(),
+                            IconButton.filled(
+                              tooltip: favourite
+                                  ? 'Remove favourite'
+                                  : 'Add favourite',
+                              style: IconButton.styleFrom(
+                                backgroundColor: Mechi.white,
+                                foregroundColor: favourite
+                                    ? Mechi.blue
+                                    : Mechi.ink,
+                              ),
+                              icon: const Icon(LucideIcons.heart, size: 19),
+                              onPressed: () {
+                                preferences.setBool(favouriteKey, !favourite);
+                                setState(() {});
+                              },
+                            ),
+                            IconButton.filled(
+                              tooltip: 'More options',
+                              style: IconButton.styleFrom(
+                                backgroundColor: Mechi.white,
+                                foregroundColor: Mechi.ink,
+                              ),
+                              icon: const Icon(
+                                LucideIcons.moreHorizontal,
+                                size: 19,
+                              ),
+                              onPressed: () => showModalBottomSheet<void>(
+                                context: context,
+                                builder: (sheet) => SafeArea(
+                                  child: ListTile(
+                                    title: Text(mechanic.name),
+                                    subtitle: Text(
+                                      '${mechanic.area} · Demo mechanic',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  const Text('Call-out fee'),
+                  if (!reviews) ...[
+                    Stack(
+                      children: [
+                        Positioned.fill(
+                          bottom: 20,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Mechi.ink,
+                              borderRadius: BorderRadius.circular(Mechi.radius),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 14, 16, 32),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const ChipLabel(
+                                    'Verified · Demo',
+                                    icon: LucideIcons.shieldCheck,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      mechanic.name,
+                                      style: type.titleMedium?.copyWith(
+                                        color: Mechi.white,
+                                      ),
+                                    ),
+                                  ),
+                                  if (average != null)
+                                    Text(
+                                      '★ ${average.toStringAsFixed(1)}',
+                                      style: type.bodySmall?.copyWith(
+                                        color: Mechi.white,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Wrap(
+                                      spacing: 12,
+                                      runSpacing: 5,
+                                      children: [
+                                        _mechanicFact(
+                                          context,
+                                          '${mechanic.distance} km',
+                                          'Distance',
+                                        ),
+                                        _mechanicFact(
+                                          context,
+                                          '${mechanic.eta} min',
+                                          'Arrival time',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Flexible(child: SizedBox(height: 100)),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: SizedBox(
+                            height: 24,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                color: Mechi.white,
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(24),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          bottom: 6,
+                          width: MediaQuery.sizeOf(context).width * .45,
+                          child: VehicleImage(job.request.vehicle, height: 100),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Overview', style: type.titleLarge),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              const Icon(LucideIcons.mapPin, size: 22),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  mechanic.area,
+                                  style: type.titleMedium,
+                                ),
+                              ),
+                              const ChipLabel('Available'),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              for (final (icon, value, label) in [
+                                (
+                                  LucideIcons.shieldCheck,
+                                  'Verified',
+                                  'Mechanic',
+                                ),
+                                (
+                                  LucideIcons.clock,
+                                  '${mechanic.eta} min',
+                                  'Arrival',
+                                ),
+                                (
+                                  LucideIcons.wrench,
+                                  '${mechanic.experience} years',
+                                  'Experience',
+                                ),
+                              ])
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Panel(
+                                      color: Mechi.canvas,
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Icon(icon, size: 17),
+                                          const SizedBox(height: 6),
+                                          Text(value, style: type.labelLarge),
+                                          Text(label, style: type.bodySmall),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Text('Services', style: type.titleMedium),
+                          const SizedBox(height: 6),
+                          ChipLabel(
+                            mechanic.specialty,
+                            background: Mechi.canvas,
+                            ink: Mechi.ink,
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text('Reviews', style: type.titleMedium),
+                              ),
+                              TextButton(
+                                onPressed: () => setState(() => reviews = true),
+                                child: const Text('See all'),
+                              ),
+                            ],
+                          ),
+                          const InfoRow(
+                            'Demo qualification',
+                            'Motor vehicle trade certificate',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ] else
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: MechanicReviews(
+                        specialty: mechanic.specialty,
+                        records: records,
+                        now: ref.watch(demoClockProvider),
+                      ),
+                    ),
                 ],
               ),
             ),
-            Expanded(
-              child: ActionButton(
-                'Get quote',
-                job?.status == JobStatus.searching
-                    ? () {
-                        ref.read(jobsProvider.notifier).quote(job!, mechanic);
-                        context.pushReplacement('/job/${job.id}');
-                      }
-                    : null,
+            const Divider(height: 1, color: Mechi.line),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(usd(mechanic.callout), style: type.titleLarge),
+                        Text('Call-out estimate', style: type.bodySmall),
+                      ],
+                    ),
+                  ),
+                  FilledButton.icon(
+                    style: FilledButton.styleFrom(shape: const StadiumBorder()),
+                    onPressed: job.status == JobStatus.searching
+                        ? () {
+                            ref
+                                .read(jobsProvider.notifier)
+                                .quote(job, mechanic);
+                            context.pushReplacement('/job/${job.id}');
+                          }
+                        : null,
+                    icon: const Icon(LucideIcons.navigation, size: 15),
+                    label: const Text('Get quote'),
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ),
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(Mechi.radius),
-          child: SizedBox(
-            height: 180,
-            child: DemoMap(
-              mechanics: [mechanic],
-              selected: mechanic.id,
-              location: mechanic.area,
-            ),
-          ),
-        ),
-        Panel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MechanicIdentity(mechanic),
-              const SizedBox(height: 10),
-              const ChipLabel('Verified · Demo', icon: LucideIcons.badgeCheck),
-              InfoRow('Customer rating', '${mechanic.rating} / 5'),
-              InfoRow('Estimated arrival', '${mechanic.eta} min'),
-              InfoRow('Availability', 'Available · ${mechanic.area}'),
-            ],
-          ),
-        ),
-        SegmentedButton<bool>(
-          showSelectedIcon: false,
-          segments: const [
-            ButtonSegment(value: false, label: Text('Overview')),
-            ButtonSegment(value: true, label: Text('Reviews')),
-          ],
-          selected: {reviews},
-          onSelectionChanged: (value) => setState(() => reviews = value.first),
-        ),
-        if (reviews) ...[
-          const Panel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Ropa N. · 5 / 5'),
-                Text(
-                  'Explained the fault clearly and arrived within the estimate.',
-                ),
-              ],
-            ),
-          ),
-          const Panel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Kuda S. · 5 / 5'),
-                Text('The final bill matched the quote.'),
-              ],
-            ),
-          ),
-        ] else
-          Panel(
-            child: Column(
-              children: [
-                InfoRow('Experience', '${mechanic.experience} years'),
-                const InfoRow(
-                  'Qualification',
-                  'Motor vehicle trade certificate',
-                ),
-                InfoRow('Services', mechanic.specialty),
-                const InfoRow('Profile', 'Fictional prototype mechanic'),
-              ],
-            ),
-          ),
-      ],
     );
   }
+
+  Widget _mechanicFact(BuildContext context, String value, String label) =>
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            value,
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(color: Mechi.white),
+          ),
+          Text(
+            label,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: Mechi.paper),
+          ),
+        ],
+      );
 }
