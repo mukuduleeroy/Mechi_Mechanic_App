@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/design_system/lucide_icons.dart';
 import '../../core/design_system/mechi_ui.dart';
-import '../garage/garage_screens.dart';
+import '../garage/vehicle_image.dart';
+import '../../core/design_system/mechi_logo.dart';
 import '../garage/garage_state.dart';
 import 'demo_map.dart';
 import 'domain.dart';
@@ -181,7 +182,7 @@ class JobScreen extends ConsumerWidget {
                     icon: complete ? LucideIcons.check : LucideIcons.wrench,
                   ),
                   const SizedBox(height: 8),
-                  const Center(child: VehicleArt(height: 100)),
+                  Center(child: VehicleImage(job.request.vehicle, height: 100)),
                   Center(
                     child: ProgressRing(
                       job.progress / 100,
@@ -847,13 +848,7 @@ class _ReceiptScreenState extends ConsumerState<ReceiptScreen> {
                                 ),
                                 child: Column(
                                   children: [
-                                    const Text(
-                                      'M E C H I',
-                                      style: TextStyle(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
+                                    const MechiLogo(height: 44),
                                     const Text('DEMONSTRATION SERVICE RECEIPT'),
                                     const SizedBox(height: 8),
                                     const Divider(color: Mechi.line),

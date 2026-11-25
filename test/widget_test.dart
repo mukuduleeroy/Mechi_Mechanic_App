@@ -40,31 +40,29 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> captureGolden(WidgetTester tester, String name) async {
+    await tester.runAsync(() async {
+      for (final image in find.byType(Image).evaluate()) {
+        await precacheImage((image.widget as Image).image, image);
+      }
+    });
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(Scaffold).hitTestable(),
+      matchesGoldenFile('goldens/$name.png'),
+    );
+  }
+
   testWidgets('home, request, job, payment and receipt at 390 × 844', (
     tester,
   ) async {
     await launch(tester);
     expect(find.text('Hello, Tadiwa M.'), findsOneWidget);
-    await expectLater(
-      find.byType(Scaffold),
-      matchesGoldenFile('goldens/home.png'),
-    );
-    await bookRepair(
-      tester,
-      capture: (name) => expectLater(
-        find.byType(Scaffold).hitTestable(),
-        matchesGoldenFile('goldens/$name.png'),
-      ),
-    );
-    await expectLater(
-      find.byType(Scaffold).hitTestable(),
-      matchesGoldenFile('goldens/payment.png'),
-    );
+    await captureGolden(tester, 'home');
+    await bookRepair(tester, capture: (name) => captureGolden(tester, name));
+    await captureGolden(tester, 'payment');
     await payAndReview(tester);
-    await expectLater(
-      find.byType(Scaffold).hitTestable(),
-      matchesGoldenFile('goldens/receipt.png'),
-    );
+    await captureGolden(tester, 'receipt');
     await tapLabel(tester, 'Done');
     await tester.pageBack();
     await tester.pumpAndSettle();

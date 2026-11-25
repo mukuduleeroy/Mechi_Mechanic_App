@@ -2,7 +2,7 @@
 
 All 53 inventory rows were matched to their original files and their `Crop_` equivalents in the supplied ZIP. Original and cropped images were reviewed in sequence. Pixel values were checked against the JSON and the specification. The 20-page investor pitch informs the service and payments flow. The supplied copy is named `Mechanic App Pitch.pdf`.
 
-The table groups transitional frames with the customer experience they inform. Mechi uses original layouts and a generic illustrated vehicle asset. The offline schematic, initials portraits, outline payment icons, and locally bundled Inter and IBM Plex Mono are substitutes for the original imagery, map tiles, and typography. Request, vehicle editing, review submission, history, and profile are newly composed screens.
+The table groups transitional frames with the customer experience they inform. Mechi uses original layouts and bundled model-specific vehicle renders with an illustration fallback. The offline schematic, initials portraits, outline payment icons, and locally bundled Inter and IBM Plex Mono are substitutes for the original imagery, map tiles, and typography. Request, vehicle editing, review submission, history, and profile are newly composed screens.
 
 | Source frame | Time (s) | Mechi use |
 | --- | ---: | --- |

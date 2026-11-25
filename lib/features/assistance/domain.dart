@@ -59,9 +59,17 @@ String usd(int cents) =>
     '\$${cents ~/ 100}.${(cents % 100).toString().padLeft(2, '0')}';
 
 class Vehicle {
-  const Vehicle(this.id, this.make, this.model, this.year, this.plate);
+  const Vehicle(
+    this.id,
+    this.make,
+    this.model,
+    this.year,
+    this.plate, {
+    this.colour,
+  });
   final String id, make, model, plate;
   final int year;
+  final String? colour;
   String get name => '$make $model';
   Map<String, Object?> toJson() => {
     'id': id,
@@ -69,9 +77,16 @@ class Vehicle {
     'model': model,
     'year': year,
     'plate': plate,
+    if (colour != null) 'colour': colour,
   };
-  factory Vehicle.fromJson(Map<String, dynamic> j) =>
-      Vehicle(j['id'], j['make'], j['model'], j['year'], j['plate']);
+  factory Vehicle.fromJson(Map<String, dynamic> j) => Vehicle(
+    j['id'],
+    j['make'],
+    j['model'],
+    j['year'],
+    j['plate'],
+    colour: j['colour'] as String?,
+  );
 }
 
 class Mechanic {

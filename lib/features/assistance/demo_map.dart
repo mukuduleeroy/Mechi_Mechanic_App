@@ -11,6 +11,7 @@ class DemoMap extends StatelessWidget {
     this.selected = 0,
     this.onSelect,
     this.movement,
+    this.trackingFix,
     this.zoom = 1,
     this.location = 'Harare',
   });
@@ -18,6 +19,10 @@ class DemoMap extends StatelessWidget {
   final int selected;
   final ValueChanged<int>? onSelect;
   final double? movement;
+
+  /// Projected GPS position in normalized map coordinates and clockwise
+  /// heading in degrees from map north.
+  final ({Offset position, double heading})? trackingFix;
   final double zoom;
   final String location;
   static const origin = Offset(.30, .56);
@@ -33,6 +38,29 @@ class DemoMap extends StatelessWidget {
   static List<Offset> route(int index) {
     final target = points[index];
     return [origin, Offset(target.dx, origin.dy), target];
+  }
+
+  ({Offset position, double heading}) _routeFix(
+    List<Offset> route,
+    Size size,
+    double progress,
+  ) {
+    final firstLeg = progress < .5;
+    final start = firstLeg ? route.last : route[1];
+    final end = firstLeg ? route[1] : route.first;
+    final vector = end - start;
+    final heading = math.atan2(
+      vector.dx * size.width,
+      -vector.dy * size.height,
+    );
+    return (
+      position: Offset.lerp(
+        start,
+        end,
+        firstLeg ? progress * 2 : progress * 2 - 1,
+      )!,
+      heading: heading * 180 / math.pi,
+    );
   }
 
   @override
@@ -55,10 +83,6 @@ class DemoMap extends StatelessWidget {
               height: 46,
               child: child,
             );
-            final travel = movement ?? 0;
-            final enRoute = travel < .5
-                ? Offset.lerp(routePoints.last, routePoints[1], travel * 2)!
-                : Offset.lerp(routePoints[1], origin, (travel - .5) * 2)!;
             return Transform.scale(
               scale: zoom,
               child: Stack(
@@ -73,19 +97,34 @@ class DemoMap extends StatelessWidget {
                   ),
                   marker(
                     origin,
-                    const _MapPin(icon: LucideIcons.car, color: Mechi.ink),
+                    const _CarMarker(label: 'Your vehicle', heading: 90),
                   ),
-                  if (movement != null)
+                  if (trackingFix case final fix?)
                     TweenAnimationBuilder<Offset>(
-                      tween: Tween(end: enRoute),
+                      tween: Tween(end: fix.position),
                       duration: Mechi.animate(context),
-                      builder: (_, value, _) => marker(
-                        value,
-                        const _MapPin(
-                          icon: LucideIcons.wrench,
-                          color: Mechi.blue,
-                        ),
+                      curve: Mechi.curve,
+                      builder: (_, value, child) => marker(value, child!),
+                      child: _CarMarker(
+                        label: 'Mechanic vehicle',
+                        heading: fix.heading,
                       ),
+                    )
+                  else if (movement case final progress?)
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(end: progress.clamp(0.0, 1.0)),
+                      duration: Mechi.animate(context),
+                      curve: Mechi.curve,
+                      builder: (_, value, _) {
+                        final fix = _routeFix(routePoints, size, value);
+                        return marker(
+                          fix.position,
+                          _CarMarker(
+                            label: 'Mechanic vehicle',
+                            heading: fix.heading,
+                          ),
+                        );
+                      },
                     )
                   else
                     for (final mechanic in mechanics)
@@ -110,6 +149,43 @@ class DemoMap extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _CarMarker extends StatelessWidget {
+  const _CarMarker({required this.label, required this.heading});
+
+  final String label;
+  final double heading;
+
+  @override
+  Widget build(BuildContext context) => Center(
+    child: TweenAnimationBuilder<double>(
+      tween: _HeadingTween(heading),
+      duration: Mechi.animate(context),
+      curve: Mechi.curve,
+      builder: (_, angle, child) =>
+          Transform.rotate(angle: angle * math.pi / 180, child: child),
+      child: Image.asset(
+        'assets/vehicles/map-car.png',
+        height: 33,
+        width: 21,
+        fit: BoxFit.contain,
+        semanticLabel: label,
+        errorBuilder: (_, error, stack) =>
+            const Icon(LucideIcons.car, color: Mechi.ink, size: 21),
+      ),
+    ),
+  );
+}
+
+class _HeadingTween extends Tween<double> {
+  _HeadingTween(double heading) : super(end: heading);
+
+  @override
+  double lerp(double t) {
+    final delta = (end! - begin! + 180) % 360 - 180;
+    return begin! + delta * t;
+  }
 }
 
 class _MapPin extends StatelessWidget {

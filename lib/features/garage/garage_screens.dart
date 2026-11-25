@@ -1,26 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/design_system/lucide_icons.dart';
 import '../../core/design_system/mechi_ui.dart';
+import '../../core/design_system/mechi_logo.dart';
 import '../assistance/demo_map.dart';
 import '../assistance/domain.dart';
 import '../assistance/job_state.dart';
 import '../assistance/repositories.dart';
 import 'garage_state.dart';
-
-class VehicleArt extends StatelessWidget {
-  const VehicleArt({super.key, this.height = 120});
-  final double height;
-  @override
-  Widget build(BuildContext context) => SvgPicture.asset(
-    'assets/vehicles/silver.svg',
-    height: height,
-    semanticsLabel: 'Illustration of a silver car',
-  );
-}
+import 'vehicle_image.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -48,10 +38,9 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(
-                            LucideIcons.wrench,
-                            size: 18,
-                            color: Mechi.white,
+                          const ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                            child: MechiLogo(height: 18, symbolOnly: true),
                           ),
                           const SizedBox(width: 8),
                           const Text(
@@ -86,9 +75,9 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      const Align(
+                      Align(
                         alignment: Alignment.centerRight,
-                        child: VehicleArt(),
+                        child: VehicleImage(vehicle),
                       ),
                     ],
                   ),
@@ -365,6 +354,7 @@ class _VehicleFormState extends State<_VehicleForm> {
     TextEditingController(text: widget.vehicle?.model),
     TextEditingController(text: widget.vehicle?.year.toString()),
     TextEditingController(text: widget.vehicle?.plate),
+    TextEditingController(text: widget.vehicle?.colour),
   ];
   @override
   void dispose() {
@@ -394,6 +384,7 @@ class _VehicleFormState extends State<_VehicleForm> {
                 'Model',
                 'Year',
                 'Registration',
+                'Colour (optional)',
               ].indexed)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
@@ -405,6 +396,7 @@ class _VehicleFormState extends State<_VehicleForm> {
                         ? TextInputType.number
                         : TextInputType.text,
                     validator: (value) {
+                      if (index == 4) return null;
                       if (value == null || value.trim().isEmpty) {
                         return 'Enter ${label.toLowerCase()}';
                       }
@@ -431,6 +423,9 @@ class _VehicleFormState extends State<_VehicleForm> {
                     fields[1].text.trim(),
                     int.parse(fields[2].text),
                     fields[3].text.trim().toUpperCase(),
+                    colour: fields[4].text.trim().isEmpty
+                        ? null
+                        : fields[4].text.trim(),
                   ),
                 );
               }),

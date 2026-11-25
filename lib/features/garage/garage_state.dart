@@ -39,9 +39,9 @@ class LocalVehicles implements VehicleRepository {
   final SharedPreferences prefs;
   static const key = 'mechi.garage.v1';
   static const seeds = [
-    Vehicle('corolla', 'Toyota', 'Corolla', 2018, 'AFK 3127'),
-    Vehicle('fit', 'Honda', 'Fit', 2017, 'AES 1084'),
-    Vehicle('ranger', 'Ford', 'Ranger', 2021, 'AGC 5402'),
+    Vehicle('corolla', 'Toyota', 'Corolla', 2018, 'AFK 3127', colour: 'silver'),
+    Vehicle('fit', 'Honda', 'Fit', 2017, 'AES 1084', colour: 'white'),
+    Vehicle('ranger', 'Ford', 'Ranger', 2021, 'AGC 5402', colour: 'graphite'),
   ];
   @override
   Garage load() {
