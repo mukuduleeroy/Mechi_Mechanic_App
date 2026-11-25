@@ -1,0 +1,31 @@
+import 'package:flutter/widgets.dart';
+
+abstract final class LucideIcons {
+  static const activity = IconData(0xf101, fontFamily: 'Lucide');
+  static const alertCircle = IconData(0xf10b, fontFamily: 'Lucide');
+  static const alertTriangle = IconData(0xf10d, fontFamily: 'Lucide');
+  static const arrowLeft = IconData(0xf14f, fontFamily: 'Lucide');
+  static const badgeCheck = IconData(0xf179, fontFamily: 'Lucide');
+  static const banknote = IconData(0xf184, fontFamily: 'Lucide');
+  static const car = IconData(0xf1e5, fontFamily: 'Lucide');
+  static const check = IconData(0xf1ee, fontFamily: 'Lucide');
+  static const checkCircle2 = IconData(0xf1f1, fontFamily: 'Lucide');
+  static const chevronRight = IconData(0xf1fb, fontFamily: 'Lucide');
+  static const creditCard = IconData(0xf264, fontFamily: 'Lucide');
+  static const history = IconData(0xf35d, fontFamily: 'Lucide');
+  static const home = IconData(0xf35e, fontFamily: 'Lucide');
+  static const landmark = IconData(0xf380, fontFamily: 'Lucide');
+  static const locateFixed = IconData(0xf3ac, fontFamily: 'Lucide');
+  static const mapPin = IconData(0xf3c0, fontFamily: 'Lucide');
+  static const messageCircle = IconData(0xf3cd, fontFamily: 'Lucide');
+  static const minus = IconData(0xf3dc, fontFamily: 'Lucide');
+  static const moreHorizontal = IconData(0xf3ed, fontFamily: 'Lucide');
+  static const navigation = IconData(0xf407, fontFamily: 'Lucide');
+  static const pencil = IconData(0xf43d, fontFamily: 'Lucide');
+  static const plus = IconData(0xf45e, fontFamily: 'Lucide');
+  static const shield = IconData(0xf4bf, fontFamily: 'Lucide');
+  static const smartphone = IconData(0xf4dd, fontFamily: 'Lucide');
+  static const star = IconData(0xf500, fontFamily: 'Lucide');
+  static const user = IconData(0xf564, fontFamily: 'Lucide');
+  static const wrench = IconData(0xf59d, fontFamily: 'Lucide');
+}

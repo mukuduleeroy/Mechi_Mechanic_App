@@ -1,0 +1,4984 @@
+[
+  {
+    "Video": "1",
+    "Screen": "1",
+    "Filename": "Video1_Screen01_Home.png",
+    "Timestamp_seconds": "0.000",
+    "Description": "Home",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#1C1C24",
+      "#ECECF4",
+      "#F4ECF4",
+      "#F4F4F4",
+      "#14141C"
+    ],
+    "blue": "#225CFA",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          26,
+          56
+        ]
+      },
+      {
+        "hex": "#1D1C23",
+        "rgb": [
+          29,
+          28,
+          35
+        ],
+        "xy": [
+          21,
+          38
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          23,
+          82
+        ]
+      },
+      {
+        "hex": "#F0EDF3",
+        "rgb": [
+          240,
+          237,
+          243
+        ],
+        "xy": [
+          176,
+          119
+        ]
+      },
+      {
+        "hex": "#F1F0F5",
+        "rgb": [
+          241,
+          240,
+          245
+        ],
+        "xy": [
+          30,
+          64
+        ]
+      },
+      {
+        "hex": "#16151C",
+        "rgb": [
+          22,
+          21,
+          28
+        ],
+        "xy": [
+          59,
+          58
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "2",
+    "Filename": "Video1_Screen02_MapInitial.png",
+    "Timestamp_seconds": "1.000",
+    "Description": "MapInitial",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#E4DCDC",
+      "#DCDCD4",
+      "#ECECEC",
+      "#DCDCDC",
+      "#CCCCCC"
+    ],
+    "blue": "#2E64F4",
+    "samples": [
+      {
+        "hex": "#FEFBFF",
+        "rgb": [
+          254,
+          251,
+          255
+        ],
+        "xy": [
+          73,
+          58
+        ]
+      },
+      {
+        "hex": "#E1DFDD",
+        "rgb": [
+          225,
+          223,
+          221
+        ],
+        "xy": [
+          216,
+          56
+        ]
+      },
+      {
+        "hex": "#DAD8D4",
+        "rgb": [
+          218,
+          216,
+          212
+        ],
+        "xy": [
+          160,
+          48
+        ]
+      },
+      {
+        "hex": "#EFEDEE",
+        "rgb": [
+          239,
+          237,
+          238
+        ],
+        "xy": [
+          224,
+          54
+        ]
+      },
+      {
+        "hex": "#DDDBD9",
+        "rgb": [
+          221,
+          219,
+          217
+        ],
+        "xy": [
+          162,
+          48
+        ]
+      },
+      {
+        "hex": "#CFCDCB",
+        "rgb": [
+          207,
+          205,
+          203
+        ],
+        "xy": [
+          211,
+          43
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "3",
+    "Filename": "Video1_Screen03_RouteFirst.png",
+    "Timestamp_seconds": "1.500",
+    "Description": "RouteFirst",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#E4DCDC",
+      "#DCD4D4",
+      "#ECECEC",
+      "#DCDCDC",
+      "#DCDCD4"
+    ],
+    "blue": "#2C5CE0",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          161,
+          38
+        ]
+      },
+      {
+        "hex": "#E0DEDA",
+        "rgb": [
+          224,
+          222,
+          218
+        ],
+        "xy": [
+          73,
+          44
+        ]
+      },
+      {
+        "hex": "#D9D7D3",
+        "rgb": [
+          217,
+          215,
+          211
+        ],
+        "xy": [
+          175,
+          38
+        ]
+      },
+      {
+        "hex": "#EFEDEB",
+        "rgb": [
+          239,
+          237,
+          235
+        ],
+        "xy": [
+          171,
+          38
+        ]
+      },
+      {
+        "hex": "#DFDDD9",
+        "rgb": [
+          223,
+          221,
+          217
+        ],
+        "xy": [
+          194,
+          43
+        ]
+      },
+      {
+        "hex": "#DAD8D4",
+        "rgb": [
+          218,
+          216,
+          212
+        ],
+        "xy": [
+          176,
+          38
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "4",
+    "Filename": "Video1_Screen04_StationCarouselTransition.png",
+    "Timestamp_seconds": "2.500",
+    "Description": "StationCarouselTransition",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#E4DCDC",
+      "#DCD4D4",
+      "#ECECEC",
+      "#DCDCDC",
+      "#DCDCD4"
+    ],
+    "blue": "#2B5CE3",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          20,
+          38
+        ]
+      },
+      {
+        "hex": "#E0DEDA",
+        "rgb": [
+          224,
+          222,
+          218
+        ],
+        "xy": [
+          193,
+          38
+        ]
+      },
+      {
+        "hex": "#D9D7D3",
+        "rgb": [
+          217,
+          215,
+          211
+        ],
+        "xy": [
+          175,
+          38
+        ]
+      },
+      {
+        "hex": "#EFEDEB",
+        "rgb": [
+          239,
+          237,
+          235
+        ],
+        "xy": [
+          80,
+          39
+        ]
+      },
+      {
+        "hex": "#DFDDD9",
+        "rgb": [
+          223,
+          221,
+          217
+        ],
+        "xy": [
+          189,
+          38
+        ]
+      },
+      {
+        "hex": "#DAD8D4",
+        "rgb": [
+          218,
+          216,
+          212
+        ],
+        "xy": [
+          176,
+          38
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "5",
+    "Filename": "Video1_Screen05_RouteSecond.png",
+    "Timestamp_seconds": "3.500",
+    "Description": "RouteSecond",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#E4DCDC",
+      "#DCD4D4",
+      "#ECECEC",
+      "#DCDCD4",
+      "#E4E4E4"
+    ],
+    "blue": "#2B5BE8",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          83,
+          38
+        ]
+      },
+      {
+        "hex": "#E0DEDA",
+        "rgb": [
+          224,
+          222,
+          218
+        ],
+        "xy": [
+          30,
+          38
+        ]
+      },
+      {
+        "hex": "#D9D7D3",
+        "rgb": [
+          217,
+          215,
+          211
+        ],
+        "xy": [
+          24,
+          38
+        ]
+      },
+      {
+        "hex": "#EFEDEB",
+        "rgb": [
+          239,
+          237,
+          235
+        ],
+        "xy": [
+          39,
+          38
+        ]
+      },
+      {
+        "hex": "#DAD8D4",
+        "rgb": [
+          218,
+          216,
+          212
+        ],
+        "xy": [
+          25,
+          38
+        ]
+      },
+      {
+        "hex": "#E5E3E1",
+        "rgb": [
+          229,
+          227,
+          225
+        ],
+        "xy": [
+          55,
+          39
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "6",
+    "Filename": "Video1_Screen06_RouteTransition.png",
+    "Timestamp_seconds": "4.500",
+    "Description": "RouteTransition",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#E4DCDC",
+      "#DCD4D4",
+      "#ECECEC",
+      "#E4E4E4",
+      "#DCDCDC"
+    ],
+    "blue": "#2A5DEF",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          143,
+          39
+        ]
+      },
+      {
+        "hex": "#E0DEDA",
+        "rgb": [
+          224,
+          222,
+          218
+        ],
+        "xy": [
+          85,
+          38
+        ]
+      },
+      {
+        "hex": "#D9D7D3",
+        "rgb": [
+          217,
+          215,
+          211
+        ],
+        "xy": [
+          21,
+          38
+        ]
+      },
+      {
+        "hex": "#EFEDEB",
+        "rgb": [
+          239,
+          237,
+          235
+        ],
+        "xy": [
+          57,
+          38
+        ]
+      },
+      {
+        "hex": "#E2E0E1",
+        "rgb": [
+          226,
+          224,
+          225
+        ],
+        "xy": [
+          95,
+          38
+        ]
+      },
+      {
+        "hex": "#DFDDD9",
+        "rgb": [
+          223,
+          221,
+          217
+        ],
+        "xy": [
+          93,
+          40
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "7",
+    "Filename": "Video1_Screen07_RouteThird.png",
+    "Timestamp_seconds": "5.500",
+    "Description": "RouteThird",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#E4DCDC",
+      "#DCD4D4",
+      "#ECECEC",
+      "#DCDCD4",
+      "#DCDCDC"
+    ],
+    "blue": "#295BE7",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          53,
+          38
+        ]
+      },
+      {
+        "hex": "#E0DEDA",
+        "rgb": [
+          224,
+          222,
+          218
+        ],
+        "xy": [
+          173,
+          38
+        ]
+      },
+      {
+        "hex": "#D9D7D3",
+        "rgb": [
+          217,
+          215,
+          211
+        ],
+        "xy": [
+          100,
+          40
+        ]
+      },
+      {
+        "hex": "#EFEDEB",
+        "rgb": [
+          239,
+          237,
+          235
+        ],
+        "xy": [
+          86,
+          38
+        ]
+      },
+      {
+        "hex": "#DAD8D4",
+        "rgb": [
+          218,
+          216,
+          212
+        ],
+        "xy": [
+          104,
+          40
+        ]
+      },
+      {
+        "hex": "#DFDDD9",
+        "rgb": [
+          223,
+          221,
+          217
+        ],
+        "xy": [
+          214,
+          41
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "8",
+    "Filename": "Video1_Screen08_RouteFourthTransition.png",
+    "Timestamp_seconds": "6.500",
+    "Description": "RouteFourthTransition",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#DCD4D4",
+      "#E4DCDC",
+      "#ECECEC",
+      "#E4E4E4",
+      "#DCDCD4"
+    ],
+    "blue": "#2C5CEC",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          25,
+          38
+        ]
+      },
+      {
+        "hex": "#D9D7D3",
+        "rgb": [
+          217,
+          215,
+          211
+        ],
+        "xy": [
+          73,
+          38
+        ]
+      },
+      {
+        "hex": "#E0DEDA",
+        "rgb": [
+          224,
+          222,
+          218
+        ],
+        "xy": [
+          203,
+          38
+        ]
+      },
+      {
+        "hex": "#EFEDEB",
+        "rgb": [
+          239,
+          237,
+          235
+        ],
+        "xy": [
+          81,
+          38
+        ]
+      },
+      {
+        "hex": "#E7E5E3",
+        "rgb": [
+          231,
+          229,
+          227
+        ],
+        "xy": [
+          179,
+          38
+        ]
+      },
+      {
+        "hex": "#DAD8D4",
+        "rgb": [
+          218,
+          216,
+          212
+        ],
+        "xy": [
+          70,
+          38
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "9",
+    "Filename": "Video1_Screen09_RouteFourth.png",
+    "Timestamp_seconds": "8.000",
+    "Description": "RouteFourth",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#DCD4D4",
+      "#E4DCDC",
+      "#ECECEC",
+      "#E4E4E4",
+      "#DCDCD4"
+    ],
+    "blue": "#2B5BE9",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          27,
+          38
+        ]
+      },
+      {
+        "hex": "#D9D7D3",
+        "rgb": [
+          217,
+          215,
+          211
+        ],
+        "xy": [
+          172,
+          38
+        ]
+      },
+      {
+        "hex": "#E0DEDA",
+        "rgb": [
+          224,
+          222,
+          218
+        ],
+        "xy": [
+          20,
+          38
+        ]
+      },
+      {
+        "hex": "#EFEDEB",
+        "rgb": [
+          239,
+          237,
+          235
+        ],
+        "xy": [
+          45,
+          38
+        ]
+      },
+      {
+        "hex": "#E7E5E3",
+        "rgb": [
+          231,
+          229,
+          227
+        ],
+        "xy": [
+          37,
+          38
+        ]
+      },
+      {
+        "hex": "#DAD8D4",
+        "rgb": [
+          218,
+          216,
+          212
+        ],
+        "xy": [
+          171,
+          38
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "10",
+    "Filename": "Video1_Screen10_StationOverview.png",
+    "Timestamp_seconds": "9.500",
+    "Description": "StationOverview",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#141414",
+      "#F4F4F4",
+      "#E4DCDC",
+      "#DCD4D4",
+      "#ECECEC"
+    ],
+    "blue": "#215DFB",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          56,
+          38
+        ]
+      },
+      {
+        "hex": "#101116",
+        "rgb": [
+          16,
+          17,
+          22
+        ],
+        "xy": [
+          107,
+          229
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          82,
+          277
+        ]
+      },
+      {
+        "hex": "#E0DEDA",
+        "rgb": [
+          224,
+          222,
+          218
+        ],
+        "xy": [
+          29,
+          38
+        ]
+      },
+      {
+        "hex": "#D9D7D3",
+        "rgb": [
+          217,
+          215,
+          211
+        ],
+        "xy": [
+          63,
+          38
+        ]
+      },
+      {
+        "hex": "#ECEAE8",
+        "rgb": [
+          236,
+          234,
+          232
+        ],
+        "xy": [
+          70,
+          38
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "11",
+    "Filename": "Video1_Screen11_StationConnectors.png",
+    "Timestamp_seconds": "10.500",
+    "Description": "StationConnectors",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#F4F4F4",
+      "#F4F4FC",
+      "#D4DCF4",
+      "#14141C",
+      "#C4CCDC"
+    ],
+    "blue": "#1F5CFD",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          21,
+          38
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          29,
+          51
+        ]
+      },
+      {
+        "hex": "#F3F0F8",
+        "rgb": [
+          243,
+          240,
+          248
+        ],
+        "xy": [
+          37,
+          51
+        ]
+      },
+      {
+        "hex": "#D6DFF2",
+        "rgb": [
+          214,
+          223,
+          242
+        ],
+        "xy": [
+          36,
+          240
+        ]
+      },
+      {
+        "hex": "#111219",
+        "rgb": [
+          17,
+          18,
+          25
+        ],
+        "xy": [
+          101,
+          216
+        ]
+      },
+      {
+        "hex": "#C3CCDF",
+        "rgb": [
+          195,
+          204,
+          223
+        ],
+        "xy": [
+          109,
+          292
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "12",
+    "Filename": "Video1_Screen12_StationAmenities.png",
+    "Timestamp_seconds": "11.000",
+    "Description": "StationAmenities",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#F4F4F4",
+      "#F4F4FC",
+      "#D4DCF4",
+      "#ECECF4",
+      "#C4CCDC"
+    ],
+    "blue": "#1F5CFD",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          21,
+          38
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          31,
+          51
+        ]
+      },
+      {
+        "hex": "#F3F0F8",
+        "rgb": [
+          243,
+          240,
+          248
+        ],
+        "xy": [
+          195,
+          51
+        ]
+      },
+      {
+        "hex": "#D6DFF2",
+        "rgb": [
+          214,
+          223,
+          242
+        ],
+        "xy": [
+          98,
+          116
+        ]
+      },
+      {
+        "hex": "#EBE8F0",
+        "rgb": [
+          235,
+          232,
+          240
+        ],
+        "xy": [
+          45,
+          63
+        ]
+      },
+      {
+        "hex": "#C3CCDF",
+        "rgb": [
+          195,
+          204,
+          223
+        ],
+        "xy": [
+          226,
+          125
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "1",
+    "Screen": "13",
+    "Filename": "Video1_Screen13_StationReviews.png",
+    "Timestamp_seconds": "12.000",
+    "Description": "StationReviews",
+    "size": [
+      257,
+      551
+    ],
+    "colors": [
+      "#F4F4F4",
+      "#FCFCFC",
+      "#F4F4FC",
+      "#ECF4F4",
+      "#ECECF4",
+      "#1C5CFC"
+    ],
+    "blue": "#1E5CFE",
+    "samples": [
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          29,
+          52
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          21,
+          38
+        ]
+      },
+      {
+        "hex": "#F3F0F8",
+        "rgb": [
+          243,
+          240,
+          248
+        ],
+        "xy": [
+          23,
+          52
+        ]
+      },
+      {
+        "hex": "#EFF0F5",
+        "rgb": [
+          239,
+          240,
+          245
+        ],
+        "xy": [
+          74,
+          69
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          62,
+          111
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          159,
+          482
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "1",
+    "Filename": "Video2_Screen01_ChargingProgress.png",
+    "Timestamp_seconds": "0.000",
+    "Description": "ChargingProgress",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#F4F4F4",
+      "#ECECF4",
+      "#1C5CFC",
+      "#FCF4FC",
+      "#F4ECF4"
+    ],
+    "blue": "#215BC9",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          29,
+          57
+        ]
+      },
+      {
+        "hex": "#F1F0F5",
+        "rgb": [
+          241,
+          240,
+          245
+        ],
+        "xy": [
+          48,
+          39
+        ]
+      },
+      {
+        "hex": "#EFEEF3",
+        "rgb": [
+          239,
+          238,
+          243
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#1E5CFF",
+        "rgb": [
+          30,
+          92,
+          255
+        ],
+        "xy": [
+          165,
+          457
+        ]
+      },
+      {
+        "hex": "#F9F6FC",
+        "rgb": [
+          249,
+          246,
+          252
+        ],
+        "xy": [
+          85,
+          42
+        ]
+      },
+      {
+        "hex": "#F0EDF3",
+        "rgb": [
+          240,
+          237,
+          243
+        ],
+        "xy": [
+          85,
+          43
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "2",
+    "Filename": "Video2_Screen02_ChargingTarget.png",
+    "Timestamp_seconds": "2.000",
+    "Description": "ChargingTarget",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#F4F4F4",
+      "#1C5CFC",
+      "#F4ECF4",
+      "#FCF4FC"
+    ],
+    "blue": "#205BC7",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          33,
+          55
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          190,
+          39
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          35,
+          457
+        ]
+      },
+      {
+        "hex": "#F0EDF5",
+        "rgb": [
+          240,
+          237,
+          245
+        ],
+        "xy": [
+          85,
+          47
+        ]
+      },
+      {
+        "hex": "#F9F6FC",
+        "rgb": [
+          249,
+          246,
+          252
+        ],
+        "xy": [
+          234,
+          54
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "3",
+    "Filename": "Video2_Screen03_ChargedSheetEntering.png",
+    "Timestamp_seconds": "3.000",
+    "Description": "ChargedSheetEntering",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#6C6C74",
+      "#6C6C6C",
+      "#F4F4FC",
+      "#746C74",
+      "#E4ECFC"
+    ],
+    "blue": "#275DF0",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          28,
+          117
+        ]
+      },
+      {
+        "hex": "#6D6A70",
+        "rgb": [
+          109,
+          106,
+          112
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#6C696F",
+        "rgb": [
+          108,
+          105,
+          111
+        ],
+        "xy": [
+          25,
+          39
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          128,
+          232
+        ]
+      },
+      {
+        "hex": "#706D73",
+        "rgb": [
+          112,
+          109,
+          115
+        ],
+        "xy": [
+          106,
+          43
+        ]
+      },
+      {
+        "hex": "#E2E9FF",
+        "rgb": [
+          226,
+          233,
+          255
+        ],
+        "xy": [
+          127,
+          255
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "4",
+    "Filename": "Video2_Screen04_ChargedSheet.png",
+    "Timestamp_seconds": "3.500",
+    "Description": "ChargedSheet",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#1C5CFC",
+      "#54545C",
+      "#F4F4FC",
+      "#E4ECFC",
+      "#5C545C"
+    ],
+    "blue": "#1D5CFF",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          29,
+          83
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          109,
+          375
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          143,
+          197
+        ]
+      },
+      {
+        "hex": "#E2E9FF",
+        "rgb": [
+          226,
+          233,
+          255
+        ],
+        "xy": [
+          127,
+          218
+        ]
+      },
+      {
+        "hex": "#58555B",
+        "rgb": [
+          88,
+          85,
+          91
+        ],
+        "xy": [
+          163,
+          42
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "5",
+    "Filename": "Video2_Screen05_UnpluggedSheet.png",
+    "Timestamp_seconds": "4.000",
+    "Description": "UnpluggedSheet",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#54545C",
+      "#2464FC",
+      "#F4F4FC",
+      "#E4ECFC",
+      "#FCF4FC"
+    ],
+    "blue": "#2462FE",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          141,
+          81
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#2463FF",
+        "rgb": [
+          36,
+          99,
+          255
+        ],
+        "xy": [
+          37,
+          505
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          117,
+          197
+        ]
+      },
+      {
+        "hex": "#E2E9FF",
+        "rgb": [
+          226,
+          233,
+          255
+        ],
+        "xy": [
+          127,
+          217
+        ]
+      },
+      {
+        "hex": "#FAF7FD",
+        "rgb": [
+          250,
+          247,
+          253
+        ],
+        "xy": [
+          61,
+          80
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "6",
+    "Filename": "Video2_Screen06_Loading.png",
+    "Timestamp_seconds": "4.500",
+    "Description": "Loading",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#54545C",
+      "#F4F4FC",
+      "#E4ECFC",
+      "#5C545C",
+      "#FCF4FC"
+    ],
+    "blue": "#255EF2",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          141,
+          81
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          133,
+          195
+        ]
+      },
+      {
+        "hex": "#E2E9FF",
+        "rgb": [
+          226,
+          233,
+          255
+        ],
+        "xy": [
+          139,
+          217
+        ]
+      },
+      {
+        "hex": "#5A575D",
+        "rgb": [
+          90,
+          87,
+          93
+        ],
+        "xy": [
+          31,
+          55
+        ]
+      },
+      {
+        "hex": "#FAF7FD",
+        "rgb": [
+          250,
+          247,
+          253
+        ],
+        "xy": [
+          163,
+          80
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "7",
+    "Filename": "Video2_Screen07_SummaryEntering.png",
+    "Timestamp_seconds": "5.000",
+    "Description": "SummaryEntering",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#ECECF4",
+      "#FCFCFC",
+      "#54545C",
+      "#F4F4FC",
+      "#5C545C",
+      "#F4F4F4"
+    ],
+    "blue": "#4D77E8",
+    "samples": [
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          37,
+          109
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          21,
+          85
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#F6F5FE",
+        "rgb": [
+          246,
+          245,
+          254
+        ],
+        "xy": [
+          128,
+          197
+        ]
+      },
+      {
+        "hex": "#5A575D",
+        "rgb": [
+          90,
+          87,
+          93
+        ],
+        "xy": [
+          28,
+          55
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          29,
+          109
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "8",
+    "Filename": "Video2_Screen08_ChargingSummary.png",
+    "Timestamp_seconds": "5.500",
+    "Description": "ChargingSummary",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#FCF4FC",
+      "#F4F4FC",
+      "#F4F4F4",
+      "#1C5CFC"
+    ],
+    "blue": "#1F5CFE",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          25,
+          63
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#FAF7FD",
+        "rgb": [
+          250,
+          247,
+          253
+        ],
+        "xy": [
+          36,
+          59
+        ]
+      },
+      {
+        "hex": "#F7F4FA",
+        "rgb": [
+          247,
+          244,
+          250
+        ],
+        "xy": [
+          43,
+          73
+        ]
+      },
+      {
+        "hex": "#F1F0F5",
+        "rgb": [
+          241,
+          240,
+          245
+        ],
+        "xy": [
+          73,
+          39
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          153,
+          513
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "9",
+    "Filename": "Video2_Screen09_PaymentMethods.png",
+    "Timestamp_seconds": "6.500",
+    "Description": "PaymentMethods",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#F4F4F4",
+      "#1C5CFC",
+      "#F4F4FC",
+      "#F4ECF4"
+    ],
+    "blue": "#1E5CFF",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          25,
+          39
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          104,
+          41
+        ]
+      },
+      {
+        "hex": "#F2F1F6",
+        "rgb": [
+          242,
+          241,
+          246
+        ],
+        "xy": [
+          219,
+          59
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          155,
+          507
+        ]
+      },
+      {
+        "hex": "#F6F5FA",
+        "rgb": [
+          246,
+          245,
+          250
+        ],
+        "xy": [
+          45,
+          100
+        ]
+      },
+      {
+        "hex": "#F0EDF3",
+        "rgb": [
+          240,
+          237,
+          243
+        ],
+        "xy": [
+          32,
+          50
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "10",
+    "Filename": "Video2_Screen10_PaymentSelection.png",
+    "Timestamp_seconds": "8.000",
+    "Description": "PaymentSelection",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#F4F4F4",
+      "#F4ECF4",
+      "#1C5CFC",
+      "#F4F4FC"
+    ],
+    "blue": "#1C5CFE",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          115,
+          50
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#F6F4F5",
+        "rgb": [
+          246,
+          244,
+          245
+        ],
+        "xy": [
+          103,
+          69
+        ]
+      },
+      {
+        "hex": "#F0EDF3",
+        "rgb": [
+          240,
+          237,
+          243
+        ],
+        "xy": [
+          47,
+          39
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          189,
+          507
+        ]
+      },
+      {
+        "hex": "#F6F3F9",
+        "rgb": [
+          246,
+          243,
+          249
+        ],
+        "xy": [
+          113,
+          44
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "11",
+    "Filename": "Video2_Screen11_ConfirmPayment.png",
+    "Timestamp_seconds": "8.500",
+    "Description": "ConfirmPayment",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#6C646C",
+      "#FCFCFC",
+      "#64646C",
+      "#F4F4F4",
+      "#645C64",
+      "#646464"
+    ],
+    "blue": "#205DFD",
+    "samples": [
+      {
+        "hex": "#69666C",
+        "rgb": [
+          105,
+          102,
+          108
+        ],
+        "xy": [
+          103,
+          41
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          49,
+          199
+        ]
+      },
+      {
+        "hex": "#656268",
+        "rgb": [
+          101,
+          98,
+          104
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#F1F0F5",
+        "rgb": [
+          241,
+          240,
+          245
+        ],
+        "xy": [
+          61,
+          347
+        ]
+      },
+      {
+        "hex": "#625F65",
+        "rgb": [
+          98,
+          95,
+          101
+        ],
+        "xy": [
+          71,
+          39
+        ]
+      },
+      {
+        "hex": "#636066",
+        "rgb": [
+          99,
+          96,
+          102
+        ],
+        "xy": [
+          24,
+          39
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "12",
+    "Filename": "Video2_Screen12_ProcessingEntering.png",
+    "Timestamp_seconds": "9.500",
+    "Description": "ProcessingEntering",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#64646C",
+      "#FCFCFC",
+      "#645C64",
+      "#6C646C",
+      "#646464",
+      "#0C2C6C"
+    ],
+    "blue": "#3C5ED4",
+    "samples": [
+      {
+        "hex": "#67646A",
+        "rgb": [
+          103,
+          100,
+          106
+        ],
+        "xy": [
+          103,
+          41
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          222,
+          198
+        ]
+      },
+      {
+        "hex": "#625F65",
+        "rgb": [
+          98,
+          95,
+          101
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#68656B",
+        "rgb": [
+          104,
+          101,
+          107
+        ],
+        "xy": [
+          29,
+          53
+        ]
+      },
+      {
+        "hex": "#636066",
+        "rgb": [
+          99,
+          96,
+          102
+        ],
+        "xy": [
+          25,
+          39
+        ]
+      },
+      {
+        "hex": "#0E2869",
+        "rgb": [
+          14,
+          40,
+          105
+        ],
+        "xy": [
+          163,
+          507
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "13",
+    "Filename": "Video2_Screen13_ProcessingPayment.png",
+    "Timestamp_seconds": "10.000",
+    "Description": "ProcessingPayment",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#64646C",
+      "#FCFCFC",
+      "#645C64",
+      "#6C646C",
+      "#646464",
+      "#0C2C6C"
+    ],
+    "blue": "#213697",
+    "samples": [
+      {
+        "hex": "#67646A",
+        "rgb": [
+          103,
+          100,
+          106
+        ],
+        "xy": [
+          28,
+          51
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          45,
+          233
+        ]
+      },
+      {
+        "hex": "#625F65",
+        "rgb": [
+          98,
+          95,
+          101
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#68656B",
+        "rgb": [
+          104,
+          101,
+          107
+        ],
+        "xy": [
+          31,
+          54
+        ]
+      },
+      {
+        "hex": "#636066",
+        "rgb": [
+          99,
+          96,
+          102
+        ],
+        "xy": [
+          25,
+          39
+        ]
+      },
+      {
+        "hex": "#0E2869",
+        "rgb": [
+          14,
+          40,
+          105
+        ],
+        "xy": [
+          159,
+          507
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "14",
+    "Filename": "Video2_Screen14_SuccessTransition.png",
+    "Timestamp_seconds": "11.000",
+    "Description": "SuccessTransition",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#64646C",
+      "#FCFCFC",
+      "#645C64",
+      "#6C646C",
+      "#646464",
+      "#0C2C6C"
+    ],
+    "blue": "#587ADA",
+    "samples": [
+      {
+        "hex": "#67646A",
+        "rgb": [
+          103,
+          100,
+          106
+        ],
+        "xy": [
+          29,
+          51
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          53,
+          215
+        ]
+      },
+      {
+        "hex": "#625F65",
+        "rgb": [
+          98,
+          95,
+          101
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#68656B",
+        "rgb": [
+          104,
+          101,
+          107
+        ],
+        "xy": [
+          244,
+          52
+        ]
+      },
+      {
+        "hex": "#636066",
+        "rgb": [
+          99,
+          96,
+          102
+        ],
+        "xy": [
+          26,
+          39
+        ]
+      },
+      {
+        "hex": "#0E2869",
+        "rgb": [
+          14,
+          40,
+          105
+        ],
+        "xy": [
+          157,
+          507
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "15",
+    "Filename": "Video2_Screen15_PaymentSuccessful.png",
+    "Timestamp_seconds": "12.000",
+    "Description": "PaymentSuccessful",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#64646C",
+      "#FCFCFC",
+      "#645C64",
+      "#6C646C",
+      "#F4F4F4",
+      "#646464"
+    ],
+    "blue": "#1E5CFE",
+    "samples": [
+      {
+        "hex": "#67646A",
+        "rgb": [
+          103,
+          100,
+          106
+        ],
+        "xy": [
+          29,
+          51
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          55,
+          201
+        ]
+      },
+      {
+        "hex": "#625F65",
+        "rgb": [
+          98,
+          95,
+          101
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#68656B",
+        "rgb": [
+          104,
+          101,
+          107
+        ],
+        "xy": [
+          244,
+          52
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          109,
+          337
+        ]
+      },
+      {
+        "hex": "#636066",
+        "rgb": [
+          99,
+          96,
+          102
+        ],
+        "xy": [
+          26,
+          39
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "16",
+    "Filename": "Video2_Screen16_ReceiptInitial.png",
+    "Timestamp_seconds": "13.000",
+    "Description": "ReceiptInitial",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#040414",
+      "#0C1C34",
+      "#0C142C",
+      "#040C1C",
+      "#0C1424",
+      "#0C1C3C"
+    ],
+    "blue": null,
+    "samples": [
+      {
+        "hex": "#040716",
+        "rgb": [
+          4,
+          7,
+          22
+        ],
+        "xy": [
+          237,
+          353
+        ]
+      },
+      {
+        "hex": "#0C1934",
+        "rgb": [
+          12,
+          25,
+          52
+        ],
+        "xy": [
+          117,
+          47
+        ]
+      },
+      {
+        "hex": "#0B162B",
+        "rgb": [
+          11,
+          22,
+          43
+        ],
+        "xy": [
+          69,
+          39
+        ]
+      },
+      {
+        "hex": "#070A19",
+        "rgb": [
+          7,
+          10,
+          25
+        ],
+        "xy": [
+          243,
+          325
+        ]
+      },
+      {
+        "hex": "#0A1326",
+        "rgb": [
+          10,
+          19,
+          38
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#0C1B3A",
+        "rgb": [
+          12,
+          27,
+          58
+        ],
+        "xy": [
+          149,
+          72
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "17",
+    "Filename": "Video2_Screen17_ReceiptReveal.png",
+    "Timestamp_seconds": "13.500",
+    "Description": "ReceiptReveal",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#040414",
+      "#040C1C",
+      "#0C142C",
+      "#0C1C34",
+      "#0C1424",
+      "#041424"
+    ],
+    "blue": null,
+    "samples": [
+      {
+        "hex": "#040716",
+        "rgb": [
+          4,
+          7,
+          22
+        ],
+        "xy": [
+          21,
+          337
+        ]
+      },
+      {
+        "hex": "#070F1F",
+        "rgb": [
+          7,
+          15,
+          31
+        ],
+        "xy": [
+          21,
+          267
+        ]
+      },
+      {
+        "hex": "#0B162B",
+        "rgb": [
+          11,
+          22,
+          43
+        ],
+        "xy": [
+          55,
+          39
+        ]
+      },
+      {
+        "hex": "#0C1934",
+        "rgb": [
+          12,
+          25,
+          52
+        ],
+        "xy": [
+          174,
+          41
+        ]
+      },
+      {
+        "hex": "#091225",
+        "rgb": [
+          9,
+          18,
+          37
+        ],
+        "xy": [
+          23,
+          226
+        ]
+      },
+      {
+        "hex": "#071023",
+        "rgb": [
+          7,
+          16,
+          35
+        ],
+        "xy": [
+          21,
+          250
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "18",
+    "Filename": "Video2_Screen18_ReceiptPartial.png",
+    "Timestamp_seconds": "14.500",
+    "Description": "ReceiptPartial",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#040414",
+      "#FCF4FC",
+      "#040C1C",
+      "#FCFCFC",
+      "#0C1C34",
+      "#0C142C"
+    ],
+    "blue": null,
+    "samples": [
+      {
+        "hex": "#040716",
+        "rgb": [
+          4,
+          7,
+          22
+        ],
+        "xy": [
+          21,
+          337
+        ]
+      },
+      {
+        "hex": "#FAF7FB",
+        "rgb": [
+          250,
+          247,
+          251
+        ],
+        "xy": [
+          37,
+          119
+        ]
+      },
+      {
+        "hex": "#040C1A",
+        "rgb": [
+          4,
+          12,
+          26
+        ],
+        "xy": [
+          30,
+          298
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          79,
+          254
+        ]
+      },
+      {
+        "hex": "#0C1934",
+        "rgb": [
+          12,
+          25,
+          52
+        ],
+        "xy": [
+          89,
+          41
+        ]
+      },
+      {
+        "hex": "#0B162B",
+        "rgb": [
+          11,
+          22,
+          43
+        ],
+        "xy": [
+          53,
+          39
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "19",
+    "Filename": "Video2_Screen19_ReceiptComplete.png",
+    "Timestamp_seconds": "16.000",
+    "Description": "ReceiptComplete",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCF4FC",
+      "#040414",
+      "#FCFCFC",
+      "#0C142C",
+      "#0C1C34",
+      "#F4F4F4"
+    ],
+    "blue": null,
+    "samples": [
+      {
+        "hex": "#FAF7FB",
+        "rgb": [
+          250,
+          247,
+          251
+        ],
+        "xy": [
+          229,
+          119
+        ]
+      },
+      {
+        "hex": "#040716",
+        "rgb": [
+          4,
+          7,
+          22
+        ],
+        "xy": [
+          28,
+          323
+        ]
+      },
+      {
+        "hex": "#FBF8FC",
+        "rgb": [
+          251,
+          248,
+          252
+        ],
+        "xy": [
+          115,
+          127
+        ]
+      },
+      {
+        "hex": "#0B162B",
+        "rgb": [
+          11,
+          22,
+          43
+        ],
+        "xy": [
+          48,
+          39
+        ]
+      },
+      {
+        "hex": "#0C1934",
+        "rgb": [
+          12,
+          25,
+          52
+        ],
+        "xy": [
+          173,
+          39
+        ]
+      },
+      {
+        "hex": "#F6F3F7",
+        "rgb": [
+          246,
+          243,
+          247
+        ],
+        "xy": [
+          33,
+          130
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "2",
+    "Screen": "20",
+    "Filename": "Video2_Screen20_ChargingDashboardReturn.png",
+    "Timestamp_seconds": "18.500",
+    "Description": "ChargingDashboardReturn",
+    "size": [
+      267,
+      569
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#1C5CFC",
+      "#F4F4F4",
+      "#141414",
+      "#F4F4FC"
+    ],
+    "blue": "#1F5CDA",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          231,
+          57
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          21,
+          39
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          141,
+          97
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          111,
+          43
+        ]
+      },
+      {
+        "hex": "#101116",
+        "rgb": [
+          16,
+          17,
+          22
+        ],
+        "xy": [
+          77,
+          60
+        ]
+      },
+      {
+        "hex": "#F2F1F8",
+        "rgb": [
+          242,
+          241,
+          248
+        ],
+        "xy": [
+          26,
+          55
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "1",
+    "Filename": "Video3_Screen01_Home.png",
+    "Timestamp_seconds": "0.000",
+    "Description": "Home",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#1C1C24",
+      "#ECECF4",
+      "#F4F4F4",
+      "#F4ECF4",
+      "#14141C"
+    ],
+    "blue": "#205CFB",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          48,
+          70
+        ]
+      },
+      {
+        "hex": "#1D1C23",
+        "rgb": [
+          29,
+          28,
+          35
+        ],
+        "xy": [
+          37,
+          41
+        ]
+      },
+      {
+        "hex": "#EFEEF3",
+        "rgb": [
+          239,
+          238,
+          243
+        ],
+        "xy": [
+          146,
+          70
+        ]
+      },
+      {
+        "hex": "#F1F0F5",
+        "rgb": [
+          241,
+          240,
+          245
+        ],
+        "xy": [
+          138,
+          74
+        ]
+      },
+      {
+        "hex": "#F0EDF3",
+        "rgb": [
+          240,
+          237,
+          243
+        ],
+        "xy": [
+          228,
+          140
+        ]
+      },
+      {
+        "hex": "#131219",
+        "rgb": [
+          19,
+          18,
+          25
+        ],
+        "xy": [
+          113,
+          46
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "2",
+    "Filename": "Video3_Screen02_ChargingDashboard.png",
+    "Timestamp_seconds": "1.500",
+    "Description": "ChargingDashboard",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#1C5CFC",
+      "#F4F4F4",
+      "#F4ECF4",
+      "#F4F4FC"
+    ],
+    "blue": "#1E5CFD",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          41,
+          61
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          22,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          197,
+          104
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          67,
+          41
+        ]
+      },
+      {
+        "hex": "#F0EDF5",
+        "rgb": [
+          240,
+          237,
+          245
+        ],
+        "xy": [
+          165,
+          48
+        ]
+      },
+      {
+        "hex": "#F0F1F8",
+        "rgb": [
+          240,
+          241,
+          248
+        ],
+        "xy": [
+          48,
+          148
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "3",
+    "Filename": "Video3_Screen03_StartCharging.png",
+    "Timestamp_seconds": "3.000",
+    "Description": "StartCharging",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#1C5CFC",
+      "#F4F4F4",
+      "#F4F4FC",
+      "#141414"
+    ],
+    "blue": "#1D5CFF",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          43,
+          62
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          37,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          149,
+          104
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          241,
+          41
+        ]
+      },
+      {
+        "hex": "#F3F0F8",
+        "rgb": [
+          243,
+          240,
+          248
+        ],
+        "xy": [
+          178,
+          50
+        ]
+      },
+      {
+        "hex": "#101116",
+        "rgb": [
+          16,
+          17,
+          22
+        ],
+        "xy": [
+          67,
+          67
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "4",
+    "Filename": "Video3_Screen04_ChargingSheetEntering.png",
+    "Timestamp_seconds": "3.500",
+    "Description": "ChargingSheetEntering",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#6C6C74",
+      "#746C74",
+      "#E4ECFC",
+      "#F4F4FC",
+      "#ECECFC"
+    ],
+    "blue": "#4F75E5",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          38,
+          124
+        ]
+      },
+      {
+        "hex": "#6D6A72",
+        "rgb": [
+          109,
+          106,
+          114
+        ],
+        "xy": [
+          26,
+          41
+        ]
+      },
+      {
+        "hex": "#706D73",
+        "rgb": [
+          112,
+          109,
+          115
+        ],
+        "xy": [
+          181,
+          41
+        ]
+      },
+      {
+        "hex": "#E6EEFE",
+        "rgb": [
+          230,
+          238,
+          254
+        ],
+        "xy": [
+          155,
+          271
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          136,
+          245
+        ]
+      },
+      {
+        "hex": "#E8EDFE",
+        "rgb": [
+          232,
+          237,
+          254
+        ],
+        "xy": [
+          144,
+          270
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "5",
+    "Filename": "Video3_Screen05_LiveCharging.png",
+    "Timestamp_seconds": "4.000",
+    "Description": "LiveCharging",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#54545C",
+      "#1C5CFC",
+      "#E4ECFC",
+      "#F4F4FC",
+      "#ECECFC"
+    ],
+    "blue": "#1C5CFF",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          155,
+          87
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          22,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          37,
+          524
+        ]
+      },
+      {
+        "hex": "#E5EDFD",
+        "rgb": [
+          229,
+          237,
+          253
+        ],
+        "xy": [
+          131,
+          234
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          133,
+          205
+        ]
+      },
+      {
+        "hex": "#EBEEFD",
+        "rgb": [
+          235,
+          238,
+          253
+        ],
+        "xy": [
+          129,
+          236
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "6",
+    "Filename": "Video3_Screen06_LiveChargingProgress.png",
+    "Timestamp_seconds": "5.000",
+    "Description": "LiveChargingProgress",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#54545C",
+      "#1C5CFC",
+      "#E4ECFC",
+      "#F4F4FC",
+      "#ECECFC"
+    ],
+    "blue": "#1C5CFF",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          29,
+          88
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          29,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          49,
+          524
+        ]
+      },
+      {
+        "hex": "#E4EDFD",
+        "rgb": [
+          228,
+          237,
+          253
+        ],
+        "xy": [
+          103,
+          252
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          143,
+          204
+        ]
+      },
+      {
+        "hex": "#EBEEFD",
+        "rgb": [
+          235,
+          238,
+          253
+        ],
+        "xy": [
+          137,
+          234
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "7",
+    "Filename": "Video3_Screen07_ChargingSheetClosing.png",
+    "Timestamp_seconds": "5.500",
+    "Description": "ChargingSheetClosing",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#5C5C5C",
+      "#5C545C",
+      "#FCFCFC",
+      "#5C5C64",
+      "#54545C",
+      "#14141C"
+    ],
+    "blue": null,
+    "samples": [
+      {
+        "hex": "#5C595F",
+        "rgb": [
+          92,
+          89,
+          95
+        ],
+        "xy": [
+          33,
+          60
+        ]
+      },
+      {
+        "hex": "#58555B",
+        "rgb": [
+          88,
+          85,
+          91
+        ],
+        "xy": [
+          25,
+          41
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          41,
+          462
+        ]
+      },
+      {
+        "hex": "#5E5B61",
+        "rgb": [
+          94,
+          91,
+          97
+        ],
+        "xy": [
+          35,
+          60
+        ]
+      },
+      {
+        "hex": "#57545A",
+        "rgb": [
+          87,
+          84,
+          90
+        ],
+        "xy": [
+          46,
+          41
+        ]
+      },
+      {
+        "hex": "#111219",
+        "rgb": [
+          17,
+          18,
+          25
+        ],
+        "xy": [
+          140,
+          216
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "8",
+    "Filename": "Video3_Screen08_DashboardCharging.png",
+    "Timestamp_seconds": "6.000",
+    "Description": "DashboardCharging",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#1C5CFC",
+      "#F4F4F4",
+      "#FCF4FC",
+      "#F4F4FC"
+    ],
+    "blue": "#1C5CFD",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          36,
+          62
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          29,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          109,
+          476
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          231,
+          41
+        ]
+      },
+      {
+        "hex": "#F9F6FC",
+        "rgb": [
+          249,
+          246,
+          252
+        ],
+        "xy": [
+          49,
+          65
+        ]
+      },
+      {
+        "hex": "#F3F0F8",
+        "rgb": [
+          243,
+          240,
+          248
+        ],
+        "xy": [
+          51,
+          64
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "9",
+    "Filename": "Video3_Screen09_DashboardProgress.png",
+    "Timestamp_seconds": "8.000",
+    "Description": "DashboardProgress",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#1C5CFC",
+      "#F4F4F4",
+      "#FCF4FC",
+      "#F4ECF4"
+    ],
+    "blue": "#1C5CFD",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          237,
+          67
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          27,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          33,
+          476
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          233,
+          41
+        ]
+      },
+      {
+        "hex": "#F9F6FC",
+        "rgb": [
+          249,
+          246,
+          252
+        ],
+        "xy": [
+          39,
+          70
+        ]
+      },
+      {
+        "hex": "#F0EDF3",
+        "rgb": [
+          240,
+          237,
+          243
+        ],
+        "xy": [
+          22,
+          41
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "10",
+    "Filename": "Video3_Screen10_HomeCharging.png",
+    "Timestamp_seconds": "8.500",
+    "Description": "HomeCharging",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#1C1C24",
+      "#14141C",
+      "#1C5CFC",
+      "#F4F4F4"
+    ],
+    "blue": "#1E5CFD",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          57,
+          99
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          87,
+          66
+        ]
+      },
+      {
+        "hex": "#1B1C23",
+        "rgb": [
+          27,
+          28,
+          35
+        ],
+        "xy": [
+          23,
+          41
+        ]
+      },
+      {
+        "hex": "#111219",
+        "rgb": [
+          17,
+          18,
+          25
+        ],
+        "xy": [
+          94,
+          69
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          61,
+          420
+        ]
+      },
+      {
+        "hex": "#F1F0F5",
+        "rgb": [
+          241,
+          240,
+          245
+        ],
+        "xy": [
+          29,
+          69
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "11",
+    "Filename": "Video3_Screen11_HomeProgress.png",
+    "Timestamp_seconds": "10.000",
+    "Description": "HomeProgress",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#1C1C24",
+      "#14141C",
+      "#1C5CFC",
+      "#F4F4F4"
+    ],
+    "blue": "#1E5CFC",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          28,
+          69
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          88,
+          66
+        ]
+      },
+      {
+        "hex": "#1B1C23",
+        "rgb": [
+          27,
+          28,
+          35
+        ],
+        "xy": [
+          27,
+          41
+        ]
+      },
+      {
+        "hex": "#111219",
+        "rgb": [
+          17,
+          18,
+          25
+        ],
+        "xy": [
+          72,
+          67
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          123,
+          420
+        ]
+      },
+      {
+        "hex": "#F1F0F5",
+        "rgb": [
+          241,
+          240,
+          245
+        ],
+        "xy": [
+          185,
+          204
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "12",
+    "Filename": "Video3_Screen12_DashboardReturn.png",
+    "Timestamp_seconds": "10.500",
+    "Description": "DashboardReturn",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#F4F4F4",
+      "#1C5CFC",
+      "#FCF4FC",
+      "#F4F4FC"
+    ],
+    "blue": "#1E5CEA",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          37,
+          62
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          23,
+          41
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          53,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          37,
+          476
+        ]
+      },
+      {
+        "hex": "#F9F6FC",
+        "rgb": [
+          249,
+          246,
+          252
+        ],
+        "xy": [
+          234,
+          78
+        ]
+      },
+      {
+        "hex": "#F6F5F8",
+        "rgb": [
+          246,
+          245,
+          248
+        ],
+        "xy": [
+          52,
+          70
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "13",
+    "Filename": "Video3_Screen13_DashboardProgressLater.png",
+    "Timestamp_seconds": "13.000",
+    "Description": "DashboardProgressLater",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#F4F4F4",
+      "#1C5CFC",
+      "#FCF4FC",
+      "#F4F4FC"
+    ],
+    "blue": "#205CCF",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          37,
+          62
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          23,
+          41
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          56,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          35,
+          476
+        ]
+      },
+      {
+        "hex": "#F9F6FC",
+        "rgb": [
+          249,
+          246,
+          252
+        ],
+        "xy": [
+          30,
+          98
+        ]
+      },
+      {
+        "hex": "#F5F4FB",
+        "rgb": [
+          245,
+          244,
+          251
+        ],
+        "xy": [
+          37,
+          97
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "14",
+    "Filename": "Video3_Screen14_ChargingTarget.png",
+    "Timestamp_seconds": "16.000",
+    "Description": "ChargingTarget",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#F4F4F4",
+      "#1C5CFC",
+      "#FCF4FC",
+      "#141414"
+    ],
+    "blue": "#1F5CC8",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          30,
+          64
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          25,
+          41
+        ]
+      },
+      {
+        "hex": "#F0F1F6",
+        "rgb": [
+          240,
+          241,
+          246
+        ],
+        "xy": [
+          53,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          29,
+          476
+        ]
+      },
+      {
+        "hex": "#F9F6FC",
+        "rgb": [
+          249,
+          246,
+          252
+        ],
+        "xy": [
+          32,
+          60
+        ]
+      },
+      {
+        "hex": "#101116",
+        "rgb": [
+          16,
+          17,
+          22
+        ],
+        "xy": [
+          67,
+          67
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "15",
+    "Filename": "Video3_Screen15_ChargedSheetEntering.png",
+    "Timestamp_seconds": "18.000",
+    "Description": "ChargedSheetEntering",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#B4B4BC",
+      "#ACACB4",
+      "#B4B4B4",
+      "#F4F4FC",
+      "#B4ACB4"
+    ],
+    "blue": "#4A6AB9",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          105,
+          254
+        ]
+      },
+      {
+        "hex": "#B6B3B9",
+        "rgb": [
+          182,
+          179,
+          185
+        ],
+        "xy": [
+          117,
+          48
+        ]
+      },
+      {
+        "hex": "#AAABB0",
+        "rgb": [
+          170,
+          171,
+          176
+        ],
+        "xy": [
+          22,
+          42
+        ]
+      },
+      {
+        "hex": "#B3B0B6",
+        "rgb": [
+          179,
+          176,
+          182
+        ],
+        "xy": [
+          116,
+          48
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          141,
+          372
+        ]
+      },
+      {
+        "hex": "#B1AEB4",
+        "rgb": [
+          177,
+          174,
+          180
+        ],
+        "xy": [
+          194,
+          47
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "16",
+    "Filename": "Video3_Screen16_ChargedSheet.png",
+    "Timestamp_seconds": "19.000",
+    "Description": "ChargedSheet",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#54545C",
+      "#1C5CFC",
+      "#F4F4FC",
+      "#FCF4FC",
+      "#ECECFC"
+    ],
+    "blue": "#1C5CFF",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          29,
+          88
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          24,
+          41
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          81,
+          392
+        ]
+      },
+      {
+        "hex": "#F0F0FE",
+        "rgb": [
+          240,
+          240,
+          254
+        ],
+        "xy": [
+          131,
+          238
+        ]
+      },
+      {
+        "hex": "#FAF7FF",
+        "rgb": [
+          250,
+          247,
+          255
+        ],
+        "xy": [
+          166,
+          206
+        ]
+      },
+      {
+        "hex": "#EFEFFF",
+        "rgb": [
+          239,
+          239,
+          255
+        ],
+        "xy": [
+          150,
+          235
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "17",
+    "Filename": "Video3_Screen17_UnpluggedSheet.png",
+    "Timestamp_seconds": "20.500",
+    "Description": "UnpluggedSheet",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#54545C",
+      "#F4F4FC",
+      "#94B4FC",
+      "#DCE4FC",
+      "#E4ECFC"
+    ],
+    "blue": "#275EF7",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          161,
+          88
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          22,
+          41
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          137,
+          204
+        ]
+      },
+      {
+        "hex": "#91B3FF",
+        "rgb": [
+          145,
+          179,
+          255
+        ],
+        "xy": [
+          101,
+          522
+        ]
+      },
+      {
+        "hex": "#DDE5FF",
+        "rgb": [
+          221,
+          229,
+          255
+        ],
+        "xy": [
+          137,
+          226
+        ]
+      },
+      {
+        "hex": "#E2E9FF",
+        "rgb": [
+          226,
+          233,
+          255
+        ],
+        "xy": [
+          136,
+          230
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "18",
+    "Filename": "Video3_Screen18_Loading.png",
+    "Timestamp_seconds": "21.000",
+    "Description": "Loading",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#54545C",
+      "#F4F4FC",
+      "#E4ECFC",
+      "#DCE4FC",
+      "#ECECFC"
+    ],
+    "blue": "#275EF7",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          161,
+          88
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          22,
+          41
+        ]
+      },
+      {
+        "hex": "#F6F7FE",
+        "rgb": [
+          246,
+          247,
+          254
+        ],
+        "xy": [
+          137,
+          204
+        ]
+      },
+      {
+        "hex": "#E2E9FF",
+        "rgb": [
+          226,
+          233,
+          255
+        ],
+        "xy": [
+          133,
+          229
+        ]
+      },
+      {
+        "hex": "#DFE7FF",
+        "rgb": [
+          223,
+          231,
+          255
+        ],
+        "xy": [
+          126,
+          229
+        ]
+      },
+      {
+        "hex": "#EBEEFD",
+        "rgb": [
+          235,
+          238,
+          253
+        ],
+        "xy": [
+          139,
+          234
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "19",
+    "Filename": "Video3_Screen19_SummaryEntering.png",
+    "Timestamp_seconds": "21.500",
+    "Description": "SummaryEntering",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#ECECF4",
+      "#F4F4FC",
+      "#54545C",
+      "#FCFCFC",
+      "#F4F4F4",
+      "#F4ECF4"
+    ],
+    "blue": null,
+    "samples": [
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          134,
+          111
+        ]
+      },
+      {
+        "hex": "#F3F0F8",
+        "rgb": [
+          243,
+          240,
+          248
+        ],
+        "xy": [
+          23,
+          188
+        ]
+      },
+      {
+        "hex": "#565359",
+        "rgb": [
+          86,
+          83,
+          89
+        ],
+        "xy": [
+          22,
+          41
+        ]
+      },
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          161,
+          88
+        ]
+      },
+      {
+        "hex": "#F1F2F7",
+        "rgb": [
+          241,
+          242,
+          247
+        ],
+        "xy": [
+          43,
+          109
+        ]
+      },
+      {
+        "hex": "#F2EFF7",
+        "rgb": [
+          242,
+          239,
+          247
+        ],
+        "xy": [
+          22,
+          184
+        ]
+      }
+    ]
+  },
+  {
+    "Video": "3",
+    "Screen": "20",
+    "Filename": "Video3_Screen20_ChargingSummary.png",
+    "Timestamp_seconds": "22.500",
+    "Description": "ChargingSummary",
+    "size": [
+      277,
+      586
+    ],
+    "colors": [
+      "#FCFCFC",
+      "#ECECF4",
+      "#F4F4F4",
+      "#F4ECF4",
+      "#1C5CFC",
+      "#FCF4FC"
+    ],
+    "blue": "#1E5CFD",
+    "samples": [
+      {
+        "hex": "#FFFFFF",
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "xy": [
+          33,
+          62
+        ]
+      },
+      {
+        "hex": "#EDEEF3",
+        "rgb": [
+          237,
+          238,
+          243
+        ],
+        "xy": [
+          27,
+          41
+        ]
+      },
+      {
+        "hex": "#F1F0F3",
+        "rgb": [
+          241,
+          240,
+          243
+        ],
+        "xy": [
+          105,
+          41
+        ]
+      },
+      {
+        "hex": "#F0EDF5",
+        "rgb": [
+          240,
+          237,
+          245
+        ],
+        "xy": [
+          22,
+          44
+        ]
+      },
+      {
+        "hex": "#1C5CFF",
+        "rgb": [
+          28,
+          92,
+          255
+        ],
+        "xy": [
+          173,
+          530
+        ]
+      },
+      {
+        "hex": "#F8F7FA",
+        "rgb": [
+          248,
+          247,
+          250
+        ],
+        "xy": [
+          46,
+          65
+        ]
+      }
+    ]
+  }
+]
