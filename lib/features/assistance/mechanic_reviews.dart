@@ -120,7 +120,7 @@ class MechanicReviews extends StatelessWidget {
                         backgroundColor: Mechi.pale,
                         child: Text(
                           'MC',
-                          style: TextStyle(color: Mechi.blue, fontSize: 10),
+                          style: TextStyle(color: Mechi.navy, fontSize: 10),
                         ),
                       ),
                       const SizedBox(width: 8),

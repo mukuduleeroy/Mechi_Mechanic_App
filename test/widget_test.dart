@@ -269,7 +269,7 @@ void main() {
   });
 
   testWidgets('design tokens and component states', (tester) async {
-    expect(Mechi.theme.colorScheme.primary, Mechi.blue);
+    expect(Mechi.theme.colorScheme.primary, Mechi.navy);
     expect(Mechi.theme.scaffoldBackgroundColor, Mechi.canvas);
     await launch(tester);
     await tester.tap(find.byTooltip('Profile'));

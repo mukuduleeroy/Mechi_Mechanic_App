@@ -548,7 +548,7 @@ class _ServiceTile extends StatelessWidget {
   final VoidCallback action;
   @override
   Widget build(BuildContext context) => Material(
-    color: primary ? Mechi.blue : Mechi.white,
+    color: primary ? Mechi.navy : Mechi.white,
     borderRadius: BorderRadius.circular(Mechi.radius),
     child: InkWell(
       borderRadius: BorderRadius.circular(Mechi.radius),
@@ -681,7 +681,7 @@ class GarageScreen extends ConsumerWidget {
           Panel(
             child: Row(
               children: [
-                const Icon(LucideIcons.car, color: Mechi.blue),
+                const Icon(LucideIcons.car, color: Mechi.navy),
                 const SizedBox(width: 12),
                 Expanded(
                   child: InkWell(

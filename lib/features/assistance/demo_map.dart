@@ -210,7 +210,7 @@ class _CarMarker extends StatelessWidget {
           Transform.rotate(angle: angle * math.pi / 180, child: child),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: tracking ? Mechi.blue : Colors.transparent,
+          color: tracking ? Mechi.navy : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Image.asset(
@@ -250,7 +250,7 @@ class _MapPin extends StatelessWidget {
         color: Mechi.white,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: selected ? Mechi.blue : Mechi.line,
+          color: selected ? Mechi.navy : Mechi.line,
           width: 1.5,
         ),
       ),
@@ -306,7 +306,7 @@ class _StreetPainter extends CustomPainter {
     canvas.drawPath(
       metric.extractPath(0, metric.length * math.max(.01, progress)),
       Paint()
-        ..color = Mechi.blue
+        ..color = Mechi.navy
         ..strokeWidth = 4
         ..style = PaintingStyle.stroke
         ..strokeJoin = StrokeJoin.round

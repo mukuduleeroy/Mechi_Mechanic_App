@@ -634,7 +634,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                           PaymentMethod.cash => LucideIcons.banknote,
                         },
                         size: 21,
-                        color: Mechi.blue,
+                        color: Mechi.navy,
                       ),
                       title: Text(option.label),
                       controlAffinity: ListTileControlAffinity.trailing,
@@ -704,7 +704,7 @@ class _PaymentResultState extends State<_PaymentResult> {
               else
                 Icon(
                   paid ? LucideIcons.checkCircle2 : LucideIcons.alertCircle,
-                  color: paid ? Mechi.blue : Mechi.error,
+                  color: paid ? Mechi.navy : Mechi.error,
                   size: 48,
                 ),
               const SizedBox(height: 12),

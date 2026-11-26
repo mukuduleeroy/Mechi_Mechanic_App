@@ -4,17 +4,17 @@ The project uses the supplied reference video samples to calibrate Mechi’s app
 
 | Token | Value | Reference |
 | --- | --- | --- |
-| Action, route and success | `#1D5CFF` | Video3 Screen03 and Video2 Screen04 |
+| Action, route and success | `#113155` | Navy sampled from the Mechi investor pitch cover |
 | Canvas | `#ECECF4` | Video1 Screen01 and Video2 Screen08, near observed `#EDEEF3` |
 | Elevated surface | `#FFFFFF` | Video2 Screen08 and Screen15 |
 | Ink | `#14141C` | Video1 Screen01 dark regions |
 | Vehicle hero | `#22232E` | Video1 Screen01 and Video3 Screen01 |
 | Secondary | `#616170` | Darkened relative to the specification estimate for readability |
 | Divider | `#E5E5EC` | Specification estimate, also supported by neutral samples in Video2 Screen08 |
-| Info and selected background | `#E9EFFF` | Video3 Screen05 progress accents |
+| Info and selected background | `#E7EDF3` | Light tint of the pitch navy |
 | Warning and rating | `#996019` | Tuned from the rating accents in Video1 Screen13 |
 | Error | `#B73646` | Tuned from the busy badges in Video1 Screen08 and Screen10 |
-| Receipt and paper | `#080B1C`, `#FAF7FB` | Video2 Screen19 |
+| Receipt and paper | `#113155`, `#FAF7FB` | Mechi pitch navy and Video2 Screen19 paper |
 | Scrim | 60% dark ink | Video2 Screen15 and Video3 Screen05 |
 | Map blocks | `#DCDAD6` | Video1 Screen02 through Screen09 |
 

@@ -2,14 +2,13 @@ import 'package:material_ui/material_ui.dart';
 import 'lucide_icons.dart';
 
 abstract final class Mechi {
-  static const blue = Color(0xff1d5cff);
   static const canvas = Color(0xffececf4);
   static const white = Colors.white;
   static const ink = Color(0xff14141c);
   static const muted = Color(0xff616170);
   static const line = Color(0xffe5e5ec);
-  static const pale = Color(0xffe9efff);
-  static const navy = Color(0xff080b1c);
+  static const pale = Color(0xffe7edf3);
+  static const navy = Color(0xff113155);
   static const paper = Color(0xfffaf7fb);
   static const error = Color(0xffb73646);
   static const star = Color(0xff996019);
@@ -31,10 +30,14 @@ abstract final class Mechi {
       MediaQuery.disableAnimationsOf(context) ? Duration.zero : duration;
 
   static ThemeData get theme => ThemeData(
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: blue,
-      surface: white,
-    ).copyWith(primary: blue, onSurface: ink, error: error),
+    colorScheme: ColorScheme.fromSeed(seedColor: navy, surface: white).copyWith(
+      primary: navy,
+      onPrimary: white,
+      primaryContainer: pale,
+      onPrimaryContainer: navy,
+      onSurface: ink,
+      error: error,
+    ),
     scaffoldBackgroundColor: canvas,
     fontFamily: sans,
     textTheme: const TextTheme(
@@ -118,7 +121,7 @@ class ChipLabel extends StatelessWidget {
     super.key,
     this.icon,
     this.background = Mechi.pale,
-    this.ink = Mechi.blue,
+    this.ink = Mechi.navy,
   });
   final String label;
   final IconData? icon;

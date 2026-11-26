@@ -388,7 +388,7 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
-                                          ?.copyWith(color: Mechi.blue),
+                                          ?.copyWith(color: Mechi.navy),
                                     ),
                                     Text(
                                       '${average == null ? '' : '★ ${average.toStringAsFixed(1)} · '}${mechanic.eta} min · ${mechanic.distance} km',
@@ -459,7 +459,7 @@ class MechanicIdentity extends StatelessWidget {
     children: [
       CircleAvatar(
         backgroundColor: Mechi.pale,
-        foregroundColor: Mechi.blue,
+        foregroundColor: Mechi.navy,
         child: Text(mechanic.initials),
       ),
       const SizedBox(width: 10),
@@ -561,7 +561,7 @@ class _MechanicScreenState extends ConsumerState<MechanicScreen> {
                               style: IconButton.styleFrom(
                                 backgroundColor: Mechi.white,
                                 foregroundColor: favourite
-                                    ? Mechi.blue
+                                    ? Mechi.navy
                                     : Mechi.ink,
                               ),
                               icon: const Icon(LucideIcons.heart, size: 19),
