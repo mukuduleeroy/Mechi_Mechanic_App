@@ -209,8 +209,8 @@ class Screen extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Mechi.pad),
-            child: SizedBox(
-              height: 54,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 54),
               child: Row(
                 children: [
                   if (onBack != null)

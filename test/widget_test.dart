@@ -2,6 +2,9 @@ import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mechi/features/assistance/domain.dart';
+import 'package:mechi/features/assistance/job_state.dart';
 import 'package:mechi/app/mechi_app.dart';
 import 'package:mechi/core/design_system/mechi_ui.dart';
 import 'package:mechi/features/garage/garage_state.dart';
@@ -24,9 +27,15 @@ void main() {
   Future<void> launch(
     WidgetTester tester, [
     Size size = const Size(390, 844),
+    double textScale = 1,
+    FakeViewPadding insets = const FakeViewPadding(),
   ]) async {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
+    tester.view.padding = insets;
+    tester.platformDispatcher.textScaleFactorTestValue = textScale;
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     SharedPreferences.setMockInitialValues({});
@@ -52,6 +61,106 @@ void main() {
       matchesGoldenFile('goldens/$name.png'),
     );
   }
+
+  for (final size in [
+    const Size(360, 640),
+    const Size(375, 812),
+    const Size(390, 844),
+    const Size(393, 852),
+    const Size(430, 932),
+  ]) {
+    for (final scale in [1.0, 1.8]) {
+      testWidgets('dashboard ${size.width} × ${size.height} at ${scale}x', (
+        tester,
+      ) async {
+        final insets = size.height == 640
+            ? const FakeViewPadding(top: 24, bottom: 16)
+            : const FakeViewPadding(top: 54, bottom: 34);
+        await launch(tester, size, scale, insets);
+        final nav = find.byTooltip('Vehicles');
+        expect(nav.hitTestable(), findsOneWidget);
+        final action = find.text('History');
+        if (size.height > 640 && scale == 1) {
+          expect(action.hitTestable(), findsOneWidget);
+          final card = find
+              .ancestor(of: action, matching: find.byType(InkWell))
+              .first;
+          expect(
+            tester.getRect(card).bottom,
+            lessThanOrEqualTo(tester.getRect(find.byType(ListView)).bottom),
+          );
+        }
+        await tester.scrollUntilVisible(action, 160);
+        await tester.pumpAndSettle();
+        expect(action.hitTestable(), findsOneWidget);
+        expect(
+          tester.getBottomLeft(action).dy,
+          lessThan(tester.getTopLeft(nav).dy),
+        );
+        expect(tester.takeException(), isNull);
+      });
+    }
+  }
+
+  testWidgets('compact screens keep primary actions reachable at 1.8x', (
+    tester,
+  ) async {
+    await launch(
+      tester,
+      const Size(360, 640),
+      1.8,
+      const FakeViewPadding(top: 24, bottom: 16),
+    );
+    final home = tester.element(find.text('Hello, Tadiwa M.'));
+    final router = GoRouter.of(home);
+    final container = ProviderScope.containerOf(home, listen: false);
+    final controller = container.read(jobsProvider.notifier);
+    final job = controller.start(
+      ServiceRequest(
+        Service.roadside,
+        'Flat tyre',
+        '',
+        container.read(garageProvider).active,
+        'Avondale Shopping Centre',
+      ),
+    );
+
+    Future<void> check(String path, String action) async {
+      router.go(path);
+      await tester.pumpAndSettle();
+      expect(find.text(action).hitTestable(), findsOneWidget, reason: path);
+      expect(tester.takeException(), isNull, reason: path);
+    }
+
+    await check('/request', 'Find mechanics');
+    await check('/discover/${job.id}', 'View profile');
+    await check('/mechanic/${job.id}/0', 'Get quote');
+    final seeAll = find.text('See all');
+    await tester.scrollUntilVisible(seeAll, 160);
+    await tester.pumpAndSettle();
+    await tapLabel(tester, 'See all');
+    expect(find.text('Specialisations'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await controller.quote(job, container.read(mechanicsProvider).all.first);
+    await controller.move(job, JobStatus.accepted);
+    await check('/job/${job.id}', 'Simulate departure');
+    for (final status in [
+      JobStatus.mechanicEnRoute,
+      JobStatus.mechanicArrived,
+      JobStatus.repairInProgress,
+      JobStatus.awaitingCustomerConfirmation,
+      JobStatus.completed,
+    ]) {
+      await controller.move(job, status);
+    }
+    await check('/job/${job.id}', 'Continue to payment');
+    await controller.move(job, JobStatus.paymentPending);
+    await tester.pumpAndSettle();
+    expect(find.text('Pay now').hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await check('/receipt/DEMO-001', 'Done');
+    await check('/review/DEMO-002', 'Submit review');
+  });
 
   testWidgets('home, request, job, payment and receipt at 390 × 844', (
     tester,
@@ -80,6 +189,8 @@ void main() {
     'small phone: map marker selects a mechanic and declines a quote',
     (tester) async {
       await launch(tester, const Size(320, 640));
+      await tester.ensureVisible(find.text('Request assistance'));
+      await tester.pumpAndSettle();
       await tapLabel(tester, 'Request assistance');
       await tapLabel(tester, 'Problem category');
       await tapLabel(tester, 'Flat tyre');

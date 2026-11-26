@@ -86,6 +86,11 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           SegmentedButton<Service>(
+            direction:
+                MediaQuery.sizeOf(context).width < 400 &&
+                    MediaQuery.textScalerOf(context).scale(14) > 20
+                ? Axis.vertical
+                : Axis.horizontal,
             showSelectedIcon: false,
             segments: const [
               ButtonSegment(
@@ -205,6 +210,14 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
         ],
       );
     }
+    final available =
+        MediaQuery.sizeOf(context).height -
+        MediaQuery.paddingOf(context).vertical;
+    final textGrowth = MediaQuery.textScalerOf(context).scale(16) - 16;
+    final cardHeight = (200 + textGrowth * 5).clamp(
+      152.0,
+      (available * .44).clamp(152.0, 310.0),
+    );
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -237,15 +250,20 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                   ),
                   child: Row(
                     children: [
-                      FilledButton.icon(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Mechi.white,
-                          foregroundColor: Mechi.ink,
-                          shape: const StadiumBorder(),
+                      Flexible(
+                        child: FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Mechi.white,
+                            foregroundColor: Mechi.ink,
+                            shape: const StadiumBorder(),
+                          ),
+                          onPressed: () => backOrHome(context),
+                          icon: const Icon(LucideIcons.arrowLeft, size: 16),
+                          label: const Text(
+                            'Nearby mechanics',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        onPressed: () => backOrHome(context),
-                        icon: const Icon(LucideIcons.arrowLeft, size: 16),
-                        label: const Text('Nearby mechanics'),
                       ),
                       const Spacer(),
                       IconButton.filled(
@@ -338,7 +356,7 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                 ),
                 const SizedBox(height: 10),
                 SizedBox(
-                  height: 200,
+                  height: cardHeight,
                   child: PageView.builder(
                     controller: pages,
                     itemCount: mechanics.length,
@@ -351,48 +369,72 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Panel(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              MechanicIdentity(mechanic),
-                              const SizedBox(height: 5),
-                              Text(
-                                'Verified mechanic · Available',
-                                style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(color: Mechi.blue),
-                              ),
-                              Text(
-                                '${average == null ? '' : '★ ${average.toStringAsFixed(1)} · '}${mechanic.eta} min · ${mechanic.distance} km',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              const Divider(color: Mechi.line),
-                              Row(
-                                children: [
-                                  const Icon(LucideIcons.mapPin, size: 17),
-                                  const SizedBox(width: 5),
-                                  Expanded(
-                                    child: Text(
-                                      mechanic.area,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                          child: LayoutBuilder(
+                            builder: (context, bounds) => SingleChildScrollView(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minHeight: bounds.maxHeight,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    MechanicIdentity(mechanic),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Verified mechanic · Available',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(color: Mechi.blue),
                                     ),
-                                  ),
-                                  FilledButton(
-                                    style: FilledButton.styleFrom(
-                                      shape: const StadiumBorder(),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                      ),
+                                    Text(
+                                      '${average == null ? '' : '★ ${average.toStringAsFixed(1)} · '}${mechanic.eta} min · ${mechanic.distance} km',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall,
                                     ),
-                                    onPressed: () => context.push(
-                                      '/mechanic/${job.id}/${mechanic.id}',
+                                    const Divider(color: Mechi.line),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          LucideIcons.mapPin,
+                                          size: 17,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Expanded(
+                                          child: Text(
+                                            mechanic.area,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: FilledButton(
+                                            style: FilledButton.styleFrom(
+                                              shape: const StadiumBorder(),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                  ),
+                                            ),
+                                            onPressed: () => context.push(
+                                              '/mechanic/${job.id}/${mechanic.id}',
+                                            ),
+                                            child: const Text(
+                                              'View profile',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    child: const Text('View profile'),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       );

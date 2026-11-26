@@ -173,8 +173,8 @@ class DemoMap extends StatelessWidget {
                         child: Center(
                           child: ChipLabel(
                             '${selectedMechanic.eta} min · ${selectedMechanic.distance} km',
-                            background: Mechi.ink,
-                            ink: Mechi.white,
+                            background: preview ? Mechi.white : Mechi.ink,
+                            ink: preview ? Mechi.ink : Mechi.white,
                           ),
                         ),
                       ),

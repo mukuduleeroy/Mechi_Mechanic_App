@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
@@ -46,224 +48,150 @@ class HomeScreen extends ConsumerWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            const Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 72,
-              child: ColoredBox(color: Mechi.hero),
-            ),
-            SafeArea(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: 86),
-                children: [
-                  Stack(
+        body: LayoutBuilder(
+          builder: (context, bounds) {
+            final insets = MediaQuery.paddingOf(context);
+            final usable = bounds.maxHeight - insets.vertical;
+            final width = bounds.maxWidth - insets.horizontal;
+            const navHeight = 55.0;
+            const navGap = 8.0;
+            final darkHero = (width * .55).clamp(195.0, 232.0);
+            // Share the available height between the content sections. These
+            // targets are minimums so wrapped text can grow into the scroll view.
+            final baseHero = math.max(171.0, darkHero + 38 - insets.top);
+            final delta =
+                (usable -
+                        navHeight -
+                        2 * navGap -
+                        (baseHero + 204 + 138 + 94 + 74))
+                    .clamp(-56.0, 90.0);
+            final heroHeight = baseHero + delta * .32;
+            final infoHeight = (204 + delta * .34).clamp(184.0, 236.0);
+            final mapHeight = (138 + delta * .20).clamp(126.0, 156.0);
+            final quickHeight = (94 + delta * .14).clamp(88.0, 108.0);
+            return Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: insets.top,
+                  child: const ColoredBox(color: Mechi.hero),
+                ),
+                SafeArea(
+                  child: Column(
                     children: [
-                      const Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 46,
-                        child: ColoredBox(color: Mechi.hero),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      Expanded(
+                        child: ListView(
+                          padding: EdgeInsets.zero,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Stack(
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const MechiLogo(
-                                        height: 22,
-                                        symbolOnly: true,
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'Hello, ${garage.customer}',
-                                        style: typography.headlineMedium
-                                            ?.copyWith(color: Mechi.white),
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Text(
-                                        '${vehicle.name} · ${vehicle.year}',
-                                        style: typography.bodySmall?.copyWith(
-                                          color: Mechi.paper,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                const Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 38,
+                                  child: ColoredBox(color: Mechi.hero),
                                 ),
-                                Stack(
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    IconButton.filled(
-                                      tooltip: 'Notifications',
-                                      style: IconButton.styleFrom(
-                                        backgroundColor: Mechi.ink,
-                                        foregroundColor: Mechi.white,
-                                      ),
-                                      icon: const Icon(
-                                        LucideIcons.bell,
-                                        size: 19,
-                                      ),
-                                      onPressed: showStatus,
-                                    ),
-                                    if (active != null)
-                                      const Positioned(
-                                        top: 1,
-                                        right: 1,
-                                        child: IgnorePointer(
-                                          child: CircleAvatar(
-                                            radius: 9,
-                                            backgroundColor: Mechi.error,
-                                            child: Text(
-                                              '1',
-                                              style: TextStyle(
-                                                color: Mechi.white,
-                                                fontSize: 10,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: VehicleImage(vehicle, height: 140),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 11,
-                              child: Panel(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Your vehicle',
-                                      style: typography.titleMedium,
-                                    ),
-                                    Text(
-                                      'Registration',
-                                      style: typography.bodySmall,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      vehicle.plate,
-                                      style: typography.titleLarge,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    VehicleColourLabel(vehicle.colour),
-                                    TextButton(
-                                      onPressed: () => context.push('/garage'),
-                                      child: const Text('Manage vehicle'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              flex: 9,
-                              child: Column(
-                                children: [
-                                  _dashboardMetric(
-                                    LucideIcons.shieldCheck,
-                                    active == null
-                                        ? 'Ready to help'
-                                        : 'Job active',
-                                    'Assistance',
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    minHeight: heroHeight,
                                   ),
-                                  const SizedBox(height: 8),
-                                  _dashboardMetric(
-                                    LucideIcons.clock,
-                                    '${nearest.eta} min',
-                                    'Nearest mechanic · Demo',
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(Mechi.radius),
-                            child: Stack(
-                              children: [
-                                Positioned.fill(
-                                  child: DemoMap(
-                                    mechanics: [nearest],
-                                    selected: nearest.id,
-                                    preview: true,
-                                  ),
-                                ),
-                                const Positioned.fill(
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          Mechi.white,
-                                          Mechi.white,
-                                          Color(0x00ffffff),
-                                        ],
-                                        stops: [0, .40, .75],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                FractionallySizedBox(
-                                  widthFactor: .56,
                                   child: Padding(
-                                    padding: const EdgeInsets.all(14),
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16,
+                                      6,
+                                      16,
+                                      0,
+                                    ),
                                     child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          active?.status.label ??
-                                              'Find closest mechanics',
-                                          style: typography.titleMedium,
-                                        ),
-                                        const SizedBox(height: 12),
-                                        FilledButton(
-                                          style: FilledButton.styleFrom(
-                                            shape: const StadiumBorder(),
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const MechiLogo(
+                                                    height: 18,
+                                                    symbolOnly: true,
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    'Hello, ${garage.customer}',
+                                                    style: typography
+                                                        .headlineMedium
+                                                        ?.copyWith(
+                                                          color: Mechi.white,
+                                                        ),
+                                                  ),
+                                                  const SizedBox(height: 6),
+                                                  Text(
+                                                    '${vehicle.name} · ${vehicle.year}',
+                                                    style: typography.bodySmall
+                                                        ?.copyWith(
+                                                          color: Mechi.paper,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          onPressed: () =>
-                                              request(Service.roadside),
-                                          child: Text(
-                                            active == null
-                                                ? 'Request assistance'
-                                                : 'Open current job',
-                                            textAlign: TextAlign.center,
+                                            Stack(
+                                              clipBehavior: Clip.none,
+                                              children: [
+                                                IconButton.filled(
+                                                  tooltip: 'Notifications',
+                                                  style: IconButton.styleFrom(
+                                                    backgroundColor: Mechi.ink,
+                                                    foregroundColor:
+                                                        Mechi.white,
+                                                  ),
+                                                  icon: const Icon(
+                                                    LucideIcons.bell,
+                                                    size: 19,
+                                                  ),
+                                                  onPressed: showStatus,
+                                                ),
+                                                if (active != null)
+                                                  const Positioned(
+                                                    top: 1,
+                                                    right: 1,
+                                                    child: IgnorePointer(
+                                                      child: CircleAvatar(
+                                                        radius: 9,
+                                                        backgroundColor:
+                                                            Mechi.error,
+                                                        child: Text(
+                                                          '1',
+                                                          style: TextStyle(
+                                                            color: Mechi.white,
+                                                            fontSize: 10,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: VehicleImage(
+                                            vehicle,
+                                            height: (heroHeight - 77).clamp(
+                                              98.0,
+                                              150.0,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -272,117 +200,312 @@ class HomeScreen extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        Text('Quick actions', style: typography.titleMedium),
-                        const SizedBox(height: 8),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            for (final (label, icon, action)
-                                in <(String, IconData, VoidCallback)>[
-                                  (
-                                    'Breakdown',
-                                    LucideIcons.wrench,
-                                    () => request(Service.roadside),
-                                  ),
-                                  (
-                                    'Book service',
-                                    LucideIcons.clock,
-                                    () => request(Service.home),
-                                  ),
-                                  (
-                                    'Track job',
-                                    LucideIcons.navigation,
-                                    () {
-                                      if (active != null) {
-                                        openJob(context, active);
-                                      } else {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'No active job to track.',
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: infoHeight,
+                                    ),
+                                    child: IntrinsicHeight(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Expanded(
+                                            flex: 54,
+                                            child: Panel(
+                                              padding: const EdgeInsets.all(14),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Your vehicle',
+                                                    style:
+                                                        typography.titleMedium,
+                                                  ),
+                                                  Text(
+                                                    'Registration',
+                                                    style: typography.bodySmall,
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Text(
+                                                    vehicle.plate,
+                                                    style:
+                                                        typography.titleLarge,
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  VehicleColourLabel(
+                                                    vehicle.colour,
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        context.push('/garage'),
+                                                    child: const Text(
+                                                      'Manage vehicle',
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        );
-                                      }
-                                    },
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            flex: 46,
+                                            child: Column(
+                                              children: [
+                                                Expanded(
+                                                  child: _dashboardMetric(
+                                                    LucideIcons.shieldCheck,
+                                                    active == null
+                                                        ? 'Ready to help'
+                                                        : 'Job active',
+                                                    'Assistance',
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Expanded(
+                                                  child: _dashboardMetric(
+                                                    LucideIcons.clock,
+                                                    '${nearest.eta} min',
+                                                    'Nearest · Demo',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  (
-                                    'History',
-                                    LucideIcons.history,
-                                    () => context.push('/history'),
+                                  const SizedBox(height: 10),
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: mapHeight,
+                                      minWidth: double.infinity,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                        Mechi.radius,
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Positioned.fill(
+                                            child: DemoMap(
+                                              mechanics: [nearest],
+                                              selected: nearest.id,
+                                              preview: true,
+                                            ),
+                                          ),
+                                          const Positioned.fill(
+                                            child: DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  colors: [
+                                                    Mechi.white,
+                                                    Mechi.white,
+                                                    Color(0x00ffffff),
+                                                  ],
+                                                  stops: [0, .40, .75],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                              minHeight: mapHeight,
+                                            ),
+                                            child: FractionallySizedBox(
+                                              alignment: Alignment.centerLeft,
+                                              widthFactor: .56,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 14,
+                                                      vertical: 10,
+                                                    ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ConstrainedBox(
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                            maxWidth: 148,
+                                                          ),
+                                                      child: Text(
+                                                        active?.status.label ??
+                                                            'Find closest mechanics',
+                                                        style: typography
+                                                            .titleMedium,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    FilledButton(
+                                                      style: FilledButton.styleFrom(
+                                                        shape:
+                                                            const StadiumBorder(),
+                                                        padding:
+                                                            const EdgeInsets.symmetric(
+                                                              horizontal: 12,
+                                                            ),
+                                                      ),
+                                                      onPressed: () => request(
+                                                        Service.roadside,
+                                                      ),
+                                                      child: Text(
+                                                        active == null
+                                                            ? 'Request assistance'
+                                                            : 'Open current job',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ])
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 4),
-                                  child: _ServiceTile(
-                                    label,
-                                    icon,
-                                    action,
-                                    primary: label == 'Breakdown',
+                                  const SizedBox(height: 14),
+                                  Text(
+                                    'Quick actions',
+                                    style: typography.titleMedium,
                                   ),
-                                ),
+                                  const SizedBox(height: 8),
+                                  IntrinsicHeight(
+                                    child: Row(
+                                      spacing: 6,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        for (final (label, icon, action)
+                                            in <
+                                              (String, IconData, VoidCallback)
+                                            >[
+                                              (
+                                                'Breakdown',
+                                                LucideIcons.wrench,
+                                                () => request(Service.roadside),
+                                              ),
+                                              (
+                                                'Book service',
+                                                LucideIcons.clock,
+                                                () => request(Service.home),
+                                              ),
+                                              (
+                                                'Track job',
+                                                LucideIcons.navigation,
+                                                () {
+                                                  if (active != null) {
+                                                    openJob(context, active);
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                      context,
+                                                    ).showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text(
+                                                          'No active job to track.',
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                              (
+                                                'History',
+                                                LucideIcons.history,
+                                                () => context.push('/history'),
+                                              ),
+                                            ])
+                                          Expanded(
+                                            child: _ServiceTile(
+                                              label,
+                                              height: quickHeight,
+                                              icon,
+                                              action,
+                                              primary: label == 'Breakdown',
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SafeArea(
-              top: false,
-              minimum: const EdgeInsets.only(bottom: 8),
-              child: Material(
-                color: Mechi.ink,
-                borderRadius: BorderRadius.circular(100),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 3,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (final (label, icon, route) in [
-                        ('Home', LucideIcons.car, '/'),
-                        ('Vehicles', LucideIcons.wrench, '/garage'),
-                        ('Job history', LucideIcons.history, '/history'),
-                        ('Profile', LucideIcons.user, '/profile'),
-                      ])
-                        IconButton(
-                          tooltip: label,
-                          style: IconButton.styleFrom(
-                            minimumSize: const Size(54, 46),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: navGap),
+                        child: SizedBox(
+                          width: math.min(256, width),
+                          height: navHeight,
+                          child: Material(
+                            color: Mechi.ink,
+                            borderRadius: BorderRadius.circular(100),
+                            clipBehavior: Clip.antiAlias,
+                            child: Row(
+                              children: [
+                                for (final (label, icon, route) in [
+                                  ('Home', LucideIcons.car, '/'),
+                                  ('Vehicles', LucideIcons.wrench, '/garage'),
+                                  (
+                                    'Job history',
+                                    LucideIcons.history,
+                                    '/history',
+                                  ),
+                                  ('Profile', LucideIcons.user, '/profile'),
+                                ])
+                                  Expanded(
+                                    child: IconButton(
+                                      tooltip: label,
+                                      style: IconButton.styleFrom(
+                                        minimumSize: const Size(48, 48),
+                                      ),
+                                      isSelected: route == '/',
+                                      onPressed: () {
+                                        if (route != '/') context.push(route);
+                                      },
+                                      icon: route == '/'
+                                          ? SvgPicture.asset(
+                                              'assets/icons/car-front.svg',
+                                              width: 20,
+                                              height: 20,
+                                            )
+                                          : Icon(
+                                              icon,
+                                              size: 20,
+                                              color: Mechi.paper.withValues(
+                                                alpha: .65,
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
-                          isSelected: route == '/',
-                          onPressed: () {
-                            if (route != '/') context.push(route);
-                          },
-                          icon: route == '/'
-                              ? SvgPicture.asset(
-                                  'assets/icons/car-front.svg',
-                                  width: 20,
-                                  height: 20,
-                                )
-                              : Icon(
-                                  icon,
-                                  size: 20,
-                                  color: Mechi.paper.withValues(alpha: .65),
-                                ),
                         ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );
@@ -392,8 +515,9 @@ class HomeScreen extends ConsumerWidget {
 Widget _dashboardMetric(IconData icon, String value, String label) => SizedBox(
   width: double.infinity,
   child: Panel(
-    padding: const EdgeInsets.all(12),
+    padding: const EdgeInsets.all(14),
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(icon, size: 16),
@@ -415,7 +539,9 @@ class _ServiceTile extends StatelessWidget {
     this.icon,
     this.action, {
     this.primary = false,
+    required this.height,
   });
+  final double height;
   final bool primary;
   final String label;
   final IconData icon;
@@ -428,9 +554,9 @@ class _ServiceTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(Mechi.radius),
       onTap: action,
       child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 80),
+        constraints: BoxConstraints(minHeight: height),
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.fromLTRB(10, 13, 10, 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
