@@ -1,10 +1,13 @@
+import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/design_system/lucide_icons.dart';
-import '../../core/design_system/mechi_ui.dart';
+import '../../core/design_system/design_system.dart';
+import 'mechanic_components.dart';
+import 'mechanic_reviews.dart';
+import 'payment_components.dart';
+import 'job_components.dart';
 import '../garage/vehicle_image.dart';
-import '../../core/design_system/mechi_logo.dart';
 import '../garage/garage_state.dart';
 import 'demo_map.dart';
 import 'domain.dart';
@@ -121,7 +124,7 @@ class JobScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ChipLabel(job.status.label, icon: LucideIcons.navigation),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: Mechi.gap),
                   MechanicIdentity(assigned),
                   InfoRow('Arrival', eta, bold: true),
                   InfoRow('Meet at', job.request.location),
@@ -176,26 +179,42 @@ class JobScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MechanicIdentity(mechanic!),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: Mechi.gap),
                   ChipLabel(
                     job.status.label,
                     icon: complete ? LucideIcons.check : LucideIcons.wrench,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: Mechi.gap),
                   Center(child: VehicleImage(job.request.vehicle, height: 100)),
-                  Center(
-                    child: ProgressRing(
-                      job.progress / 100,
-                      caption: complete ? 'Work complete' : 'Repair progress',
-                    ),
+                  const Divider(color: Mechi.line),
+                  const SectionTitle('Service milestones'),
+                  SettingsRow(
+                    icon: job.progress >= 50
+                        ? LucideIcons.check
+                        : LucideIcons.locateFixed,
+                    title: 'Inspection',
+                    subtitle: job.progress >= 50 ? 'Complete' : 'In progress',
                   ),
-                  InfoRow('Vehicle', job.request.vehicle.name),
-                  InfoRow(
-                    'Estimated completion',
-                    complete
+                  SettingsRow(
+                    icon: job.progress >= 80
+                        ? LucideIcons.check
+                        : LucideIcons.wrench,
+                    title: 'Repair',
+                    subtitle: job.progress >= 80
+                        ? 'Work recorded'
+                        : job.progress >= 50
+                        ? 'In progress'
+                        : 'Pending inspection',
+                  ),
+                  SettingsRow(
+                    icon: LucideIcons.shieldCheck,
+                    title: 'Customer review',
+                    subtitle: complete
                         ? 'Ready for review'
-                        : '${(100 - job.progress) ~/ 4} min',
+                        : 'Pending completion',
                   ),
+                  const Divider(color: Mechi.line),
+                  InfoRow('Vehicle', job.request.vehicle.name),
                   InfoRow('Approved price', usd(quote.total), bold: true),
                 ],
               ),
@@ -244,7 +263,7 @@ class JobScreen extends ConsumerWidget {
                 )
               : ActionButton('View receipt', receipt),
           children: [
-            ...summary(context, job, mechanic!),
+            ...serviceCompletionSections(context, job, mechanic!),
             if (job.status == JobStatus.paid)
               ActionButton(
                 'Rate mechanic',
@@ -356,7 +375,13 @@ class JobScreen extends ConsumerWidget {
               ),
               Text(mechanic.name),
               const SizedBox(height: 16),
-              const ProgressRing(1, caption: 'Work completed'),
+              const CircleAvatar(
+                radius: 46,
+                backgroundColor: Mechi.pale,
+                foregroundColor: Mechi.navy,
+                child: Icon(LucideIcons.checkCircle2, size: 40),
+              ),
+              const SizedBox(height: 12),
               const ChipLabel('Ready for inspection', icon: LucideIcons.check),
               const SizedBox(height: 14),
               const Text(
@@ -377,7 +402,7 @@ class JobScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(job.quote!.work),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: Mechi.gap),
                           InfoRow('Parts used', job.quote!.partName),
                           InfoRow(
                             'Approved total',
@@ -397,7 +422,7 @@ class JobScreen extends ConsumerWidget {
                 ),
                 secondary: true,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: Mechi.gap),
               ActionButton('Confirm completion', () {
                 controller.move(job, JobStatus.completed);
                 Navigator.pop(sheet);
@@ -409,66 +434,6 @@ class JobScreen extends ConsumerWidget {
     );
   }
 }
-
-class CostPanel extends StatelessWidget {
-  const CostPanel(this.quote, {super.key});
-  final Quote quote;
-  @override
-  Widget build(BuildContext context) => Panel(
-    child: Column(
-      children: [
-        InfoRow('Labour', usd(quote.labour)),
-        InfoRow('Parts', usd(quote.parts)),
-        InfoRow('Call-out fee', usd(quote.callout)),
-        const Divider(color: Mechi.line),
-        InfoRow('Total (USD)', usd(quote.total), bold: true),
-      ],
-    ),
-  );
-}
-
-List<Widget> summary(BuildContext context, Job job, Mechanic mechanic) => [
-  Panel(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const ChipLabel('Repair complete', icon: LucideIcons.checkCircle2),
-        const SizedBox(height: 12),
-        Text(
-          job.request.problem,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 8),
-        const LinearProgressIndicator(
-          value: 1,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          minHeight: 6,
-        ),
-        const SizedBox(height: 8),
-        InfoRow('Job reference', job.id),
-        InfoRow('Status', job.status.label),
-      ],
-    ),
-  ),
-  Panel(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        MechanicIdentity(mechanic),
-        InfoRow('Vehicle', job.request.vehicle.name),
-        InfoRow('Service', job.request.service.label),
-        InfoRow('Location', job.request.location),
-        if (job.request.details.isNotEmpty)
-          InfoRow('Reported issue', job.request.details),
-        const Divider(color: Mechi.line),
-        Text('Work completed', style: Theme.of(context).textTheme.titleMedium),
-        Text(job.quote!.work),
-        InfoRow('Parts used', job.quote!.partName),
-      ],
-    ),
-  ),
-  CostPanel(job.quote!),
-];
 
 class PaymentScreen extends ConsumerStatefulWidget {
   const PaymentScreen({super.key, required this.job});
@@ -535,7 +500,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       context: context,
       barrierDismissible: false,
       barrierColor: Mechi.scrim,
-      builder: (_) => _PaymentResult(
+      builder: (_) => PaymentResultDialog(
         process: () => controller.pay(job, selected, fail: shouldFail),
         amount: amount,
         method: selected,
@@ -611,42 +576,13 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             'Payment method',
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          Panel(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-            child: RadioGroup<PaymentMethod>(
-              groupValue: method,
-              onChanged: (value) {
-                if (value != null && !submitting && !processing) {
-                  setState(() => method = value);
-                }
-              },
-              child: Column(
-                children: [
-                  for (final option in PaymentMethod.values)
-                    RadioListTile<PaymentMethod>(
-                      enabled: !processing && !submitting,
-                      value: option,
-                      secondary: Icon(
-                        switch (option) {
-                          PaymentMethod.ecoCash => LucideIcons.smartphone,
-                          PaymentMethod.card => LucideIcons.creditCard,
-                          PaymentMethod.zimswitch => LucideIcons.landmark,
-                          PaymentMethod.cash => LucideIcons.banknote,
-                        },
-                        size: 21,
-                        color: Mechi.navy,
-                      ),
-                      title: Text(option.label),
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      subtitle: Text(
-                        option == PaymentMethod.cash
-                            ? 'Confirm after handing over cash'
-                            : 'Demo payment',
-                      ),
-                    ),
-                ],
-              ),
-            ),
+          PaymentMethodPicker(
+            method: method,
+            onChanged: processing || submitting
+                ? null
+                : (value) {
+                    setState(() => method = value);
+                  },
           ),
           if (method != PaymentMethod.cash)
             SwitchListTile(
@@ -660,85 +596,6 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       ],
     );
   }
-}
-
-class _PaymentResult extends StatefulWidget {
-  const _PaymentResult({
-    required this.process,
-    required this.amount,
-    required this.method,
-    required this.onReceipt,
-  });
-  final Future<bool?> Function() process;
-  final String amount;
-  final PaymentMethod method;
-  final VoidCallback onReceipt;
-  @override
-  State<_PaymentResult> createState() => _PaymentResultState();
-}
-
-class _PaymentResultState extends State<_PaymentResult> {
-  late final result = Future<bool?>.microtask(widget.process);
-  @override
-  Widget build(BuildContext context) => FutureBuilder<bool?>(
-    future: result,
-    builder: (context, snapshot) {
-      final done = snapshot.connectionState == ConnectionState.done;
-      final paid = snapshot.data == true;
-      return PopScope(
-        canPop: done,
-        child: AlertDialog(
-          title: Text(
-            !done
-                ? 'Processing payment'
-                : paid
-                ? 'Payment successful'
-                : 'Payment failed',
-            textAlign: TextAlign.center,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (!done)
-                const CircularProgressIndicator()
-              else
-                Icon(
-                  paid ? LucideIcons.checkCircle2 : LucideIcons.alertCircle,
-                  color: paid ? Mechi.navy : Mechi.error,
-                  size: 48,
-                ),
-              const SizedBox(height: 12),
-              Text(
-                '${widget.amount} USD · ${widget.method.label}',
-                textAlign: TextAlign.center,
-              ),
-              if (paid)
-                const Padding(
-                  padding: EdgeInsets.only(top: 12),
-                  child: Text('Your receipt is ready.'),
-                ),
-            ],
-          ),
-          actions: done
-              ? [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(paid ? 'Done' : 'Back to payment'),
-                  ),
-                  if (paid)
-                    FilledButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        widget.onReceipt();
-                      },
-                      child: const Text('Print receipt'),
-                    ),
-                ]
-              : null,
-        ),
-      );
-    },
-  );
 }
 
 class ReceiptScreen extends ConsumerStatefulWidget {
@@ -768,197 +625,102 @@ class _ReceiptScreenState extends ConsumerState<ReceiptScreen> {
         .toIso8601String()
         .replaceFirst('T', ' ')
         .substring(0, 16);
-    return Scaffold(
-      backgroundColor: Mechi.navy,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  IconButton(
-                    tooltip: 'Back',
-                    onPressed: () => backOrHome(context),
-                    icon: const Icon(
-                      LucideIcons.arrowLeft,
-                      color: Mechi.white,
-                      size: 19,
-                    ),
-                  ),
-                  const Expanded(
-                    child: Text(
-                      'Your receipt',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        backgroundColor: Mechi.navy,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    IconButton(
+                      tooltip: 'Back',
+                      onPressed: () => backOrHome(context),
+                      icon: const Icon(
+                        LucideIcons.arrowLeft,
                         color: Mechi.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                        size: 19,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 48),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-                children: [
-                  Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 400),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 16,
-                            decoration: BoxDecoration(
-                              color: Mechi.pale,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            alignment: Alignment.center,
-                            child: Container(
-                              height: 3,
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                              ),
-                              color: Mechi.muted,
-                            ),
-                          ),
-                          TweenAnimationBuilder<double>(
-                            key: ValueKey(printCount),
-                            tween: Tween(begin: 0, end: 1),
-                            duration: Mechi.animate(context, Mechi.printMotion),
-                            curve: Mechi.curve,
-                            builder: (_, value, child) => ClipRect(
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                heightFactor: value,
-                                child: child,
-                              ),
-                            ),
-                            child: Container(
-                              color: Mechi.paper,
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.all(16),
-                              child: DefaultTextStyle.merge(
-                                style: const TextStyle(
-                                  fontFamily: Mechi.mono,
-                                  fontSize: 11,
-                                ),
-                                child: Column(
-                                  children: [
-                                    const MechiLogo(height: 44),
-                                    const Text('DEMONSTRATION SERVICE RECEIPT'),
-                                    const SizedBox(height: 8),
-                                    const Divider(color: Mechi.line),
-                                    InfoRow('Receipt', job.receiptId),
-                                    InfoRow('Job', job.id),
-                                    InfoRow('Date (Harare)', date),
-                                    InfoRow('Mechanic', mechanic.name),
-                                    InfoRow(
-                                      'Vehicle',
-                                      job.request.vehicle.name,
-                                    ),
-                                    InfoRow('Service', job.request.problem),
-                                    const Divider(color: Mechi.line),
-                                    InfoRow('Labour', usd(job.quote!.labour)),
-                                    InfoRow('Parts', usd(job.quote!.parts)),
-                                    InfoRow(
-                                      'Call-out',
-                                      usd(job.quote!.callout),
-                                    ),
-                                    const Divider(color: Mechi.line),
-                                    InfoRow(
-                                      'TOTAL USD',
-                                      usd(job.quote!.total),
-                                      bold: true,
-                                    ),
-                                    InfoRow('Method', job.method!.label),
-                                    const InfoRow(
-                                      'Status',
-                                      'DEMO PAID',
-                                      bold: true,
-                                    ),
-                                    const SizedBox(height: 10),
-                                    ExcludeSemantics(
-                                      child: SizedBox(
-                                        height: 22,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            for (var i = 0; i < 42; i++)
-                                              Container(
-                                                width: i % 4 == 0 ? 3 : 1.8,
-                                                margin: EdgeInsets.only(
-                                                  right: i % 3 == 0 ? 2.4 : 1.4,
-                                                ),
-                                                color: Mechi.navy,
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-              child: Column(
-                children: [
-                  if (job.status == JobStatus.paid)
-                    ActionButton(
-                      'Rate mechanic',
-                      () => context.push('/review/${job.id}'),
-                    )
-                  else if (job.status == JobStatus.reviewed)
-                    const ChipLabel(
-                      'Review submitted',
-                      icon: LucideIcons.check,
-                    ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FilledButton.icon(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: Mechi.ink,
-                            foregroundColor: Mechi.white,
-                            shape: const StadiumBorder(),
-                          ),
-                          onPressed: () => setState(() => printCount++),
-                          icon: const Icon(LucideIcons.printer, size: 16),
-                          label: const Text('Print again'),
+                    const Expanded(
+                      child: Text(
+                        'Your receipt',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Mechi.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: Mechi.white,
-                            foregroundColor: Mechi.ink,
-                            shape: const StadiumBorder(),
-                          ),
-                          onPressed: () => backOrHome(context),
-                          child: const Text('Done'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(width: 48),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+                  children: [
+                    ServiceReceipt(
+                      job: job,
+                      mechanicName: mechanic.name,
+                      date: date,
+                      printCount: printCount,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                child: Column(
+                  children: [
+                    if (job.status == JobStatus.paid)
+                      ActionButton(
+                        'Rate mechanic',
+                        () => context.push('/review/${job.id}'),
+                      )
+                    else if (job.status == JobStatus.reviewed)
+                      const ChipLabel(
+                        'Review submitted',
+                        icon: LucideIcons.check,
+                      ),
+                    const SizedBox(height: Mechi.gap),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: FilledButton.icon(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: Mechi.ink,
+                              foregroundColor: Mechi.white,
+                              shape: const StadiumBorder(),
+                            ),
+                            onPressed: () => setState(() => printCount++),
+                            icon: const Icon(LucideIcons.printer, size: 16),
+                            label: const Text('Print again'),
+                          ),
+                        ),
+                        const SizedBox(width: Mechi.gap),
+                        Expanded(
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: Mechi.white,
+                              foregroundColor: Mechi.ink,
+                              shape: const StadiumBorder(),
+                            ),
+                            onPressed: () => backOrHome(context),
+                            child: const Text('Done'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -1045,7 +807,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                 MechanicIdentity(
                   ref.watch(mechanicsProvider).byId(job!.mechanicId!),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: Mechi.gap),
                 Text(
                   '${job.request.service.label} · Completed',
                   style: type.bodySmall,
@@ -1058,24 +820,13 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
             'Choose a star rating and share your experience.',
             style: type.bodySmall,
           ),
-          Row(
-            children: [
-              for (var i = 1; i <= 5; i++)
-                Expanded(
-                  child: IconButton(
-                    tooltip: '$i star${i == 1 ? '' : 's'}',
-                    isSelected: i <= rating,
-                    onPressed: submitting
-                        ? null
-                        : () => setState(() => rating = i),
-                    icon: Icon(
-                      i <= rating ? Icons.star_rounded : LucideIcons.star,
-                      color: Mechi.star,
-                      size: 29,
-                    ),
-                  ),
-                ),
-            ],
+          RatingPicker(
+            rating: rating,
+            onChanged: submitting
+                ? null
+                : (value) {
+                    setState(() => rating = value);
+                  },
           ),
           Text('What went well?', style: type.titleMedium),
           Wrap(

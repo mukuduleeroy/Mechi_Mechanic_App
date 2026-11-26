@@ -3,10 +3,16 @@ import '../assistance/domain.dart';
 import 'vehicle_catalog.dart';
 
 class VehicleImage extends StatelessWidget {
-  const VehicleImage(this.vehicle, {super.key, this.height = 120});
+  const VehicleImage(
+    this.vehicle, {
+    super.key,
+    this.height = 120,
+    this.placeholder,
+  });
 
   final Vehicle vehicle;
   final double height;
+  final Widget? placeholder;
 
   static String? assetFor(Vehicle vehicle) {
     final render = VehicleCatalog.resolve(vehicle);
@@ -16,18 +22,20 @@ class VehicleImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final asset = assetFor(vehicle);
-    Widget fallback() => SizedBox(
-      height: height,
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          'Vehicle image unavailable',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+    Widget fallback() =>
+        placeholder ??
+        SizedBox(
+          height: height,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              'Vehicle image unavailable',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        );
     if (asset == null) return fallback();
 
     // Image.asset reuses Flutter's decoded ImageCache. Limit decoded size to

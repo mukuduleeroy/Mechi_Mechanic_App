@@ -13,6 +13,7 @@ Future<void> bookRepair(
   bool captureProfiles = false,
 }) async {
   await tapLabel(tester, 'Request assistance');
+  if (captureProfiles) await capture?.call('request-assistance');
   await tapLabel(tester, 'Find mechanics');
   expect(find.text('Select a problem category'), findsOneWidget);
   expect(find.text('Select a service location'), findsOneWidget);

@@ -1,21 +1,19 @@
-import 'dart:math' as math;
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/design_system/lucide_icons.dart';
-import '../../core/design_system/mechi_ui.dart';
-import '../../core/design_system/mechi_logo.dart';
-import '../assistance/demo_map.dart';
+import '../../core/design_system/design_system.dart';
+import 'dashboard_components.dart';
+import 'vehicle_components.dart';
+import '../assistance/job_components.dart';
 import '../assistance/domain.dart';
 import '../assistance/job_state.dart';
 import '../assistance/repositories.dart';
 import 'garage_state.dart';
-import 'vehicle_image.dart';
+import 'profile_components.dart';
 import 'vehicle_catalog.dart';
+import 'vehicle_image.dart';
 import 'vehicle_colour.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -51,24 +49,7 @@ class HomeScreen extends ConsumerWidget {
         body: LayoutBuilder(
           builder: (context, bounds) {
             final insets = MediaQuery.paddingOf(context);
-            final usable = bounds.maxHeight - insets.vertical;
-            final width = bounds.maxWidth - insets.horizontal;
-            const navHeight = 55.0;
-            const navGap = 8.0;
-            final darkHero = (width * .55).clamp(195.0, 232.0);
-            // Share the available height between the content sections. These
-            // targets are minimums so wrapped text can grow into the scroll view.
-            final baseHero = math.max(171.0, darkHero + 38 - insets.top);
-            final delta =
-                (usable -
-                        navHeight -
-                        2 * navGap -
-                        (baseHero + 204 + 138 + 94 + 74))
-                    .clamp(-56.0, 90.0);
-            final heroHeight = baseHero + delta * .32;
-            final infoHeight = (204 + delta * .34).clamp(184.0, 236.0);
-            final mapHeight = (138 + delta * .20).clamp(126.0, 156.0);
-            final quickHeight = (94 + delta * .14).clamp(88.0, 108.0);
+            final dimensions = DashboardDimensions(bounds, insets);
             return Stack(
               children: [
                 Positioned(
@@ -85,120 +66,12 @@ class HomeScreen extends ConsumerWidget {
                         child: ListView(
                           padding: EdgeInsets.zero,
                           children: [
-                            Stack(
-                              children: [
-                                const Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  right: 0,
-                                  bottom: 38,
-                                  child: ColoredBox(color: Mechi.hero),
-                                ),
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    minHeight: heroHeight,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      16,
-                                      6,
-                                      16,
-                                      0,
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const MechiLogo(
-                                                    height: 18,
-                                                    symbolOnly: true,
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  Text(
-                                                    'Hello, ${garage.customer}',
-                                                    style: typography
-                                                        .headlineMedium
-                                                        ?.copyWith(
-                                                          color: Mechi.white,
-                                                        ),
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    '${vehicle.name} · ${vehicle.year}',
-                                                    style: typography.bodySmall
-                                                        ?.copyWith(
-                                                          color: Mechi.paper,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Stack(
-                                              clipBehavior: Clip.none,
-                                              children: [
-                                                IconButton.filled(
-                                                  tooltip: 'Notifications',
-                                                  style: IconButton.styleFrom(
-                                                    backgroundColor: Mechi.ink,
-                                                    foregroundColor:
-                                                        Mechi.white,
-                                                  ),
-                                                  icon: const Icon(
-                                                    LucideIcons.bell,
-                                                    size: 19,
-                                                  ),
-                                                  onPressed: showStatus,
-                                                ),
-                                                if (active != null)
-                                                  const Positioned(
-                                                    top: 1,
-                                                    right: 1,
-                                                    child: IgnorePointer(
-                                                      child: CircleAvatar(
-                                                        radius: 9,
-                                                        backgroundColor:
-                                                            Mechi.error,
-                                                        child: Text(
-                                                          '1',
-                                                          style: TextStyle(
-                                                            color: Mechi.white,
-                                                            fontSize: 10,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: VehicleImage(
-                                            vehicle,
-                                            height: (heroHeight - 77).clamp(
-                                              98.0,
-                                              150.0,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            VehicleHero(
+                              vehicle: vehicle,
+                              customer: garage.customer,
+                              height: dimensions.heroHeight,
+                              hasActiveJob: active != null,
+                              onNotifications: showStatus,
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
@@ -207,7 +80,7 @@ class HomeScreen extends ConsumerWidget {
                                 children: [
                                   ConstrainedBox(
                                     constraints: BoxConstraints(
-                                      minHeight: infoHeight,
+                                      minHeight: dimensions.infoHeight,
                                     ),
                                     child: IntrinsicHeight(
                                       child: Row(
@@ -234,13 +107,17 @@ class HomeScreen extends ConsumerWidget {
                                                     'Registration',
                                                     style: typography.bodySmall,
                                                   ),
-                                                  const SizedBox(height: 8),
+                                                  const SizedBox(
+                                                    height: Mechi.gap,
+                                                  ),
                                                   Text(
                                                     vehicle.plate,
                                                     style:
                                                         typography.titleLarge,
                                                   ),
-                                                  const SizedBox(height: 8),
+                                                  const SizedBox(
+                                                    height: Mechi.gap,
+                                                  ),
                                                   VehicleColourLabel(
                                                     vehicle.colour,
                                                   ),
@@ -261,7 +138,7 @@ class HomeScreen extends ConsumerWidget {
                                             child: Column(
                                               children: [
                                                 Expanded(
-                                                  child: _dashboardMetric(
+                                                  child: DashboardMetric(
                                                     LucideIcons.shieldCheck,
                                                     active == null
                                                         ? 'Ready to help'
@@ -271,7 +148,7 @@ class HomeScreen extends ConsumerWidget {
                                                 ),
                                                 const SizedBox(height: 10),
                                                 Expanded(
-                                                  child: _dashboardMetric(
+                                                  child: DashboardMetric(
                                                     LucideIcons.clock,
                                                     '${nearest.eta} min',
                                                     'Nearest · Demo',
@@ -285,107 +162,23 @@ class HomeScreen extends ConsumerWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 10),
-                                  ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      minHeight: mapHeight,
-                                      minWidth: double.infinity,
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                        Mechi.radius,
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Positioned.fill(
-                                            child: DemoMap(
-                                              mechanics: [nearest],
-                                              selected: nearest.id,
-                                              preview: true,
-                                            ),
-                                          ),
-                                          const Positioned.fill(
-                                            child: DecoratedBox(
-                                              decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                  colors: [
-                                                    Mechi.white,
-                                                    Mechi.white,
-                                                    Color(0x00ffffff),
-                                                  ],
-                                                  stops: [0, .40, .75],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                              minHeight: mapHeight,
-                                            ),
-                                            child: FractionallySizedBox(
-                                              alignment: Alignment.centerLeft,
-                                              widthFactor: .56,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 14,
-                                                      vertical: 10,
-                                                    ),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    ConstrainedBox(
-                                                      constraints:
-                                                          const BoxConstraints(
-                                                            maxWidth: 148,
-                                                          ),
-                                                      child: Text(
-                                                        active?.status.label ??
-                                                            'Find closest mechanics',
-                                                        style: typography
-                                                            .titleMedium,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    FilledButton(
-                                                      style: FilledButton.styleFrom(
-                                                        shape:
-                                                            const StadiumBorder(),
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              horizontal: 12,
-                                                            ),
-                                                      ),
-                                                      onPressed: () => request(
-                                                        Service.roadside,
-                                                      ),
-                                                      child: Text(
-                                                        active == null
-                                                            ? 'Request assistance'
-                                                            : 'Open current job',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                  DashboardMapCard(
+                                    height: dimensions.mapHeight,
+                                    mechanic: nearest,
+                                    title:
+                                        active?.status.label ??
+                                        'Find closest mechanics',
+                                    actionLabel: active == null
+                                        ? 'Request assistance'
+                                        : 'Open current job',
+                                    onPressed: () => request(Service.roadside),
                                   ),
                                   const SizedBox(height: 14),
                                   Text(
                                     'Quick actions',
                                     style: typography.titleMedium,
                                   ),
-                                  const SizedBox(height: 8),
+                                  const SizedBox(height: Mechi.gap),
                                   IntrinsicHeight(
                                     child: Row(
                                       spacing: 6,
@@ -432,9 +225,9 @@ class HomeScreen extends ConsumerWidget {
                                               ),
                                             ])
                                           Expanded(
-                                            child: _ServiceTile(
+                                            child: DashboardActionCard(
                                               label,
-                                              height: quickHeight,
+                                              height: dimensions.quickHeight,
                                               icon,
                                               action,
                                               primary: label == 'Breakdown',
@@ -449,56 +242,14 @@ class HomeScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: navGap),
-                        child: SizedBox(
-                          width: math.min(256, width),
-                          height: navHeight,
-                          child: Material(
-                            color: Mechi.ink,
-                            borderRadius: BorderRadius.circular(100),
-                            clipBehavior: Clip.antiAlias,
-                            child: Row(
-                              children: [
-                                for (final (label, icon, route) in [
-                                  ('Home', LucideIcons.car, '/'),
-                                  ('Vehicles', LucideIcons.wrench, '/garage'),
-                                  (
-                                    'Job history',
-                                    LucideIcons.history,
-                                    '/history',
-                                  ),
-                                  ('Profile', LucideIcons.user, '/profile'),
-                                ])
-                                  Expanded(
-                                    child: IconButton(
-                                      tooltip: label,
-                                      style: IconButton.styleFrom(
-                                        minimumSize: const Size(48, 48),
-                                      ),
-                                      isSelected: route == '/',
-                                      onPressed: () {
-                                        if (route != '/') context.push(route);
-                                      },
-                                      icon: route == '/'
-                                          ? SvgPicture.asset(
-                                              'assets/icons/car-front.svg',
-                                              width: 20,
-                                              height: 20,
-                                            )
-                                          : Icon(
-                                              icon,
-                                              size: 20,
-                                              color: Mechi.paper.withValues(
-                                                alpha: .65,
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      DashboardNavigation(
+                        availableWidth: bounds.maxWidth - insets.horizontal,
+                        onDestination: (destination) =>
+                            context.push(switch (destination) {
+                              DashboardDestination.vehicles => '/garage',
+                              DashboardDestination.history => '/history',
+                              DashboardDestination.profile => '/profile',
+                            }),
                       ),
                     ],
                   ),
@@ -512,81 +263,9 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-Widget _dashboardMetric(IconData icon, String value, String label) => SizedBox(
-  width: double.infinity,
-  child: Panel(
-    padding: const EdgeInsets.all(14),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 16),
-        const SizedBox(height: 5),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
-        Text(label, style: const TextStyle(color: Mechi.muted, fontSize: 11)),
-      ],
-    ),
-  ),
-);
-
 void openJob(BuildContext context, Job job) => context.push(
   job.status == JobStatus.searching ? '/discover/${job.id}' : '/job/${job.id}',
 );
-
-class _ServiceTile extends StatelessWidget {
-  const _ServiceTile(
-    this.label,
-    this.icon,
-    this.action, {
-    this.primary = false,
-    required this.height,
-  });
-  final double height;
-  final bool primary;
-  final String label;
-  final IconData icon;
-  final VoidCallback action;
-  @override
-  Widget build(BuildContext context) => Material(
-    color: primary ? Mechi.navy : Mechi.white,
-    borderRadius: BorderRadius.circular(Mechi.radius),
-    child: InkWell(
-      borderRadius: BorderRadius.circular(Mechi.radius),
-      onTap: action,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: height),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 14,
-                backgroundColor: primary
-                    ? Mechi.white.withValues(alpha: .20)
-                    : Mechi.pale,
-                child: Icon(
-                  icon,
-                  size: 17,
-                  color: primary ? Mechi.white : Mechi.ink,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: primary ? Mechi.white : Mechi.ink,
-                  fontSize: 11,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
 
 Future<VehicleRender?> _openVehicleCatalog(
   BuildContext context,
@@ -599,7 +278,7 @@ Future<VehicleRender?> _openVehicleCatalog(
     child: Column(
       children: [
         const Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(Mechi.pad),
           child: Text('Choose a vehicle model'),
         ),
         Expanded(
@@ -667,51 +346,51 @@ class GarageScreen extends ConsumerWidget {
       onBack: context.pop,
       footer: ActionButton('Add vehicle', () => edit(context, ref)),
       children: [
-        OutlinedButton.icon(
-          icon: const Icon(LucideIcons.car, size: 18),
-          label: const Text('Browse catalog'),
-          onPressed: () async {
-            final preset = await _openVehicleCatalog(context);
-            if (preset != null && context.mounted) {
-              await edit(context, ref, preset: preset);
-            }
-          },
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'My garage',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            Text(
+              '${garage.vehicles.length} ${garage.vehicles.length == 1 ? 'vehicle' : 'vehicles'}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ),
-        for (final vehicle in garage.vehicles)
-          Panel(
-            child: Row(
-              children: [
-                const Icon(LucideIcons.car, color: Mechi.navy),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: InkWell(
-                    onTap: () => ref
-                        .read(garageProvider.notifier)
-                        .save(selected: vehicle.id),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          vehicle.name,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Text('${vehicle.year} · ${vehicle.plate}'),
-                        const SizedBox(height: 6),
-                        VehicleColourLabel(vehicle.colour),
-                        if (garage.selected == vehicle.id)
-                          const ChipLabel('Current vehicle'),
-                      ],
-                    ),
-                  ),
-                ),
-                IconButton(
-                  tooltip: 'Edit ${vehicle.name}',
-                  onPressed: () => edit(context, ref, initial: vehicle),
-                  icon: const Icon(LucideIcons.pencil, size: 18),
+        Panel.grouped(
+          child: SettingsRow(
+            icon: LucideIcons.car,
+            title: 'Browse catalog',
+            onTap: () async {
+              final preset = await _openVehicleCatalog(context);
+              if (preset != null && context.mounted) {
+                await edit(context, ref, preset: preset);
+              }
+            },
+          ),
+        ),
+        const SectionTitle('Registered vehicles'),
+        Panel(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            children: [
+              for (final (index, vehicle) in garage.vehicles.indexed) ...[
+                if (index != 0) const Divider(height: 1, color: Mechi.line),
+                RegisteredVehicleRow(
+                  vehicle: vehicle,
+                  selected: garage.selected == vehicle.id,
+                  onSelect: () => ref
+                      .read(garageProvider.notifier)
+                      .save(selected: vehicle.id),
+                  onEdit: () => edit(context, ref, initial: vehicle),
                 ),
               ],
-            ),
+            ],
           ),
+        ),
       ],
     );
   }
@@ -773,7 +452,7 @@ class _VehicleFormState extends State<_VehicleForm> {
     padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
     child: SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(Mechi.pad),
         child: Form(
           key: key,
           child: Column(
@@ -797,14 +476,10 @@ class _VehicleFormState extends State<_VehicleForm> {
               ].indexed)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: TextFormField(
+                  child: MechiFormField(
                     controller: fields[index],
-                    decoration: InputDecoration(
-                      labelText: label,
-                      hintText: index == 4
-                          ? 'e.g. Pearl white or #a62032'
-                          : null,
-                    ),
+                    label: label,
+                    hint: index == 4 ? 'e.g. Pearl white or #a62032' : null,
                     maxLength: 32,
                     keyboardType: index == 2
                         ? TextInputType.number
@@ -897,134 +572,144 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       title: 'Job history',
       onBack: context.pop,
       children: [
-        SegmentedButton<int>(
-          showSelectedIcon: false,
-          segments: const [
-            ButtonSegment(value: 0, label: Text('All')),
-            ButtonSegment(value: 1, label: Text('Paid')),
-            ButtonSegment(value: 2, label: Text('Other')),
+        SegmentPicker<int>(
+          options: const [
+            (value: 0, label: 'All', icon: null),
+            (value: 1, label: 'Paid', icon: null),
+            (value: 2, label: 'Other', icon: null),
           ],
-          selected: {filter},
-          onSelectionChanged: (v) => setState(() => filter = v.first),
+          value: filter,
+          onChanged: (value) => setState(() => filter = value),
         ),
+        const SectionTitle('Past services'),
         if (jobs.isEmpty)
           const Panel(child: Text('No jobs match this filter.')),
         for (final job in jobs)
-          Panel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  job.request.problem,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                InfoRow(
-                  job.request.vehicle.name,
-                  job.quote == null ? job.id : usd(job.quote!.total),
-                ),
-                ChipLabel(job.status.label),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () => openJob(context, job),
-                      child: const Text('Details'),
-                    ),
-                    if (job.status.settled)
-                      TextButton(
-                        onPressed: () => context.push('/receipt/${job.id}'),
-                        child: const Text('Receipt'),
-                      ),
-                  ],
-                ),
-              ],
-            ),
+          JobHistoryCard(
+            job: job,
+            onDetails: () => openJob(context, job),
+            onReceipt: () => context.push('/receipt/${job.id}'),
           ),
       ],
     );
   }
 }
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  late final contact = TextEditingController(
+    text: ref.read(garageProvider).emergency,
+  );
+
+  @override
+  void dispose() {
+    contact.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final garage = ref.watch(garageProvider);
     final editor = ref.read(garageProvider.notifier);
     return Screen(
       title: 'Profile',
       onBack: context.pop,
+      footer: ActionButton('Done', () async {
+        await editor.save(emergency: contact.text);
+        if (context.mounted) context.pop();
+      }),
       children: [
-        Panel(
+        ProfileHeader(
+          name: garage.customer,
+          subtitle: 'Harare · Fictional demo account',
+        ),
+        const SectionTitle('Account'),
+        Panel.grouped(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                garage.customer,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const Text('Harare · Fictional demo account'),
-              DropdownButton<String>(
+              SelectionField<String>(
+                icon: LucideIcons.user,
+                title: 'Demo account',
+                options: const ['Tadiwa M.', 'Ropa N.', 'Kuda S.'],
                 value: garage.customer,
-                items: [
-                  for (final name in ['Tadiwa M.', 'Ropa N.', 'Kuda S.'])
-                    DropdownMenuItem(value: name, child: Text(name)),
-                ],
+                labelFor: (name) => name,
                 onChanged: (name) => editor.save(customer: name),
               ),
-            ],
-          ),
-        ),
-        Panel(
-          child: Column(
-            children: [
-              ListTile(
-                leading: const Icon(LucideIcons.car),
-                title: const Text('Vehicles'),
-                trailing: const Icon(LucideIcons.chevronRight),
+              const Divider(height: 1, color: Mechi.line),
+              SettingsRow(
+                icon: LucideIcons.car,
+                title: 'Vehicles',
+                subtitle: 'Manage your garage',
                 onTap: () => context.push('/garage'),
               ),
-              ListTile(
-                leading: const Icon(LucideIcons.history),
-                title: const Text('Job history'),
-                trailing: const Icon(LucideIcons.chevronRight),
+              const Divider(height: 1, color: Mechi.line),
+              SettingsRow(
+                icon: LucideIcons.history,
+                title: 'Job history',
+                subtitle: 'View past services',
                 onTap: () => context.push('/history'),
-              ),
-              SwitchListTile(
-                title: const Text('Low-data mode'),
-                subtitle: const Text(
-                  'Demo maps and assets are available offline.',
-                ),
-                value: garage.lowData,
-                onChanged: (value) => editor.save(lowData: value),
               ),
             ],
           ),
         ),
-        Panel(
+        const SectionTitle('Preferences'),
+        Panel.grouped(
           child: Column(
             children: [
-              DropdownButtonFormField<PaymentMethod>(
-                initialValue: garage.payment,
-                isExpanded: true,
-                decoration: const InputDecoration(
-                  labelText: 'Preferred payment method',
+              SettingsRow(
+                icon: LucideIcons.wifi,
+                title: 'Low-data mode',
+                subtitle: 'Offline demo maps and assets',
+                trailing: Semantics(
+                  label: 'Low-data mode',
+                  child: Switch(
+                    value: garage.lowData,
+                    onChanged: (value) => editor.save(lowData: value),
+                    activeThumbColor: Mechi.white,
+                    activeTrackColor: Mechi.navy,
+                    inactiveTrackColor: Mechi.canvas,
+                  ),
                 ),
-                items: [
-                  for (final method in PaymentMethod.values)
-                    DropdownMenuItem(value: method, child: Text(method.label)),
-                ],
-                onChanged: (v) => editor.save(payment: v),
               ),
-              TextFormField(
-                initialValue: garage.emergency,
-                keyboardType: TextInputType.phone,
-                maxLength: 30,
-                decoration: const InputDecoration(
-                  labelText: 'Emergency contact',
-                  helperText: 'Saved locally. Tap Done to save.',
+              const Divider(height: 1, color: Mechi.line),
+              SelectionField<PaymentMethod>(
+                icon: LucideIcons.creditCard,
+                title: 'Preferred payment method',
+                options: PaymentMethod.values,
+                value: garage.payment,
+                labelFor: (method) => method.label,
+                onChanged: (method) => editor.save(payment: method),
+              ),
+            ],
+          ),
+        ),
+        const SectionTitle('Emergency contact'),
+        Panel(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: IconBubble(LucideIcons.phone),
+              ),
+              const SizedBox(width: Mechi.gap),
+              Expanded(
+                child: MechiFormField(
+                  controller: contact,
+                  keyboardType: TextInputType.phone,
+                  maxLength: 30,
+                  label: 'Contact phone number',
+                  helper: 'Saved locally. Tap Done to save.',
+                  helperMaxLines: 2,
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (value) => editor.save(emergency: value),
                 ),
-                textInputAction: TextInputAction.done,
-                onFieldSubmitted: (v) => editor.save(emergency: v),
               ),
             ],
           ),
@@ -1074,27 +759,4 @@ class ProfileScreen extends ConsumerWidget {
       ],
     );
   }
-}
-
-class GalleryScreen extends StatelessWidget {
-  const GalleryScreen({super.key});
-  @override
-  Widget build(BuildContext context) => Screen(
-    title: 'Component gallery',
-    onBack: context.pop,
-    children: [
-      ActionButton('Primary action', () {}),
-      ActionButton('Secondary action', () {}, secondary: true),
-      const ActionButton('Disabled', null),
-      const Panel(
-        child: Column(
-          children: [
-            ChipLabel('Verified · Demo', icon: LucideIcons.badgeCheck),
-            InfoRow('Total', '\$36.00', bold: true),
-            ProgressRing(.5, caption: 'Repair progress'),
-          ],
-        ),
-      ),
-    ],
-  );
 }

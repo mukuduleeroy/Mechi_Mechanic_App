@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'assets.dart';
 
 class MechiLogo extends StatelessWidget {
   const MechiLogo({super.key, required this.height, this.symbolOnly = false});
@@ -7,11 +8,8 @@ class MechiLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = symbolOnly
-        ? 'mechi-app-symbol-transparent'
-        : 'mechi-logo-original';
     return Image.asset(
-      'assets/branding/$name.png',
+      symbolOnly ? MechiAssets.symbol : MechiAssets.logo,
       height: height,
       fit: BoxFit.contain,
       cacheHeight: (height * MediaQuery.devicePixelRatioOf(context)).ceil(),

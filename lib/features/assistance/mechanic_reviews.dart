@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import '../../core/design_system/mechi_ui.dart';
+import '../../core/design_system/design_system.dart';
 import 'domain.dart';
 
 List<Job> reviewsFor(List<Job> jobs, int mechanicId) => jobs
@@ -171,12 +171,43 @@ class ReviewStars extends StatelessWidget {
         children: [
           for (var star = 1; star <= 5; star++)
             Icon(
-              star <= rating ? Icons.star_rounded : Icons.star_border_rounded,
+              star <= rating ? MechiIcons.filledStar : MechiIcons.outlinedStar,
               size: 14,
               color: Mechi.star,
             ),
         ],
       ),
     ),
+  );
+}
+
+/// Review form's five-star input. A null callback disables editing.
+class RatingPicker extends StatelessWidget {
+  const RatingPicker({
+    super.key,
+    required this.rating,
+    required this.onChanged,
+  });
+
+  final int rating;
+  final ValueChanged<int>? onChanged;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      for (var i = 1; i <= 5; i++)
+        Expanded(
+          child: IconButton(
+            tooltip: '$i star${i == 1 ? '' : 's'}',
+            isSelected: i <= rating,
+            onPressed: onChanged == null ? null : () => onChanged!(i),
+            icon: Icon(
+              i <= rating ? MechiIcons.filledStar : LucideIcons.star,
+              color: Mechi.star,
+              size: 29,
+            ),
+          ),
+        ),
+    ],
   );
 }

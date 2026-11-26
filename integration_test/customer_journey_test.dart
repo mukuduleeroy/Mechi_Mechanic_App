@@ -20,7 +20,20 @@ void main() {
             await binding.takeScreenshot(name);
           }
         : null;
-    await capture?.call('home');
+    if (capture != null) {
+      for (final (label, screenshot) in [
+        ('Vehicles', 'vehicles'),
+        ('Profile', 'profile'),
+        ('Job history', 'job-history'),
+      ]) {
+        await tester.tap(find.byTooltip(label));
+        await tester.pumpAndSettle();
+        await capture(screenshot);
+        await tester.tap(find.byTooltip('Back'));
+        await tester.pumpAndSettle();
+      }
+      await capture('home');
+    }
     await bookRepair(
       tester,
       capture: capture,

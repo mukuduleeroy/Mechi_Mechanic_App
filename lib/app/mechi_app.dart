@@ -2,11 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../core/design_system/mechi_ui.dart';
+import '../core/design_system/design_system.dart';
 import '../features/assistance/request_screens.dart';
 import '../features/assistance/job_screens.dart';
 import '../features/garage/garage_screens.dart';
 import '../features/assistance/domain.dart';
+
+import 'design_system_gallery.dart';
 
 class MechiApp extends ConsumerStatefulWidget {
   const MechiApp({super.key});

@@ -1,6 +1,10 @@
 import 'package:flutter/widgets.dart';
 
 abstract final class LucideIcons {
+  static const batteryCharging = IconData(0xf18f, fontFamily: 'Lucide');
+  static const phone = IconData(0xf440, fontFamily: 'Lucide');
+  static const thermometer = IconData(0xf534, fontFamily: 'Lucide');
+  static const wifi = IconData(0xf596, fontFamily: 'Lucide');
   static const bell = IconData(0xf19c, fontFamily: 'Lucide');
   static const clock = IconData(0xf221, fontFamily: 'Lucide');
   static const heart = IconData(0xf354, fontFamily: 'Lucide');

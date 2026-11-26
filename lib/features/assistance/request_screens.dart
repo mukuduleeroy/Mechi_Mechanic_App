@@ -1,8 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/design_system/lucide_icons.dart';
-import '../../core/design_system/mechi_ui.dart';
+import '../../core/design_system/design_system.dart';
+import 'mechanic_components.dart';
 import '../garage/garage_state.dart';
 import '../garage/vehicle_image.dart';
 import 'mechanic_reviews.dart';
@@ -85,81 +85,80 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
             'What do you need?',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          SegmentedButton<Service>(
-            direction:
-                MediaQuery.sizeOf(context).width < 400 &&
-                    MediaQuery.textScalerOf(context).scale(14) > 20
-                ? Axis.vertical
-                : Axis.horizontal,
-            showSelectedIcon: false,
-            segments: const [
-              ButtonSegment(
+          SegmentPicker<Service>(
+            options: const [
+              (
                 value: Service.roadside,
-                label: Text('Roadside'),
-                icon: Icon(LucideIcons.alertTriangle, size: 17),
+                label: 'Roadside',
+                icon: LucideIcons.alertTriangle,
               ),
-              ButtonSegment(
+              (
                 value: Service.home,
-                label: Text('Home service'),
-                icon: Icon(LucideIcons.home, size: 17),
+                label: 'Home service',
+                icon: LucideIcons.home,
               ),
             ],
-            selected: {service},
-            onSelectionChanged: (value) => setState(() {
-              service = value.first;
+            value: service,
+            onChanged: (value) => setState(() {
+              service = value;
               problem = null;
             }),
           ),
-          DropdownButtonFormField<String>(
-            key: ValueKey(service),
-            initialValue: problem,
-            isExpanded: true,
-            decoration: const InputDecoration(labelText: 'Problem category'),
-            items: [
-              for (final category in categories)
-                DropdownMenuItem(value: category, child: Text(category)),
-            ],
-            onChanged: (value) => problem = value,
-            validator: (value) =>
-                value == null ? 'Select a problem category' : null,
-          ),
-          TextFormField(
-            controller: details,
-            decoration: const InputDecoration(
-              labelText: 'Describe the issue (optional)',
-            ),
-            minLines: 2,
-            maxLines: 4,
-            maxLength: 240,
-          ),
-          DropdownButtonFormField<String>(
-            initialValue: vehicleId ?? garage.selected,
-            isExpanded: true,
-            decoration: const InputDecoration(labelText: 'Vehicle'),
-            items: [
-              for (final vehicle in garage.vehicles)
-                DropdownMenuItem(
-                  value: vehicle.id,
-                  child: Text('${vehicle.name} · ${vehicle.plate}'),
+          const SectionTitle('Service details'),
+          Panel(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SelectionField<String>(
+                  key: ValueKey(service),
+                  icon: LucideIcons.wrench,
+                  title: 'Problem category',
+                  prompt: 'Select a category',
+                  options: categories,
+                  labelFor: (item) => item,
+                  value: problem,
+                  onChanged: (value) => problem = value,
+                  validator: (value) =>
+                      value == null ? 'Select a problem category' : null,
                 ),
-            ],
-            onChanged: (value) => vehicleId = value,
-          ),
-          DropdownButtonFormField<String>(
-            isExpanded: true,
-            decoration: const InputDecoration(labelText: 'Service location'),
-            items: [
-              for (final place in locations)
-                DropdownMenuItem(value: place, child: Text(place)),
-            ],
-            onChanged: (value) => location = value,
-            validator: (value) =>
-                value == null ? 'Select a service location' : null,
-          ),
-          const Panel(
-            child: Text(
-              'Device location is unavailable in this demo. Choose a Harare location to continue.',
+                const Divider(height: 12, color: Mechi.line),
+                MechiFormField.description(
+                  controller: details,
+                  label: 'Describe the issue (optional)',
+                ),
+              ],
             ),
+          ),
+          const SectionTitle('Your vehicle'),
+          Panel.grouped(
+            child: SelectionField<Vehicle>(
+              icon: LucideIcons.car,
+              title: 'Vehicle',
+              value: garage.vehicles.firstWhere(
+                (item) => item.id == (vehicleId ?? garage.selected),
+              ),
+              options: garage.vehicles,
+              labelFor: (item) => '${item.name} · ${item.plate}',
+              onChanged: (item) => vehicleId = item.id,
+            ),
+          ),
+          const SectionTitle('Location'),
+          Panel.grouped(
+            child: SelectionField<String>(
+              icon: LucideIcons.mapPin,
+              title: 'Service location',
+              prompt: 'Choose a Harare location',
+              options: locations,
+              labelFor: (item) => item,
+              value: location,
+              onChanged: (value) => location = value,
+              validator: (value) =>
+                  value == null ? 'Select a service location' : null,
+            ),
+          ),
+          const InformationNotice(
+            'Device location is unavailable in this demo. Choose a Harare location to continue.',
           ),
         ],
       ),
@@ -316,31 +315,14 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                   alignment: Alignment.centerRight,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 16),
-                    child: Panel(
-                      padding: EdgeInsets.zero,
-                      child: Column(
-                        children: [
-                          IconButton(
-                            tooltip: 'Zoom in',
-                            onPressed: zoom >= 1.5
-                                ? null
-                                : () => setState(() => zoom += .25),
-                            icon: const Icon(LucideIcons.plus, size: 18),
-                          ),
-                          IconButton(
-                            tooltip: 'Zoom out',
-                            onPressed: zoom <= 1
-                                ? null
-                                : () => setState(() => zoom -= .25),
-                            icon: const Icon(LucideIcons.minus, size: 18),
-                          ),
-                          IconButton(
-                            tooltip: 'Recenter map',
-                            onPressed: () => setState(() => zoom = 1),
-                            icon: const Icon(LucideIcons.locateFixed, size: 18),
-                          ),
-                        ],
-                      ),
+                    child: MapControls(
+                      onZoomIn: zoom >= 1.5
+                          ? null
+                          : () => setState(() => zoom += .25),
+                      onZoomOut: zoom <= 1
+                          ? null
+                          : () => setState(() => zoom -= .25),
+                      onRecenter: () => setState(() => zoom = 1),
                     ),
                   ),
                 ),
@@ -451,34 +433,6 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
   }
 }
 
-class MechanicIdentity extends StatelessWidget {
-  const MechanicIdentity(this.mechanic, {super.key});
-  final Mechanic mechanic;
-  @override
-  Widget build(BuildContext context) => Row(
-    children: [
-      CircleAvatar(
-        backgroundColor: Mechi.pale,
-        foregroundColor: Mechi.navy,
-        child: Text(mechanic.initials),
-      ),
-      const SizedBox(width: 10),
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(mechanic.name, style: Theme.of(context).textTheme.titleMedium),
-            Text(
-              mechanic.specialty,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
-}
-
 class MechanicScreen extends ConsumerStatefulWidget {
   const MechanicScreen({super.key, required this.id, required this.mechanicId});
   final String id;
@@ -534,7 +488,7 @@ class _MechanicScreenState extends ConsumerState<MechanicScreen> {
                       else
                         const SizedBox(height: 82),
                       Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(Mechi.pad),
                         child: Row(
                           children: [
                             FilledButton.icon(
@@ -620,7 +574,7 @@ class _MechanicScreenState extends ConsumerState<MechanicScreen> {
                                     'Verified · Demo',
                                     icon: LucideIcons.shieldCheck,
                                   ),
-                                  const SizedBox(width: 8),
+                                  const SizedBox(width: Mechi.gap),
                                   Expanded(
                                     child: Text(
                                       mechanic.name,
@@ -698,7 +652,7 @@ class _MechanicScreenState extends ConsumerState<MechanicScreen> {
                           Row(
                             children: [
                               const Icon(LucideIcons.mapPin, size: 22),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: Mechi.gap),
                               Expanded(
                                 child: Text(
                                   mechanic.area,
@@ -758,7 +712,7 @@ class _MechanicScreenState extends ConsumerState<MechanicScreen> {
                             background: Mechi.canvas,
                             ink: Mechi.ink,
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: Mechi.gap),
                           Row(
                             children: [
                               Expanded(
@@ -779,7 +733,7 @@ class _MechanicScreenState extends ConsumerState<MechanicScreen> {
                     ),
                   ] else
                     Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(Mechi.pad),
                       child: MechanicReviews(
                         specialty: mechanic.specialty,
                         records: records,
@@ -790,34 +744,14 @@ class _MechanicScreenState extends ConsumerState<MechanicScreen> {
               ),
             ),
             const Divider(height: 1, color: Mechi.line),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(usd(mechanic.callout), style: type.titleLarge),
-                        Text('Call-out estimate', style: type.bodySmall),
-                      ],
-                    ),
-                  ),
-                  FilledButton.icon(
-                    style: FilledButton.styleFrom(shape: const StadiumBorder()),
-                    onPressed: job.status == JobStatus.searching
-                        ? () {
-                            ref
-                                .read(jobsProvider.notifier)
-                                .quote(job, mechanic);
-                            context.pushReplacement('/job/${job.id}');
-                          }
-                        : null,
-                    icon: const Icon(LucideIcons.navigation, size: 15),
-                    label: const Text('Get quote'),
-                  ),
-                ],
-              ),
+            MechanicPricingBar(
+              callout: mechanic.callout,
+              onPressed: job.status == JobStatus.searching
+                  ? () {
+                      ref.read(jobsProvider.notifier).quote(job, mechanic);
+                      context.pushReplacement('/job/${job.id}');
+                    }
+                  : null,
             ),
           ],
         ),

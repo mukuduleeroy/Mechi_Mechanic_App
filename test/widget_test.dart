@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mechi/features/assistance/domain.dart';
 import 'package:mechi/features/assistance/job_state.dart';
 import 'package:mechi/app/mechi_app.dart';
-import 'package:mechi/core/design_system/mechi_ui.dart';
+import 'package:mechi/core/design_system/design_system.dart';
 import 'package:mechi/features/garage/garage_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'support/journey.dart';
@@ -268,6 +268,25 @@ void main() {
     await captureGolden(tester, 'vehicle-paint');
   });
 
+  testWidgets('profile selectors and Done persist local settings', (
+    tester,
+  ) async {
+    await launch(tester);
+    await tester.tap(find.byTooltip('Profile'));
+    await tester.pumpAndSettle();
+    await tapLabel(tester, 'Demo account');
+    await tapLabel(tester, 'Ropa N.');
+    final contact = find.byType(TextFormField);
+    await tester.ensureVisible(contact);
+    await tester.enterText(contact, '+263 77 000 0000');
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    await tapLabel(tester, 'Done');
+    expect(find.text('Hello, Ropa N.'), findsOneWidget);
+    final prefs = await SharedPreferences.getInstance();
+    expect(LocalVehicles(prefs).load().emergency, '+263 77 000 0000');
+  });
+
   testWidgets('design tokens and component states', (tester) async {
     expect(Mechi.theme.colorScheme.primary, Mechi.navy);
     expect(Mechi.theme.scaffoldBackgroundColor, Mechi.canvas);
@@ -285,5 +304,12 @@ void main() {
       isNull,
     );
     expect(find.byType(ProgressRing), findsOneWidget);
+    await tapLabel(tester, 'Foundations');
+    expect(find.text('Typography'), findsOneWidget);
+    await tapLabel(tester, 'Garage');
+    expect(find.byTooltip('Notifications'), findsOneWidget);
+    await tapLabel(tester, 'Services');
+    expect(find.byTooltip('Zoom in'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }

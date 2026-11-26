@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:mechi/core/design_system/mechi_ui.dart';
+import 'package:mechi/core/design_system/design_system.dart';
 import 'package:mechi/features/assistance/demo_map.dart';
 
 void main() {

@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:material_ui/material_ui.dart';
-import '../../core/design_system/lucide_icons.dart';
-import '../../core/design_system/mechi_ui.dart';
+import '../../core/design_system/design_system.dart';
 import 'domain.dart';
 
 class DemoMap extends StatelessWidget {
@@ -214,7 +213,7 @@ class _CarMarker extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Image.asset(
-          'assets/vehicles/map-car.png',
+          MechiAssets.trackingCar,
           height: 33,
           width: 21,
           fit: BoxFit.contain,
@@ -317,4 +316,42 @@ class _StreetPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _StreetPainter oldDelegate) => true;
+}
+
+/// Map zoom buttons and recenter action. Null disables a zoom direction.
+class MapControls extends StatelessWidget {
+  const MapControls({
+    super.key,
+    this.onZoomIn,
+    this.onZoomOut,
+    required this.onRecenter,
+  });
+
+  final VoidCallback? onZoomIn;
+  final VoidCallback? onZoomOut;
+  final VoidCallback onRecenter;
+
+  @override
+  Widget build(BuildContext context) => Panel(
+    padding: EdgeInsets.zero,
+    child: Column(
+      children: [
+        IconButton(
+          tooltip: 'Zoom in',
+          onPressed: onZoomIn,
+          icon: const Icon(LucideIcons.plus, size: 18),
+        ),
+        IconButton(
+          tooltip: 'Zoom out',
+          onPressed: onZoomOut,
+          icon: const Icon(LucideIcons.minus, size: 18),
+        ),
+        IconButton(
+          tooltip: 'Recenter map',
+          onPressed: onRecenter,
+          icon: const Icon(LucideIcons.locateFixed, size: 18),
+        ),
+      ],
+    ),
+  );
 }

@@ -46,6 +46,6 @@ Goldens use a 390 × 844 logical viewport with the locally bundled fonts. Regene
 
 Choose Request assistance, select a problem and an example Harare location, then open a mechanic’s profile and accept the itemized quote. Use the simulation controls to advance arrival and repair. Review and confirm completion, choose a payment method, and open the receipt. Submit a rating and revisit the job in Job history.
 
-See the [demo guide](docs/PROTOTYPE_DEMO_GUIDE.md), [architecture](docs/architecture/ARCHITECTURE.md), [design tokens](docs/design-system/DESIGN_TOKENS.md), [reference mapping](docs/design-system/REFERENCE_MAPPING.md), and [implementation report](docs/IMPLEMENTATION_REPORT.md).
+See the [demo guide](docs/PROTOTYPE_DEMO_GUIDE.md), [architecture](docs/architecture/ARCHITECTURE.md), [design system and component catalogue](docs/design-system/README.md), [reference mapping](docs/design-system/REFERENCE_MAPPING.md), and [implementation report](docs/IMPLEMENTATION_REPORT.md).
 
 The map is schematic. Job tracking runs on explicit demo controls. Payments, identity verification, dispatch, and communications require production integrations. Demo records and preferences live on the device and are suitable only for fictional data.

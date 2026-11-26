@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import '../../core/design_system/mechi_ui.dart';
+import '../../core/design_system/design_system.dart';
 
 abstract final class VehicleColours {
   static const presets = {
