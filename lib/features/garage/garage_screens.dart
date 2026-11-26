@@ -556,9 +556,9 @@ class _ServiceTile extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints(minHeight: height),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 13, 10, 10),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
                 radius: 14,
@@ -574,6 +574,7 @@ class _ServiceTile extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 label,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: primary ? Mechi.white : Mechi.ink,
                   fontSize: 11,

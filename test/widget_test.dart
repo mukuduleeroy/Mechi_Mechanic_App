@@ -167,6 +167,27 @@ void main() {
   ) async {
     await launch(tester);
     expect(find.text('Hello, Tadiwa M.'), findsOneWidget);
+    double? iconRow;
+    for (final title in ['Breakdown', 'Book service', 'Track job', 'History']) {
+      final label = find.text(title);
+      final card = find
+          .ancestor(of: label, matching: find.byType(InkWell))
+          .first;
+      final icon = find.descendant(
+        of: card,
+        matching: find.byType(CircleAvatar),
+      );
+      final midpoint = tester.getCenter(card).dx;
+      final iconCenter = tester.getCenter(icon);
+      expect(iconCenter.dx, closeTo(midpoint, .01));
+      expect(tester.getCenter(label).dx, closeTo(midpoint, .01));
+      expect(
+        tester.getBottomLeft(icon).dy,
+        lessThan(tester.getTopLeft(label).dy),
+      );
+      iconRow ??= iconCenter.dy;
+      expect(iconCenter.dy, closeTo(iconRow, .01));
+    }
     await captureGolden(tester, 'home');
     await bookRepair(tester, capture: (name) => captureGolden(tester, name));
     await captureGolden(tester, 'payment');
