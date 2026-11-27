@@ -237,11 +237,20 @@ abstract final class VehicleCatalog {
       ('nissan', 'days' || 'dayzhighwaystar' || 'dayshighwaystar') => 'dayz',
       _ => model,
     };
+    final explicitGeneration = normalize(vehicle.generation ?? '');
     VehicleRender? match;
     for (final render in renders) {
       if (normalize(render.make) != make) continue;
       final base = normalize(render.model);
       final generations = render.generation.split('/').map(normalize);
+      if (explicitGeneration.isNotEmpty && model == base) {
+        if (generations.contains(explicitGeneration) &&
+            vehicle.year >= render.firstYear &&
+            vehicle.year <= render.lastYear) {
+          return render;
+        }
+        continue;
+      }
       if (generations.any((code) {
         if (code.isEmpty) return false;
         final prefix = '$base$code';

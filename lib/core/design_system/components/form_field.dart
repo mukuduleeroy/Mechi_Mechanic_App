@@ -16,17 +16,19 @@ class MechiFormField extends StatelessWidget {
     this.textInputAction,
     this.validator,
     this.onSubmitted,
+    this.obscureText = false,
   }) : _multiline = false;
 
   const MechiFormField.description({
     super.key,
     required this.controller,
     required this.label,
-  }) : _multiline = true,
+    this.maxLength = 240,
+  }) : obscureText = false,
+       _multiline = true,
        hint = null,
        helper = null,
        helperMaxLines = null,
-       maxLength = 240,
        keyboardType = null,
        textInputAction = null,
        validator = null,
@@ -43,10 +45,14 @@ class MechiFormField extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onSubmitted;
   final bool _multiline;
+  final bool obscureText;
 
   @override
   Widget build(BuildContext context) => TextFormField(
     controller: controller,
+    obscureText: obscureText,
+    autocorrect: !obscureText,
+    enableSuggestions: !obscureText,
     decoration: InputDecoration(
       labelText: label,
       hintText: hint,

@@ -66,10 +66,14 @@ class Vehicle {
     this.year,
     this.plate, {
     this.colour,
+    this.generation,
+    this.variantId,
+    this.isDefault = false,
   });
   final String id, make, model, plate;
   final int year;
-  final String? colour;
+  final String? colour, generation, variantId;
+  final bool isDefault;
   String get name => '$make $model';
   Map<String, Object?> toJson() => {
     'id': id,
@@ -86,6 +90,9 @@ class Vehicle {
     j['year'],
     j['plate'],
     colour: j['colour'] as String?,
+    generation: j['generation'] as String?,
+    variantId: j['variantId'] as String?,
+    isDefault: j['isDefault'] == true,
   );
 }
 

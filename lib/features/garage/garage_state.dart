@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../assistance/domain.dart';
+import '../account/backend.dart';
+import '../account/driver_data.dart';
+import '../account/session.dart';
 
 final preferencesProvider = Provider<SharedPreferences>(
   (ref) => throw StateError('Preferences must be initialized'),
@@ -28,6 +31,7 @@ class Garage {
   final String selected, customer, emergency;
   final bool lowData;
   final PaymentMethod payment;
+  Vehicle? get activeOrNull => vehicles.isEmpty ? null : active;
   Vehicle get active => vehicles.firstWhere(
     (v) => v.id == selected,
     orElse: () => vehicles.first,
@@ -82,10 +86,62 @@ class LocalVehicles implements VehicleRepository {
 }
 
 class GarageController extends Notifier<Garage> {
+  String? _selection;
+  String? _selectionOwner;
+
+  void selectForSession(String id) {
+    final owner = ref.read(sessionProvider).account?.id;
+    if (owner == null || !state.vehicles.any((vehicle) => vehicle.id == id)) {
+      return;
+    }
+    _selectionOwner = owner;
+    _selection = id;
+    final garage = state;
+    state = Garage(
+      garage.vehicles,
+      id,
+      garage.customer,
+      garage.lowData,
+      garage.emergency,
+      garage.payment,
+    );
+  }
+
   VehicleRepository get repository =>
       LocalVehicles(ref.read(preferencesProvider));
   @override
-  Garage build() => repository.load();
+  Garage build() {
+    if (ref.watch(apiProvider) == null) return repository.load();
+    final owner = ref.watch(
+      sessionProvider.select(
+        (value) => value.stage == SessionStage.ready ? value.account?.id : null,
+      ),
+    );
+    if (_selectionOwner != owner) {
+      _selectionOwner = owner;
+      _selection = null;
+    }
+    if (owner == null) {
+      return const Garage([], '', '', true, '', PaymentMethod.ecoCash);
+    }
+    final data = ref.watch(driverDataProvider(owner)).value;
+    final vehicles = data?.vehicles ?? const <Vehicle>[];
+    final defaultVehicle = vehicles
+        .where((vehicle) => vehicle.isDefault)
+        .firstOrNull;
+    final selected = vehicles.any((vehicle) => vehicle.id == _selection)
+        ? _selection
+        : null;
+    return Garage(
+      vehicles,
+      selected ?? defaultVehicle?.id ?? vehicles.firstOrNull?.id ?? '',
+      data?.profile.name ?? 'Driver',
+      true,
+      '',
+      PaymentMethod.ecoCash,
+    );
+  }
+
   Future<void> save({
     Vehicle? vehicle,
     String? selected,

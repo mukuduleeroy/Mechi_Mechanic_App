@@ -14,6 +14,7 @@ class DemoMap extends StatelessWidget {
     this.zoom = 1,
     this.preview = false,
     this.details = false,
+    this.jobOverlay,
     this.location = 'Harare',
   });
   final List<Mechanic> mechanics;
@@ -28,6 +29,7 @@ class DemoMap extends StatelessWidget {
   final bool preview;
   final bool details;
   final String location;
+  final ({Offset destination, List<Offset> route})? jobOverlay;
   static const origin = Offset(.30, .56);
   static const points = [
     Offset(.73, .29),
@@ -68,13 +70,17 @@ class DemoMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'Demonstration map of $location',
+    label: jobOverlay == null
+        ? 'Demonstration map of $location'
+        : 'Local tracking map',
     child: ClipRect(
       child: ColoredBox(
         color: Mechi.grid,
         child: LayoutBuilder(
           builder: (context, box) {
             final size = box.biggest;
+            final routeAvailable =
+                jobOverlay == null && (!preview || mechanics.isNotEmpty);
             final standardRoute = route(selected);
             final detailTarget = Offset(
               standardRoute.last.dx,
@@ -89,7 +95,7 @@ class DemoMap extends StatelessWidget {
             final selectedMechanic = mechanics
                 .where((m) => m.id == selected)
                 .firstOrNull;
-            final List<Offset> projected = routePoints
+            final List<Offset> projected = (jobOverlay?.route ?? routePoints)
                 .map((p) => Offset(p.dx * size.width, p.dy * size.height))
                 .toList();
             Widget marker(Offset p, Widget child) => Positioned(
@@ -108,13 +114,28 @@ class DemoMap extends StatelessWidget {
                     key: ValueKey(selected),
                     tween: Tween(begin: 0, end: 1),
                     duration: Mechi.animate(context),
-                    builder: (_, value, _) =>
-                        CustomPaint(painter: _StreetPainter(projected, value)),
+                    builder: (_, value, _) => CustomPaint(
+                      painter: _StreetPainter(
+                        routeAvailable || jobOverlay != null
+                            ? projected
+                            : const [],
+                        value,
+                      ),
+                    ),
                   ),
-                  marker(
-                    routePoints.first,
-                    const _CarMarker(label: 'Your vehicle', heading: 90),
-                  ),
+                  if (jobOverlay case final overlay?)
+                    marker(
+                      overlay.destination,
+                      Semantics(
+                        label: 'Service destination',
+                        child: _MapPin(selected: true),
+                      ),
+                    ),
+                  if (routeAvailable)
+                    marker(
+                      routePoints.first,
+                      const _CarMarker(label: 'Your vehicle', heading: 90),
+                    ),
                   if (trackingFix case final fix?)
                     TweenAnimationBuilder<Offset>(
                       tween: Tween(end: fix.position),
@@ -297,11 +318,19 @@ class _StreetPainter extends CustomPainter {
         ..color = Mechi.arterial
         ..strokeWidth = 8,
     );
+    if (route.isEmpty) {
+      canvas.restore();
+      return;
+    }
     final line = Path()..moveTo(route.first.dx, route.first.dy);
     for (final point in route.skip(1)) {
       line.lineTo(point.dx, point.dy);
     }
-    final metric = line.computeMetrics().first;
+    final metric = line.computeMetrics().firstOrNull;
+    if (metric == null) {
+      canvas.restore();
+      return;
+    }
     canvas.drawPath(
       metric.extractPath(0, metric.length * math.max(.01, progress)),
       Paint()

@@ -100,7 +100,7 @@ class DashboardMapCard extends StatelessWidget {
   });
 
   final double height;
-  final Mechanic mechanic;
+  final Mechanic? mechanic;
   final String title;
   final String actionLabel;
   final VoidCallback onPressed;
@@ -114,8 +114,8 @@ class DashboardMapCard extends StatelessWidget {
         children: [
           Positioned.fill(
             child: DemoMap(
-              mechanics: [mechanic],
-              selected: mechanic.id,
+              mechanics: [?mechanic],
+              selected: mechanic?.id ?? 0,
               preview: true,
             ),
           ),
@@ -182,7 +182,7 @@ class VehicleHero extends StatelessWidget {
     required this.onNotifications,
   });
 
-  final Vehicle vehicle;
+  final Vehicle? vehicle;
   final String customer;
   final double height;
   final bool hasActiveJob;
@@ -190,6 +190,7 @@ class VehicleHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vehicle = this.vehicle;
     final typography = Theme.of(context).textTheme;
     return Stack(
       children: [
@@ -226,7 +227,9 @@ class VehicleHero extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            '${vehicle.name} · ${vehicle.year}',
+                            vehicle == null
+                                ? 'No registered vehicle'
+                                : '${vehicle.name} · ${vehicle.year}',
                             style: typography.bodySmall?.copyWith(
                               color: Mechi.paper,
                             ),
@@ -268,13 +271,14 @@ class VehicleHero extends StatelessWidget {
                     ),
                   ],
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: VehicleImage(
-                    vehicle,
-                    height: (height - 77).clamp(98.0, 150.0),
+                if (vehicle != null)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: VehicleImage(
+                      vehicle,
+                      height: (height - 77).clamp(98.0, 150.0),
+                    ),
                   ),
-                ),
               ],
             ),
           ),

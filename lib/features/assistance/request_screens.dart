@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/design_system/design_system.dart';
 import 'mechanic_components.dart';
+import '../account/backend.dart';
+import '../account/driver_data.dart';
 import '../garage/garage_state.dart';
 import '../garage/vehicle_image.dart';
 import 'mechanic_reviews.dart';
@@ -39,47 +41,65 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
   @override
   Widget build(BuildContext context) {
     final garage = ref.watch(garageProvider);
-    final locations = ref.watch(locationsProvider).locations;
-    final categories = switch (service) {
-      Service.roadside => [
-        'Flat tyre',
-        'Battery / starting',
-        'Overheating',
-        'Other',
-      ],
-      Service.home => [
-        'Routine service',
-        'Battery / starting',
-        'Overheating',
-        'Other',
-      ],
-    };
+    final connected = ref.watch(apiProvider) != null;
+    final categoryResult = connected ? ref.watch(categoriesProvider) : null;
+    final locations = connected
+        ? const <String>[]
+        : ref.watch(locationsProvider).locations;
+    final categories = connected
+        ? (categoryResult?.value ?? const <ServiceCategory>[])
+              .where(
+                (category) => service == Service.roadside
+                    ? category.immediate
+                    : category.scheduled,
+              )
+              .map((category) => category.name)
+              .toList()
+        : switch (service) {
+            Service.roadside => [
+              'Flat tyre',
+              'Battery / starting',
+              'Overheating',
+              'Other',
+            ],
+            Service.home => [
+              'Routine service',
+              'Battery / starting',
+              'Overheating',
+              'Other',
+            ],
+          };
     return Form(
       key: form,
       child: Screen(
         title: 'Request assistance',
         onBack: () => backOrHome(context),
-        footer: ActionButton('Find mechanics', () {
-          if (!form.currentState!.validate()) return;
-          final controller = ref.read(jobsProvider.notifier);
-          if (controller.active != null) {
-            context.pushReplacement('/job/${controller.active!.id}');
-            return;
-          }
-          final vehicle = garage.vehicles.firstWhere(
-            (item) => item.id == (vehicleId ?? garage.selected),
-          );
-          final job = controller.start(
-            ServiceRequest(
-              service,
-              problem!,
-              details.text.trim(),
-              vehicle,
-              location!,
-            ),
-          );
-          context.pushReplacement('/discover/${job.id}');
-        }),
+        footer: ActionButton(
+          connected ? 'Dispatch unavailable' : 'Find mechanics',
+          connected
+              ? null
+              : () {
+                  if (!form.currentState!.validate()) return;
+                  final controller = ref.read(jobsProvider.notifier);
+                  if (controller.active != null) {
+                    context.pushReplacement('/job/${controller.active!.id}');
+                    return;
+                  }
+                  final vehicle = garage.vehicles.firstWhere(
+                    (item) => item.id == (vehicleId ?? garage.selected),
+                  );
+                  final job = controller.start(
+                    ServiceRequest(
+                      service,
+                      problem!,
+                      details.text.trim(),
+                      vehicle,
+                      location!,
+                    ),
+                  );
+                  context.pushReplacement('/discover/${job.id}');
+                },
+        ),
         children: [
           Text(
             'What do you need?',
@@ -105,6 +125,17 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
             }),
           ),
           const SectionTitle('Service details'),
+          if (categoryResult?.isLoading == true &&
+              categoryResult?.value == null)
+            const InformationNotice('Loading service categories…'),
+          if (categoryResult?.hasError == true) ...[
+            InformationNotice(
+              categoryResult?.value == null
+                  ? 'Could not load service categories.'
+                  : 'Showing previously loaded categories.',
+            ),
+            ActionButton('Retry', () => ref.invalidate(categoriesProvider)),
+          ],
           Panel(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Column(
@@ -135,31 +166,37 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
             child: SelectionField<Vehicle>(
               icon: LucideIcons.car,
               title: 'Vehicle',
-              value: garage.vehicles.firstWhere(
-                (item) => item.id == (vehicleId ?? garage.selected),
-              ),
+              value: garage.vehicles
+                  .where((item) => item.id == (vehicleId ?? garage.selected))
+                  .firstOrNull,
               options: garage.vehicles,
               labelFor: (item) => '${item.name} · ${item.plate}',
               onChanged: (item) => vehicleId = item.id,
             ),
           ),
-          const SectionTitle('Location'),
-          Panel.grouped(
-            child: SelectionField<String>(
-              icon: LucideIcons.mapPin,
-              title: 'Service location',
-              prompt: 'Choose a Harare location',
-              options: locations,
-              labelFor: (item) => item,
-              value: location,
-              onChanged: (value) => location = value,
-              validator: (value) =>
-                  value == null ? 'Select a service location' : null,
+          if (connected)
+            const InformationNotice(
+              'You can browse categories and select a vehicle. Service requests and live dispatch are unavailable.',
             ),
-          ),
-          const InformationNotice(
-            'Device location is unavailable in this demo. Choose a Harare location to continue.',
-          ),
+          if (!connected) ...[
+            const SectionTitle('Location'),
+            Panel.grouped(
+              child: SelectionField<String>(
+                icon: LucideIcons.mapPin,
+                title: 'Service location',
+                prompt: 'Choose a Harare location',
+                options: locations,
+                labelFor: (item) => item,
+                value: location,
+                onChanged: (value) => location = value,
+                validator: (value) =>
+                    value == null ? 'Select a service location' : null,
+              ),
+            ),
+            const InformationNotice(
+              'Device location is unavailable in this demo. Choose a Harare location to continue.',
+            ),
+          ],
         ],
       ),
     );

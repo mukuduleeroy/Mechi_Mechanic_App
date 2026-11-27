@@ -1,3 +1,4 @@
+import '../job_execution/job_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
@@ -5,6 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/design_system/design_system.dart';
 import 'dashboard_components.dart';
+import '../account/backend.dart';
+import '../account/catalogue_sheet.dart';
+import '../account/driver_data.dart';
+import '../account/session.dart';
 import 'vehicle_components.dart';
 import '../assistance/job_components.dart';
 import '../assistance/domain.dart';
@@ -21,27 +26,35 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final garage = ref.watch(garageProvider);
-    final vehicle = garage.active;
-    ref.watch(jobsProvider);
-    final active = ref.read(jobsProvider.notifier).active;
+    final connected = ref.watch(apiProvider) != null;
+    final vehicle = garage.activeOrNull;
+    final owner = connected ? ref.watch(sessionProvider).account?.id : null;
+    final driver = owner == null ? null : ref.watch(driverDataProvider(owner));
+    final active = connected ? null : ref.watch(jobsProvider.notifier).active;
+    if (!connected) ref.watch(jobsProvider);
     void request(Service service) => active == null
         ? context.push('/request?service=${service.name}')
         : openJob(context, active);
-    final nearest = ref
-        .watch(mechanicsProvider)
-        .all
-        .reduce(
-          (first, second) => first.distance <= second.distance ? first : second,
-        );
+    final nearest = connected
+        ? null
+        : ref
+              .watch(mechanicsProvider)
+              .all
+              .reduce(
+                (first, second) =>
+                    first.distance <= second.distance ? first : second,
+              );
     final typography = Theme.of(context).textTheme;
     void showStatus() => showModalBottomSheet<void>(
       context: context,
-      builder: (_) => SafeArea(
-        child: ListTile(
-          title: const Text('Notifications'),
-          subtitle: Text(active?.status.label ?? 'You’re all caught up.'),
-        ),
-      ),
+      builder: (_) => connected
+          ? const JobNotifications()
+          : SafeArea(
+              child: ListTile(
+                title: const Text('Notifications'),
+                subtitle: Text(active?.status.label ?? 'You’re all caught up.'),
+              ),
+            ),
     );
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
@@ -78,6 +91,24 @@ class HomeScreen extends ConsumerWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  if (driver?.isLoading == true &&
+                                      driver?.value == null)
+                                    const InformationNotice(
+                                      'Loading your garage…',
+                                    ),
+                                  if (driver?.hasError == true) ...[
+                                    InformationNotice(
+                                      driver?.value == null
+                                          ? 'Could not load your garage.'
+                                          : 'Showing previously loaded information.',
+                                    ),
+                                    ActionButton(
+                                      'Retry',
+                                      () => ref.invalidate(
+                                        driverDataProvider(owner!),
+                                      ),
+                                    ),
+                                  ],
                                   ConstrainedBox(
                                     constraints: BoxConstraints(
                                       minHeight: dimensions.infoHeight,
@@ -111,16 +142,18 @@ class HomeScreen extends ConsumerWidget {
                                                     height: Mechi.gap,
                                                   ),
                                                   Text(
-                                                    vehicle.plate,
+                                                    vehicle?.plate ??
+                                                        'No vehicle added',
                                                     style:
                                                         typography.titleLarge,
                                                   ),
                                                   const SizedBox(
                                                     height: Mechi.gap,
                                                   ),
-                                                  VehicleColourLabel(
-                                                    vehicle.colour,
-                                                  ),
+                                                  if (vehicle != null)
+                                                    VehicleColourLabel(
+                                                      vehicle.colour,
+                                                    ),
                                                   TextButton(
                                                     onPressed: () =>
                                                         context.push('/garage'),
@@ -140,7 +173,9 @@ class HomeScreen extends ConsumerWidget {
                                                 Expanded(
                                                   child: DashboardMetric(
                                                     LucideIcons.shieldCheck,
-                                                    active == null
+                                                    connected
+                                                        ? 'Unavailable'
+                                                        : active == null
                                                         ? 'Ready to help'
                                                         : 'Job active',
                                                     'Assistance',
@@ -150,8 +185,12 @@ class HomeScreen extends ConsumerWidget {
                                                 Expanded(
                                                   child: DashboardMetric(
                                                     LucideIcons.clock,
-                                                    '${nearest.eta} min',
-                                                    'Nearest · Demo',
+                                                    nearest == null
+                                                        ? 'Unavailable'
+                                                        : '${nearest.eta} min',
+                                                    nearest == null
+                                                        ? 'Live availability'
+                                                        : 'Nearest · Demo',
                                                   ),
                                                 ),
                                               ],
@@ -323,15 +362,50 @@ class GarageScreen extends ConsumerWidget {
     WidgetRef ref, {
     Vehicle? initial,
     VehicleRender? preset,
+    CatalogueChoice? catalogue,
   }) async {
+    final connected = ref.read(apiProvider) != null;
+    final repository = connected ? ref.read(driverRepositoryProvider) : null;
+    final owner = connected ? ref.read(sessionProvider).account?.id : null;
+    void refresh() {
+      if (context.mounted && owner != null) {
+        ref.invalidate(driverDataProvider(owner));
+      }
+    }
+
     final vehicle = await showModalBottomSheet<Vehicle>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
       barrierColor: Mechi.scrim,
-      builder: (_) => _VehicleForm(initial, preset),
+      builder: (_) => _VehicleForm(
+        initial,
+        preset,
+        catalogue: catalogue,
+        choose: repository == null
+            ? null
+            : (context) => openServerCatalogue(context, repository),
+        save: repository == null
+            ? null
+            : (vehicle) async {
+                await repository.saveVehicle(vehicle, create: initial == null);
+                refresh();
+              },
+        setDefault: repository == null || initial == null || initial.isDefault
+            ? null
+            : () async {
+                await repository.setDefault(initial.id);
+                refresh();
+              },
+        archive: repository == null || initial == null
+            ? null
+            : () async {
+                await repository.archiveVehicle(initial.id);
+                refresh();
+              },
+      ),
     );
-    if (vehicle != null && context.mounted) {
+    if (!connected && vehicle != null && context.mounted) {
       await ref
           .read(garageProvider.notifier)
           .save(vehicle: vehicle, selected: vehicle.id);
@@ -341,6 +415,9 @@ class GarageScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final garage = ref.watch(garageProvider);
+    final connected = ref.watch(apiProvider) != null;
+    final owner = connected ? ref.watch(sessionProvider).account?.id : null;
+    final result = owner == null ? null : ref.watch(driverDataProvider(owner));
     return Screen(
       title: 'Your vehicles',
       onBack: context.pop,
@@ -365,6 +442,16 @@ class GarageScreen extends ConsumerWidget {
             icon: LucideIcons.car,
             title: 'Browse catalog',
             onTap: () async {
+              if (connected) {
+                final choice = await openServerCatalogue(
+                  context,
+                  ref.read(driverRepositoryProvider),
+                );
+                if (choice != null && context.mounted) {
+                  await edit(context, ref, catalogue: choice);
+                }
+                return;
+              }
               final preset = await _openVehicleCatalog(context);
               if (preset != null && context.mounted) {
                 await edit(context, ref, preset: preset);
@@ -373,24 +460,47 @@ class GarageScreen extends ConsumerWidget {
           ),
         ),
         const SectionTitle('Registered vehicles'),
-        Panel(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Column(
-            children: [
-              for (final (index, vehicle) in garage.vehicles.indexed) ...[
-                if (index != 0) const Divider(height: 1, color: Mechi.line),
-                RegisteredVehicleRow(
-                  vehicle: vehicle,
-                  selected: garage.selected == vehicle.id,
-                  onSelect: () => ref
-                      .read(garageProvider.notifier)
-                      .save(selected: vehicle.id),
-                  onEdit: () => edit(context, ref, initial: vehicle),
-                ),
-              ],
-            ],
+        if (result?.hasError == true) ...[
+          InformationNotice(
+            result?.value == null
+                ? 'Could not load your vehicles.'
+                : 'Showing previously loaded vehicles.',
           ),
-        ),
+          ActionButton(
+            'Retry',
+            () => ref.invalidate(driverDataProvider(owner!)),
+          ),
+        ],
+        if (result?.isLoading == true && result?.value == null)
+          const InformationNotice('Loading your vehicles…')
+        else if (garage.vehicles.isEmpty && result?.hasError != true)
+          const InformationNotice(
+            'No vehicles registered. Add a vehicle to get started.',
+          ),
+        if (garage.vehicles.isNotEmpty)
+          Panel(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              children: [
+                for (final (index, vehicle) in garage.vehicles.indexed) ...[
+                  if (index != 0) const Divider(height: 1, color: Mechi.line),
+                  RegisteredVehicleRow(
+                    vehicle: vehicle,
+                    selected: garage.selected == vehicle.id,
+                    onSelect: () {
+                      final controller = ref.read(garageProvider.notifier);
+                      if (connected) {
+                        controller.selectForSession(vehicle.id);
+                      } else {
+                        controller.save(selected: vehicle.id);
+                      }
+                    },
+                    onEdit: () => edit(context, ref, initial: vehicle),
+                  ),
+                ],
+              ],
+            ),
+          ),
       ],
     );
   }
@@ -401,25 +511,71 @@ String _modelName(VehicleRender render) => render.generation.isEmpty
     : '${render.model} ${render.generation.split(' / ').first}';
 
 class _VehicleForm extends StatefulWidget {
-  const _VehicleForm(this.vehicle, this.preset);
+  const _VehicleForm(
+    this.vehicle,
+    this.preset, {
+    this.catalogue,
+    this.choose,
+    this.save,
+    this.setDefault,
+    this.archive,
+  });
   final Vehicle? vehicle;
   final VehicleRender? preset;
+  final CatalogueChoice? catalogue;
+  final Future<CatalogueChoice?> Function(BuildContext)? choose;
+  final Future<void> Function(Vehicle)? save;
+  final Future<void> Function()? setDefault, archive;
   @override
   State<_VehicleForm> createState() => _VehicleFormState();
 }
 
 class _VehicleFormState extends State<_VehicleForm> {
   final key = GlobalKey<FormState>();
+  late CatalogueChoice? catalogue = widget.catalogue;
+  late String? variantId = catalogue?.id ?? widget.vehicle?.variantId;
+  late final id =
+      widget.vehicle?.id ??
+      (widget.save == null
+          ? 'vehicle-${DateTime.now().microsecondsSinceEpoch}'
+          : vehicleRequestId());
+  bool busy = false;
+  String? error;
+  bool get connected => widget.save != null;
+
+  Future<void> _submit(Future<void> Function() action) async {
+    setState(() {
+      busy = true;
+      error = null;
+    });
+    try {
+      await action();
+      if (mounted) Navigator.pop(context);
+    } catch (failure) {
+      if (mounted) {
+        setState(() {
+          busy = false;
+          error = ApiFailure.of(failure).message;
+        });
+      }
+    }
+  }
+
   late final fields = [
-    TextEditingController(text: widget.vehicle?.make ?? widget.preset?.make),
+    TextEditingController(
+      text:
+          widget.vehicle?.make ?? widget.catalogue?.make ?? widget.preset?.make,
+    ),
     TextEditingController(
       text:
           widget.vehicle?.model ??
+          widget.catalogue?.model ??
           (widget.preset == null ? null : _modelName(widget.preset!)),
     ),
     TextEditingController(
       text:
           widget.vehicle?.year.toString() ??
+          widget.catalogue?.yearFrom?.toString() ??
           widget.preset?.sampleYear.toString(),
     ),
     TextEditingController(text: widget.vehicle?.plate),
@@ -435,6 +591,20 @@ class _VehicleFormState extends State<_VehicleForm> {
 
   Future<void> _chooseModel() async {
     FocusScope.of(context).unfocus();
+    if (widget.choose != null) {
+      final selected = await widget.choose!(context);
+      if (!mounted || selected == null) return;
+      setState(() {
+        catalogue = selected;
+        variantId = selected.id;
+        fields[0].text = selected.make;
+        fields[1].text = selected.model;
+        if (selected.yearFrom != null) {
+          fields[2].text = selected.yearFrom.toString();
+        }
+      });
+      return;
+    }
     final selected = await _openVehicleCatalog(context);
     if (!mounted || selected == null) return;
     final editYear = int.tryParse(fields[2].text.trim());
@@ -463,7 +633,7 @@ class _VehicleFormState extends State<_VehicleForm> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               TextButton.icon(
-                onPressed: _chooseModel,
+                onPressed: busy ? null : _chooseModel,
                 icon: const Icon(LucideIcons.car, size: 17),
                 label: const Text('Choose a vehicle model'),
               ),
@@ -472,7 +642,7 @@ class _VehicleFormState extends State<_VehicleForm> {
                 'Model',
                 'Year',
                 'Registration',
-                'Colour (optional)',
+                connected ? 'Colour' : 'Colour (optional)',
               ].indexed)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
@@ -485,13 +655,16 @@ class _VehicleFormState extends State<_VehicleForm> {
                         ? TextInputType.number
                         : TextInputType.text,
                     validator: (value) {
-                      if (index == 4) return null;
+                      if (index == 4 && !connected) return null;
                       if (value == null || value.trim().isEmpty) {
                         return 'Enter ${label.toLowerCase()}';
                       }
                       if (index == 2) {
                         final year = int.tryParse(value.trim());
-                        if (year == null || year < 1900 || year > 2030) {
+                        if (year == null ||
+                            year < (connected ? 1886 : 1900) ||
+                            year >
+                                (connected ? DateTime.now().year + 1 : 2030)) {
                           return 'Enter a valid year';
                         }
                       }
@@ -522,25 +695,76 @@ class _VehicleFormState extends State<_VehicleForm> {
                 ),
               ),
               const SizedBox(height: 12),
-              ActionButton('Save vehicle', () {
-                if (!key.currentState!.validate()) return;
-                final id =
-                    widget.vehicle?.id ??
-                    'vehicle-${DateTime.now().microsecondsSinceEpoch}';
-                Navigator.pop(
-                  context,
-                  Vehicle(
-                    id,
-                    fields[0].text.trim(),
-                    fields[1].text.trim(),
-                    int.parse(fields[2].text.trim()),
-                    fields[3].text.trim().toUpperCase(),
-                    colour: fields[4].text.trim().isEmpty
-                        ? null
-                        : fields[4].text.trim(),
-                  ),
-                );
-              }),
+              if (error != null) InformationNotice(error!),
+              ActionButton(
+                'Save vehicle',
+                busy
+                    ? null
+                    : () {
+                        if (!key.currentState!.validate()) return;
+                        final make = fields[0].text.trim();
+                        final model = fields[1].text.trim();
+                        final originalMake =
+                            catalogue?.make ?? widget.vehicle?.make;
+                        final originalModel =
+                            catalogue?.model ?? widget.vehicle?.model;
+                        final usesVariant =
+                            variantId != null &&
+                            make == originalMake &&
+                            model == originalModel;
+                        final colour = fields[4].text.trim();
+                        final vehicle = Vehicle(
+                          id,
+                          make,
+                          model,
+                          int.parse(fields[2].text.trim()),
+                          fields[3].text.trim().toUpperCase(),
+                          colour: colour.isEmpty ? null : colour,
+                          variantId: usesVariant ? variantId : null,
+                        );
+                        if (widget.save case final save?) {
+                          _submit(() => save(vehicle));
+                        } else {
+                          Navigator.pop(context, vehicle);
+                        }
+                      },
+              ),
+              if (connected && widget.vehicle?.isDefault == true)
+                const InformationNotice('This is your default vehicle.'),
+              if (widget.setDefault != null)
+                ActionButton(
+                  'Set as default',
+                  busy ? null : () => _submit(widget.setDefault!),
+                  secondary: true,
+                ),
+              if (widget.archive != null)
+                ActionButton(
+                  'Remove vehicle',
+                  busy
+                      ? null
+                      : () async {
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (dialog) => AlertDialog(
+                              title: const Text('Remove this vehicle?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(dialog, false),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(dialog, true),
+                                  child: const Text('Remove'),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (confirmed == true && mounted) {
+                            await _submit(widget.archive!);
+                          }
+                        },
+                  secondary: true,
+                ),
             ],
           ),
         ),

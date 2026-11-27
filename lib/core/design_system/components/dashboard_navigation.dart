@@ -13,11 +13,56 @@ class DashboardNavigation extends StatelessWidget {
   const DashboardNavigation({
     super.key,
     required this.availableWidth,
-    required this.onDestination,
-  });
+    required ValueChanged<DashboardDestination> this.onDestination,
+  }) : selectedIndex = 0,
+       mechanicActions = null;
+
+  const DashboardNavigation.mechanic({
+    super.key,
+    required this.availableWidth,
+    required this.selectedIndex,
+    required VoidCallback onHome,
+    required VoidCallback onJobs,
+    required VoidCallback onEarnings,
+    required VoidCallback onProfile,
+  }) : onDestination = null,
+       mechanicActions = (onHome, onJobs, onEarnings, onProfile);
 
   final double availableWidth;
-  final ValueChanged<DashboardDestination> onDestination;
+  final ValueChanged<DashboardDestination>? onDestination;
+  final int selectedIndex;
+  final (VoidCallback, VoidCallback, VoidCallback, VoidCallback)?
+  mechanicActions;
+
+  List<(String, IconData, VoidCallback?)> get items {
+    if (mechanicActions case final actions?) {
+      return [
+        ('Home', LucideIcons.car, actions.$1),
+        ('Jobs', LucideIcons.history, actions.$2),
+        ('Earnings', LucideIcons.banknote, actions.$3),
+        ('Profile', LucideIcons.user, actions.$4),
+      ];
+    }
+    final navigate = onDestination!;
+    return [
+      ('Home', LucideIcons.car, null),
+      (
+        'Vehicles',
+        LucideIcons.wrench,
+        () => navigate(DashboardDestination.vehicles),
+      ),
+      (
+        'Job history',
+        LucideIcons.history,
+        () => navigate(DashboardDestination.history),
+      ),
+      (
+        'Profile',
+        LucideIcons.user,
+        () => navigate(DashboardDestination.profile),
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -31,27 +76,18 @@ class DashboardNavigation extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: Row(
           children: [
-            for (final (label, icon, destination) in [
-              ('Home', LucideIcons.car, null),
-              ('Vehicles', LucideIcons.wrench, DashboardDestination.vehicles),
-              (
-                'Job history',
-                LucideIcons.history,
-                DashboardDestination.history,
-              ),
-              ('Profile', LucideIcons.user, DashboardDestination.profile),
-            ])
+            for (final (index, (label, icon, action)) in items.indexed)
               Expanded(
                 child: IconButton(
                   tooltip: label,
                   style: IconButton.styleFrom(
                     minimumSize: const Size.square(Mechi.controlHeight),
                   ),
-                  isSelected: destination == null,
+                  isSelected: index == selectedIndex,
                   onPressed: () {
-                    if (destination != null) onDestination(destination);
+                    action?.call();
                   },
-                  icon: destination == null
+                  icon: index == 0
                       ? SvgPicture.asset(
                           MechiAssets.frontCar,
                           width: 20,
